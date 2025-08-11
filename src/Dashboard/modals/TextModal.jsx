@@ -1,0 +1,457 @@
+"use client";
+
+import { useState, useEffect, Fragment, useRef } from "react";
+import { X, Copy, ChevronDown, Check, Info } from "lucide-react";
+import { useLinksContext } from "../../context/useLinksContext";
+import dayjs from "dayjs";
+import { Listbox, Transition } from "@headlessui/react";
+import Switch from "../../components/ui/Switch";
+import InfoModal from "../../components/ui/InfoModal";
+import * as Popover from "@radix-ui/react-popover";
+
+const initialState = {
+  title: "",
+  text: "",
+  maxViews: 1,
+  expiresPreset: "1h",
+  expiresAt: "",
+};
+
+const maxViewsOptions = [
+  { label: "1 click", value: 1 },
+  { label: "3 clicks", value: 3 },
+  { label: "5 clicks", value: 5 },
+  { label: "10 clicks", value: 10 },
+  { label: "Custom", value: "custom" },
+];
+
+const expiryOptions = [
+  { label: "1 hour", value: "1h" },
+  { label: "1 day", value: "1d" },
+  { label: "1 week", value: "1w" },
+  { label: "Custom", value: "custom" },
+];
+
+const TextModal = ({ closeModal }) => {
+  const [form, setForm] = useState(initialState);
+  const [maxViewsObj, setMaxViewsObj] = useState(maxViewsOptions[0]);
+  const [expiryObj, setExpiryObj] = useState(expiryOptions[0]);
+  const [errors, setErrors] = useState({});
+  const [successLink, setSuccessLink] = useState(null);
+  const [extraSecure, setExtraSecure] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const { create, loading } = useLinksContext();
+
+  const viewsBtnRef = useRef(null);
+  const expiryBtnRef = useRef(null);
+  const [viewsWidth, setViewsWidth] = useState(undefined);
+  const [expiryWidth, setExpiryWidth] = useState(undefined);
+  const [viewsOpen, setViewsOpen] = useState(false);
+  const [expiryOpen, setExpiryOpen] = useState(false);
+
+  useEffect(() => {
+    if (viewsBtnRef.current) {
+      setViewsWidth(viewsBtnRef.current.offsetWidth);
+    }
+  }, [viewsOpen]);
+  useEffect(() => {
+    if (expiryBtnRef.current) {
+      setExpiryWidth(expiryBtnRef.current.offsetWidth);
+    }
+  }, [expiryOpen]);
+
+  // Lock scroll when success modal is open
+  useEffect(() => {
+    if (successLink) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [successLink]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!form.title.trim()) errs.title = "Title is required";
+    if (!form.text.trim()) errs.text = "Text is required";
+    const maxViewsVal =
+      maxViewsObj.value === "custom"
+        ? Number(form.maxViewsCustom)
+        : Number(maxViewsObj.value);
+    if (!maxViewsVal || maxViewsVal < 1)
+      errs.maxViews = "Views must be positive";
+    if (expiryObj.value === "custom" && !form.expiresAt)
+      errs.expiresAt = "Expiry is required";
+    return errs;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validate();
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+    let expiresAt = "";
+    if (expiryObj.value === "custom") {
+      expiresAt = dayjs(form.expiresAt).toISOString();
+    } else {
+      // Calculate expiry from now
+      const now = dayjs();
+      if (expiryObj.value === "1h")
+        expiresAt = now.add(1, "hour").toISOString();
+      if (expiryObj.value === "1d") expiresAt = now.add(1, "day").toISOString();
+      if (expiryObj.value === "1w")
+        expiresAt = now.add(1, "week").toISOString();
+    }
+    const maxViews =
+      maxViewsObj.value === "custom"
+        ? Number(form.maxViewsCustom)
+        : Number(maxViewsObj.value);
+    try {
+      const newLink = await create({
+        title: form.title,
+        format: "text",
+        text: form.text,
+        maxViews,
+        expiresAt,
+        extraSecure,
+      });
+      setForm(initialState);
+      setSuccessLink(newLink.url || newLink.shortUrl || newLink._id);
+    } catch {
+      setErrors({ submit: "Failed to create link. Try again." });
+    }
+  };
+
+  const handleCopy = () => {
+    if (successLink) {
+      navigator.clipboard.writeText(successLink);
+    }
+  };
+
+  // Success Modal
+  if (successLink) {
+    const previewUrl = `/preview/${successLink.split("/").pop()}`;
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F1F23]/40 p-4">
+        <div
+          className={`w-full max-w-md mx-auto rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 transition-all duration-300 relative overflow-hidden ${
+            window.innerWidth < 768
+              ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
+              : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+          }`}
+        >
+          {/* Cyan gradient circles - only on desktop */}
+          {window.innerWidth >= 768 && (
+            <>
+              <div className="absolute -top-12 -left-12 w-[120px] h-[120px] bg-gradient-to-tr from-[#00ffff]/20 to-transparent rounded-full blur-[400px] z-0" />
+              <div className="absolute bottom-0 -right-10 w-[140px] h-[140px] bg-gradient-to-br from-[#00ffff]/15 to-transparent rounded-full blur-[400px] z-0" />
+            </>
+          )}
+          <div className="relative z-10">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors duration-200"
+              onClick={() => setSuccessLink(null)}
+              aria-label="Close"
+            >
+              <X />
+            </button>
+            <div className="text-center">
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-white">
+                Link Created!
+              </h2>
+              <p className="mb-6 text-gray-300/80 text-sm sm:text-base">
+                Your text link is ready to share:
+              </p>
+              <div className="flex items-center justify-center gap-2 bg-[#232326] border border-gray-700 rounded-lg px-4 py-3 mb-6">
+                <span
+                  className="truncate text-[#00ffff] font-mono text-sm"
+                  style={{ maxWidth: 200 }}
+                >
+                  {successLink}
+                </span>
+                <button
+                  onClick={handleCopy}
+                  className="text-gray-400 hover:text-[#00ffff] p-1 transition-colors duration-200"
+                  title="Copy link"
+                  aria-label="Copy link"
+                >
+                  <Copy size={18} />
+                </button>
+              </div>
+              <div className="flex flex-col sm:flex-row justify-center gap-3 mb-4">
+                <a
+                  href={previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black px-4 py-2 rounded-lg text-sm font-semibold shadow-md transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
+                >
+                  Preview Link
+                </a>
+              </div>
+              <p className="text-xs text-gray-400/80">
+                Share instantly to your favorite platform
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-full max-w-4xl mx-auto rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 flex flex-col gap-4 sm:gap-6 lg:gap-8 min-h-[400px] sm:min-h-[500px] transition-all duration-300 relative overflow-hidden ${
+        window.innerWidth < 768
+          ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
+          : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+      }`}
+    >
+      {/* Cyan gradient circles - only on desktop */}
+      {window.innerWidth >= 768 && (
+        <>
+          <div className="absolute -top-12 -left-12 w-[120px] h-[120px] bg-gradient-to-tr from-[#00ffff]/20 to-transparent rounded-full blur-[400px] z-0" />
+          <div className="absolute bottom-0 -right-10 w-[140px] h-[140px] bg-gradient-to-br from-[#00ffff]/15 to-transparent rounded-full blur-[400px] z-0" />
+          <div className="absolute top-1/2 right-0 w-[80px] h-[80px] bg-gradient-to-tl from-[#00ffff]/10 to-transparent rounded-full blur-[400px] z-0" />
+        </>
+      )}
+      <div className="relative z-10">
+        <div className="flex items-center gap-2 mb-2">
+          <Switch
+            checked={extraSecure}
+            onChange={() => setExtraSecure((v) => !v)}
+            label={<span className="text-white">Extra Secure</span>}
+            id="extra-secure-text"
+            className="bg-[#232326] border border-gray-700 text-white"
+          />
+          <button
+            type="button"
+            className="rounded-full border-none border-gray-200 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-[#1de4bf] hover:border-[#1de4bf] transition"
+            onClick={() => setShowInfo(true)}
+            tabIndex={0}
+            aria-label="Info about Extra Secure"
+          >
+            <Info size={16} />
+          </button>
+          <InfoModal
+            open={showInfo}
+            onClose={() => setShowInfo(false)}
+            title="Extra Secure for Text"
+          >
+            <div className="text-gray-200">
+              When enabled, your text will be view-only. Copy, right-click,
+              inspect, and screenshot are blocked for maximum privacy.
+            </div>
+          </InfoModal>
+        </div>
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-xl font-semibold text-white/80">
+            Create Text Link
+          </h3>
+          <button
+            onClick={closeModal}
+            className="text-gray-400 hover:text-white"
+          >
+            <X />
+          </button>
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row w-full gap-6 transition-all duration-300"
+        >
+          <div className="flex-1 flex flex-col gap-4">
+            <label className="flex flex-col gap-1 text-left">
+              <span className="font-medium text-white/80">
+                Title <span className="text-red-500">*</span>
+              </span>
+              <input
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                className="border border-gray-700 rounded px-3 py-2 bg-[#232326] text-gray-200 placeholder:text-gray-500 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
+                disabled={loading}
+                required
+              />
+              {errors.title && (
+                <span className="text-xs text-red-500">{errors.title}</span>
+              )}
+            </label>
+            <label className="flex flex-col gap-1 text-left">
+              <span className="font-medium text-white/80">
+                Max Views <span className="text-red-500">*</span>
+              </span>
+              <Popover.Root open={viewsOpen} onOpenChange={setViewsOpen}>
+                <Popover.Trigger asChild>
+                  <button
+                    ref={viewsBtnRef}
+                    type="button"
+                    className="relative w-full cursor-pointer rounded border border-gray-700 bg-[#232326] py-2 pl-3 pr-10 text-left text-gray-200 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
+                    disabled={loading}
+                  >
+                    <span className="block truncate">{maxViewsObj.label}</span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronDown
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </button>
+                </Popover.Trigger>
+                <Popover.Content
+                  align="start"
+                  sideOffset={4}
+                  style={viewsWidth ? { width: viewsWidth } : {}}
+                  className="z-50 rounded bg-[#232326] py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm border border-gray-700 max-h-60 overflow-auto"
+                >
+                  {maxViewsOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className={`relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+                        option.value === maxViewsObj.value
+                          ? "bg-[#222] text-[#00ffff] font-semibold"
+                          : "text-gray-200"
+                      }`}
+                      onClick={() => {
+                        setMaxViewsObj(option);
+                        setViewsOpen(false);
+                      }}
+                    >
+                      <span className="block truncate">{option.label}</span>
+                      {option.value === maxViewsObj.value && (
+                        <span className="absolute left-2 inset-y-0 flex items-center text-[#00ffff]">
+                          <Check className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </Popover.Content>
+              </Popover.Root>
+              {maxViewsObj.value === "custom" && (
+                <input
+                  name="maxViewsCustom"
+                  type="number"
+                  min={1}
+                  value={form.maxViewsCustom || ""}
+                  onChange={handleChange}
+                  className="mt-2 border border-gray-200 rounded px-3 py-2 bg-gray-50 text-gray-700/80 focus:border-[#1de4bf] focus:ring-2 focus:ring-[#1de4bf]/20"
+                  placeholder="Enter custom max views"
+                  disabled={loading}
+                  required
+                />
+              )}
+              {errors.maxViews && (
+                <span className="text-xs text-red-500">{errors.maxViews}</span>
+              )}
+            </label>
+            <label className="flex flex-col gap-1 text-left">
+              <span className="font-medium text-white/80">
+                Expires In <span className="text-red-500">*</span>
+              </span>
+              <Popover.Root open={expiryOpen} onOpenChange={setExpiryOpen}>
+                <Popover.Trigger asChild>
+                  <button
+                    ref={expiryBtnRef}
+                    type="button"
+                    className="relative w-full cursor-pointer rounded border border-gray-700 bg-[#232326] py-2 pl-3 pr-10 text-left text-gray-200 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
+                    disabled={loading}
+                  >
+                    <span className="block truncate">{expiryObj.label}</span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronDown
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </button>
+                </Popover.Trigger>
+                <Popover.Content
+                  align="start"
+                  sideOffset={4}
+                  style={expiryWidth ? { width: expiryWidth } : {}}
+                  className="z-50 rounded bg-[#232326] py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm border border-gray-700 max-h-60 overflow-auto"
+                >
+                  {expiryOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className={`relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+                        option.value === expiryObj.value
+                          ? "bg-[#222] text-[#00ffff] font-semibold"
+                          : "text-gray-200"
+                      }`}
+                      onClick={() => {
+                        setExpiryObj(option);
+                        setExpiryOpen(false);
+                      }}
+                    >
+                      <span className="block truncate">{option.label}</span>
+                      {option.value === expiryObj.value && (
+                        <span className="absolute left-2 inset-y-0 flex items-center text-[#00ffff]">
+                          <Check className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </Popover.Content>
+              </Popover.Root>
+              {expiryObj.value === "custom" && (
+                <input
+                  name="expiresAt"
+                  type="datetime-local"
+                  value={form.expiresAt}
+                  onChange={handleChange}
+                  className="mt-2 border border-gray-200 rounded px-3 py-2 bg-gray-50 text-gray-700/80 focus:border-[#1de4bf] focus:ring-2 focus:ring-[#1de4bf]/20"
+                  disabled={loading}
+                  required
+                />
+              )}
+              {errors.expiresAt && (
+                <span className="text-xs text-red-500">{errors.expiresAt}</span>
+              )}
+            </label>
+          </div>
+          <div className="flex-1 flex flex-col gap-4 items-center justify-between">
+            <label className="flex flex-col gap-1 text-left w-full">
+              <span className="font-medium text-white/80">
+                Text <span className="text-red-500">*</span>
+              </span>
+              <textarea
+                name="text"
+                value={form.text}
+                onChange={handleChange}
+                rows={8}
+                className="border border-gray-700 rounded px-3 py-2 bg-[#232326] text-gray-200 placeholder:text-gray-500 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20 resize-none"
+                disabled={loading}
+                required
+              />
+              {errors.text && (
+                <span className="text-xs text-red-500">{errors.text}</span>
+              )}
+            </label>
+            <button
+              type="submit"
+              className={`w-full 
+              bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] 
+              text-black px-3 py-2 rounded text-sm font-semibold shadow-md
+              transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left
+              hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7]
+              hover:brightness-125 hover:saturate-150
+              hover:shadow-[0_0_12px_#00ff9d]
+              disabled:opacity-60`}
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Create Link"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default TextModal;

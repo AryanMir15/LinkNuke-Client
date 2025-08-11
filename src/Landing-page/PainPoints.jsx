@@ -1,0 +1,328 @@
+import React, { useState, useEffect } from "react";
+import {
+  AlertTriangle,
+  Check,
+  Shield,
+  Zap,
+  Eye,
+  Clock,
+  Lock,
+} from "lucide-react";
+
+const painPoints = [
+  {
+    icon: <AlertTriangle className="h-5 w-5" />,
+    text: "Links stay live forever even when they're not supposed to.",
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+  {
+    icon: <Eye className="h-5 w-5" />,
+    text: "Previews can leak sensitive info before someone even clicks.",
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+  {
+    icon: <Zap className="h-5 w-5" />,
+    text: "You can't control where that link ends up once it's out.",
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+  {
+    icon: <Clock className="h-5 w-5" />,
+    text: "There's no way to set a proper expiry or time bomb.",
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+  {
+    icon: <Shield className="h-5 w-5" />,
+    text: "You end up relying on trust when you should rely on tech.",
+    color: "text-red-400",
+    bgColor: "bg-red-500/10",
+    borderColor: "border-red-500/20",
+  },
+];
+
+const solutions = [
+  {
+    icon: <Check className="h-5 w-5" />,
+    text: "LinkNuke nukes your link after one view or a timer you set. Your rules.",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+  },
+  {
+    icon: <Eye className="h-5 w-5" />,
+    text: "Everything stays hidden until opened. No previews, no leaks.",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+  },
+  {
+    icon: <Lock className="h-5 w-5" />,
+    text: "You can lock links with view limits and time-based nukes.",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+  },
+  {
+    icon: <Clock className="h-5 w-5" />,
+    text: "Set it, forget it. Link gone exactly when you said.",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+  },
+  {
+    icon: <Shield className="h-5 w-5" />,
+    text: "You're in full control. No guessing. No false hope.",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/20",
+  },
+];
+
+function PainPoints() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState("problems");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById("pain-points");
+    if (element) observer.observe(element);
+
+    return () => {
+      if (element) observer.unobserve(element);
+    };
+  }, []);
+
+  return (
+    <section
+      className="w-full bg-black py-24 sm:py-32 px-4 sm:px-6 lg:px-8"
+      id="pain-points"
+    >
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div
+          className={`text-center mb-16 sm:mb-20 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6">
+            <AlertTriangle className="h-4 w-4 mr-2" />
+            The Problem
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+            Why risky links put your
+            <span className="bg-gradient-to-r from-red-400 to-red-600 text-transparent bg-clip-text">
+              {" "}
+              info in danger
+            </span>
+          </h2>
+
+          <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto">
+            Here's what's wrong and how LinkNuke fixes it.
+          </p>
+        </div>
+
+        {/* Mobile Tab Navigation */}
+        <div className="flex sm:hidden mb-10">
+          <button
+            onClick={() => setActiveTab("problems")}
+            className={`flex-1 py-3 px-4 text-sm font-medium rounded-l-lg border transition-all duration-300 ${
+              activeTab === "problems"
+                ? "bg-red-500/20 border-red-500/40 text-red-400"
+                : "bg-gray-800/50 border-gray-700 text-gray-400"
+            }`}
+          >
+            Problems
+          </button>
+          <button
+            onClick={() => setActiveTab("solutions")}
+            className={`flex-1 py-3 px-4 text-sm font-medium rounded-r-lg border border-l-0 transition-all duration-300 ${
+              activeTab === "solutions"
+                ? "bg-green-500/20 border-green-500/40 text-green-400"
+                : "bg-gray-800/50 border-gray-700 text-gray-400"
+            }`}
+          >
+            Solutions
+          </button>
+        </div>
+
+        {/* Desktop Side-by-Side Layout */}
+        <div className="hidden sm:grid sm:grid-cols-2 gap-8 lg:gap-12">
+          {/* Problems Side */}
+          <div
+            className={`transition-all duration-700 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-8"
+            }`}
+          >
+            <div className="bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-8 lg:p-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                  <AlertTriangle className="h-5 w-5 text-red-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">The Problems</h3>
+              </div>
+
+              <div className="space-y-5">
+                {painPoints.map((point, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${point.bgColor} ${point.borderColor}`}
+                    style={{ transitionDelay: `${index * 100}ms` }}
+                  >
+                    <div className={`mt-0.5 shrink-0 ${point.color}`}>
+                      {point.icon}
+                    </div>
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                      {point.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Solutions Side */}
+          <div
+            className={`transition-all duration-700 delay-200 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-8"
+            }`}
+          >
+            <div className="bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-8 lg:p-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                  <Check className="h-5 w-5 text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">The Solutions</h3>
+              </div>
+
+              <div className="space-y-5">
+                {solutions.map((solution, index) => (
+                  <div
+                    key={index}
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${solution.bgColor} ${solution.borderColor}`}
+                    style={{ transitionDelay: `${index * 100}ms` }}
+                  >
+                    <div className={`mt-0.5 shrink-0 ${solution.color}`}>
+                      {solution.icon}
+                    </div>
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                      {solution.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Single Column Layout */}
+        <div className="sm:hidden">
+          {activeTab === "problems" && (
+            <div
+              className={`transition-all duration-500 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <div className="bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                    <AlertTriangle className="h-5 w-5 text-red-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">The Problems</h3>
+                </div>
+
+                <div className="space-y-4">
+                  {painPoints.map((point, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-start gap-3 p-3 rounded-xl border ${point.bgColor} ${point.borderColor}`}
+                    >
+                      <div className={`mt-0.5 shrink-0 ${point.color}`}>
+                        {point.icon}
+                      </div>
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        {point.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "solutions" && (
+            <div
+              className={`transition-all duration-500 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <div className="bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                    <Check className="h-5 w-5 text-green-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    The Solutions
+                  </h3>
+                </div>
+
+                <div className="space-y-4">
+                  {solutions.map((solution, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-start gap-3 p-3 rounded-xl border ${solution.bgColor} ${solution.borderColor}`}
+                    >
+                      <div className={`mt-0.5 shrink-0 ${solution.color}`}>
+                        {solution.icon}
+                      </div>
+                      <p className="text-gray-300 text-sm leading-relaxed">
+                        {solution.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Bottom CTA */}
+        <div
+          className={`text-center mt-16 sm:mt-20 transition-all duration-700 delay-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 text-green-400 text-sm font-medium">
+            <Shield className="h-4 w-4 mr-2" />
+            Secure by Design
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default PainPoints;
