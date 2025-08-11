@@ -80,9 +80,8 @@ export default function PricingSection() {
         return;
       }
 
-      const response = await axios.post("/api/paddle/generate-payment-link", {
+      const response = await axios.post("/api/v1/paddle/create-checkout", {
         productType: tier.name.toLowerCase(),
-        userId: user._id,
       });
 
       posthog.capture("upgrade_clicked", {
@@ -92,7 +91,7 @@ export default function PricingSection() {
         timestamp: new Date().toISOString(),
       });
 
-      window.location.href = response.data.url;
+      window.location.href = response.data.checkoutUrl;
     } catch (err) {
       console.error("Payment init failed:", err);
       setError("Failed to initiate payment. Please try again.");
