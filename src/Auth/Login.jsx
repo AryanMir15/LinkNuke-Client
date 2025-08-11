@@ -60,8 +60,12 @@ export default function Login() {
         timestamp: new Date().toISOString(),
       });
 
+      // Check for returnUrl in URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnUrl = urlParams.get("returnUrl") || "/dashboard";
+
       setShowSuccess(true);
-      setTimeout(() => navigate("/dashboard"), 2000);
+      setTimeout(() => navigate(returnUrl), 2000);
     } catch {
       toast.error("Network error. Check your connection.");
     } finally {

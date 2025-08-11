@@ -73,7 +73,9 @@ export default function PricingSection() {
       setLoading(true);
       setError(null);
 
-      if (!user) {
+      // Check if user is logged in by checking localStorage
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) {
         window.location.href = `/login?returnUrl=${encodeURIComponent(
           window.location.pathname
         )}`;
