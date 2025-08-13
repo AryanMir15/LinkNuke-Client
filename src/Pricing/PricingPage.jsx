@@ -168,10 +168,14 @@ export default function PricingPage() {
         }
       );
 
-      // Redirect to checkout page with the checkout URL
+      // Redirect to checkout page with the checkout URL and transaction ID
       navigate(
         `/checkout?checkout_url=${encodeURIComponent(
           response.data.checkoutUrl
+        )}&transaction_id=${
+          response.data.transactionId
+        }&original_checkout_url=${encodeURIComponent(
+          response.data.originalCheckoutUrl
         )}`
       );
 

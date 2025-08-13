@@ -48,6 +48,7 @@ export default function CheckoutPage() {
         const paymentStatus = searchParams.get("payment");
         const transactionId =
           searchParams.get("_ptxn") || searchParams.get("transaction_id");
+        const originalCheckoutUrl = searchParams.get("original_checkout_url");
 
         // If we have a transaction ID from Paddle, open checkout overlay
         if (transactionId && !paymentStatus) {
@@ -89,9 +90,14 @@ export default function CheckoutPage() {
             return;
           } catch (e) {
             console.error("Failed to open Paddle checkout:", e);
-            // As a fallback, redirect to Paddle's hosted checkout
-            const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}`;
-            window.location.href = paddleCheckoutUrl;
+            // As a fallback, redirect to the original checkout URL
+            if (originalCheckoutUrl) {
+              window.location.href = originalCheckoutUrl;
+            } else {
+              // Last resort fallback
+              const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}/checkout`;
+              window.location.href = paddleCheckoutUrl;
+            }
             return;
           }
         }
