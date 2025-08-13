@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Topbar from "./Topbar";
 import GeneratedLinks from "./GeneratedLinks";
 import SubscriptionManager from "./SubscriptionManager";
 import { useLinksContext } from "../context/useLinksContext";
+import { BarChart3, CreditCard } from "lucide-react";
 
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
+  const [activeTab, setActiveTab] = useState("dashboard");
   const { links } = useLinksContext();
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSubscriptionStatus();
-  }, [links]); // Add links as dependency
+  }, [links]);
 
   const fetchSubscriptionStatus = async () => {
     try {
@@ -58,12 +58,12 @@ export default function Dashboard() {
   };
 
   const handleUpgrade = () => {
-    navigate("/pricing");
+    setActiveTab("billing");
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-[#1F1F23]">
         <div className="flex items-center justify-center h-screen">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#1de4bf]"></div>
         </div>
@@ -71,13 +71,35 @@ export default function Dashboard() {
     );
   }
 
+  const tabs = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: BarChart3,
+    },
+    {
+      id: "billing",
+      label: "Billing & Plans",
+      icon: CreditCard,
+    },
+  ];
+
+  const getLinksThisMonth = () => {
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+    const safeLinks = Array.isArray(links) ? links : [];
+    return safeLinks.filter((link) => new Date(link.createdAt) >= startOfMonth)
+      .length;
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-[#1F1F23]">
       <Topbar />
 
       {/* Free Plan Limit Banner */}
       {showFreePlanLimit && (
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3">
+        <div className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black px-4 py-3">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div>
               <h3 className="font-semibold">Free Plan Limit Reached</h3>
@@ -88,7 +110,7 @@ export default function Dashboard() {
             </div>
             <button
               onClick={handleUpgrade}
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-black text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
             >
               Upgrade Now
             </button>
@@ -100,18 +122,10 @@ export default function Dashboard() {
       {(!subscription?.plan || subscription?.plan === "free") &&
         !showFreePlanLimit &&
         (() => {
-          const startOfMonth = new Date();
-          startOfMonth.setDate(1);
-          startOfMonth.setHours(0, 0, 0, 0);
-
-          const safeLinks = Array.isArray(links) ? links : [];
-          const linksThisMonth = safeLinks.filter(
-            (link) => new Date(link.createdAt) >= startOfMonth
-          ).length;
-
+          const linksThisMonth = getLinksThisMonth();
           if (linksThisMonth >= 3) {
             return (
-              <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-3">
+              <div className="bg-gradient-to-r from-[#1de4bf]/20 to-[#0bf3a2]/20 border border-[#1de4bf]/30 text-white px-4 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold">Free Plan Usage</h3>
@@ -122,7 +136,7 @@ export default function Dashboard() {
                   </div>
                   <button
                     onClick={handleUpgrade}
-                    className="bg-white text-orange-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                    className="bg-[#1de4bf] text-black px-4 py-2 rounded-lg font-semibold hover:bg-[#0bf3a2] transition-colors"
                   >
                     Upgrade Now
                   </button>
@@ -134,60 +148,97 @@ export default function Dashboard() {
         })()}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            <GeneratedLinks />
-          </div>
+        {/* Centered Tab Navigation */}
+        <div className="mb-6 flex justify-center">
+          <div className="flex bg-[#2A2A2E]/80 backdrop-blur-xl rounded-2xl p-1 shadow-lg max-w-xs">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <SubscriptionManager />
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 flex items-center justify-center px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black shadow"
+                      : "text-gray-400 hover:text-white hover:bg-[#2E2E32]/50"
+                  }`}
+                >
+                  <Icon size={16} className="mr-2" />
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "dashboard" && (
+          <div className="flex justify-center">
+            <div className="w-full max-w-6xl">
+              <GeneratedLinks />
+            </div>
+          </div>
+        )}
+
+        {activeTab === "billing" && (
+          <div className="space-y-8">
+            {/* Billing Header */}
+            <div className="bg-[#2A2A2E] rounded-xl p-6 shadow-lg border border-[#2E2E32]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Billing & Plans
+                  </h2>
+                  <p className="text-gray-400 mt-1">
+                    Manage your subscription and billing preferences
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-gray-400">Current Plan</p>
+                  <p className="text-lg font-semibold text-white capitalize">
+                    {subscription?.plan || "Free"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Subscription Manager */}
+            <div className="bg-[#2A2A2E] rounded-xl shadow-lg border border-[#2E2E32]">
+              <SubscriptionManager />
+            </div>
 
             {/* Quick Stats */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
+            <div className="bg-[#2A2A2E] rounded-xl shadow-lg p-6 border border-[#2E2E32]">
+              <h3 className="text-lg font-semibold mb-4 text-white">
+                Quick Stats
+              </h3>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    Total Links
-                  </span>
-                  <span className="font-semibold">
+                  <span className="text-gray-400">Total Links</span>
+                  <span className="font-semibold text-white">
                     {Array.isArray(links) ? links.length : 0}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Plan</span>
-                  <span className="font-semibold capitalize">
+                  <span className="text-gray-400">Plan</span>
+                  <span className="font-semibold text-white capitalize">
                     {subscription?.plan || "Free"}
                   </span>
                 </div>
-                {(!subscription?.plan || subscription?.plan === "free") &&
-                  (() => {
-                    const startOfMonth = new Date();
-                    startOfMonth.setDate(1);
-                    startOfMonth.setHours(0, 0, 0, 0);
-
-                    const safeLinks = Array.isArray(links) ? links : [];
-                    const linksThisMonth = safeLinks.filter(
-                      (link) => new Date(link.createdAt) >= startOfMonth
-                    ).length;
-
-                    return (
-                      <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">
-                          Links This Month
-                        </span>
-                        <span className="font-semibold">
-                          {linksThisMonth}/5
-                        </span>
-                      </div>
-                    );
-                  })()}
+                {(!subscription?.plan || subscription?.plan === "free") && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Links This Month</span>
+                    <span className="font-semibold text-white">
+                      {getLinksThisMonth()}/5
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
