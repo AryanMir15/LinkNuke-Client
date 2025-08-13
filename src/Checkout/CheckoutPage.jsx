@@ -57,17 +57,31 @@ export default function CheckoutPage() {
               throw new Error("Paddle script failed to load");
             }
 
-            // Optional: set environment from env var
-            const env = import.meta.env.VITE_PADDLE_ENV || "production";
-            if (env && Paddle.Environment && Paddle.Environment.set) {
-              Paddle.Environment.set(env);
+            // Get client token from backend
+            const token = localStorage.getItem("token");
+            if (!token) {
+              throw new Error("No authentication token found");
             }
 
-            // Initialize if client token is available (recommended by Paddle)
-            const clientToken = import.meta.env.VITE_PADDLE_CLIENT_TOKEN;
-            if (clientToken && Paddle.Initialize) {
-              Paddle.Initialize({ token: clientToken });
+            const response = await fetch(
+              `${import.meta.env.VITE_API_URL}/paddle/client-token`,
+              {
+                method: "GET",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to get client token");
             }
+
+            const { clientToken } = await response.json();
+
+            // Initialize Paddle with client token
+            Paddle.Initialize({ token: clientToken });
 
             // Open overlay checkout for this transaction
             Paddle.Checkout.open({ transactionId });
@@ -75,10 +89,9 @@ export default function CheckoutPage() {
             return;
           } catch (e) {
             console.error("Failed to open Paddle checkout:", e);
-            // As a fallback, try redirecting to Paddle-hosted checkout if provided by server
-            setError(
-              "Unable to open checkout. Please go back to pricing and try again."
-            );
+            // As a fallback, redirect to Paddle's hosted checkout
+            const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}`;
+            window.location.href = paddleCheckoutUrl;
             return;
           }
         }
