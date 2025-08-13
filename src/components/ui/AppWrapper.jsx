@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import App from "../../App";
 import Login from "../../Auth/Login";
 import Register from "../../Auth/Register";
@@ -12,6 +12,16 @@ import PreviewPage from "../../Preview/PreviewPage";
 import FeedbackForm from "../../Dashboard/FeedbackForm";
 import OAuthSuccess from "../OAuthSuccess";
 import ProgressBar from "./ProgressBar";
+import PricingPage from "../../Pricing/PricingPage";
+
+// Auth protection component
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function AppWrapper() {
   const [isLoading, setIsLoading] = useState(false);
@@ -60,21 +70,24 @@ function AppWrapper() {
         }`}
       >
         <Routes>
-          {/* Public routes — no longer need LinksProvider since we removed stats from Founder's Note */}
+          {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-pin" element={<VerifyPin />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/pricing" element={<PricingPage />} />
 
-          {/* Private/dashboard routes wrapped properly in LinksProvider */}
+          {/* Protected routes */}
           <Route
             path="/dashboard"
             element={
-              <LinksProvider>
-                <Dashboard />
-              </LinksProvider>
+              <ProtectedRoute>
+                <LinksProvider>
+                  <Dashboard />
+                </LinksProvider>
+              </ProtectedRoute>
             }
           />
           <Route
@@ -88,9 +101,11 @@ function AppWrapper() {
           <Route
             path="/feedback"
             element={
-              <LinksProvider>
-                <FeedbackForm />
-              </LinksProvider>
+              <ProtectedRoute>
+                <LinksProvider>
+                  <FeedbackForm />
+                </LinksProvider>
+              </ProtectedRoute>
             }
           />
 

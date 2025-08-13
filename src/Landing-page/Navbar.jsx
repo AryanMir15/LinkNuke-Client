@@ -12,7 +12,6 @@ import DarkModeToggle from "../components/ui/DarkModeToggle";
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
   { label: "Use Cases", href: "#usecases" },
   { label: "FAQs", href: "#faqs" },
 ];
@@ -78,6 +77,14 @@ export default function Navbar() {
                     </HashLink>
                   </NavigationMenuItem>
                 ))}
+                <NavigationMenuItem>
+                  <Link
+                    to="/pricing"
+                    className="text-gray-300 hover:text-[#1de4bf] transition"
+                  >
+                    Pricing
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -158,6 +165,13 @@ export default function Navbar() {
               {label}
             </HashLink>
           ))}
+          <Link
+            to="/pricing"
+            className="text-gray-300 hover:text-[#1de4bf] transition text-base"
+            onClick={() => setShowMobile(false)}
+          >
+            Pricing
+          </Link>
         </div>
       )}
     </header>

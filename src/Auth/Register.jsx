@@ -16,6 +16,11 @@ export default function Register() {
   const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
+  // Get trial info from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const trialPlan = urlParams.get("trial");
+  const returnUrl = urlParams.get("returnUrl") || "/dashboard";
+
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -54,22 +59,16 @@ export default function Register() {
 
         switch (res.status) {
           case 400:
-            toast.error("Invalid form. Fill in all fields properly.");
-            break;
-          case 401:
-            toast.error("Unauthorized. Weird... Try again.");
-            break;
-          case 403:
-            toast.error("Access forbidden. Suspicious activity?");
+            toast.error("Invalid request. Fill in all fields properly.");
             break;
           case 409:
-            toast.error("Email already exists. Try logging in.");
+            toast.error("User already exists with this email.");
             break;
           case 429:
-            toast.error("Too many requests. Slow your roll.");
+            toast.error("Too many attempts. Chill out for a minute.");
             break;
           case 500:
-            toast.error("Server on fire. We're working on it.");
+            toast.error("Server error. We're fixing it ASAP.");
             break;
           default:
             toast.error(data.error || "Registration failed. Try again.");
@@ -77,19 +76,43 @@ export default function Register() {
         return;
       }
 
-      toast.success("Registered! Check email to verify.");
+      toast.success("Account created! Verification PIN sent to email.");
+      localStorage.setItem("token", data.token);
 
-      // Track user signup event
-      trackEvent("user_signed_up", {
+      // Track registration event
+      trackEvent("user_registered", {
         email: form.email,
-        name: form.name,
+        trialPlan: trialPlan || "none",
         timestamp: new Date().toISOString(),
       });
 
+      // If trial plan was selected, start trial after registration
+      if (trialPlan) {
+        try {
+          await fetch(`${import.meta.env.VITE_API_URL}/paddle/start-trial`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${data.token}`,
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              plan: trialPlan,
+              trialDays: 3,
+            }),
+          });
+
+          toast.success(
+            `Started ${trialPlan} trial! You have 3 days to explore.`
+          );
+        } catch (trialError) {
+          console.error("Trial start error:", trialError);
+          // Don't fail registration if trial start fails
+        }
+      }
+
       setShowSuccess(true);
-      setTimeout(() => {
-        navigate("/verify-pin", { state: { email: form.email } });
-      }, 2000);
+      setTimeout(() => navigate(returnUrl), 2000);
     } catch {
       toast.error("Network error. Check your connection.");
     } finally {

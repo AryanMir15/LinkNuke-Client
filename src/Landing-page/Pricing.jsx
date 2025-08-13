@@ -76,9 +76,8 @@ export default function PricingSection() {
       // Check if user is logged in by checking localStorage
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
-        window.location.href = `/login?returnUrl=${encodeURIComponent(
-          window.location.pathname
-        )}`;
+        // Redirect to pricing page for better flow
+        window.location.href = `/pricing?trial=${tier.name.toLowerCase()}`;
         return;
       }
 
@@ -99,6 +98,7 @@ export default function PricingSection() {
         tier: tier.name,
         price: tier.priceMonthly,
         featured: tier.featured,
+        fromPage: "landing",
         timestamp: new Date().toISOString(),
       });
 
