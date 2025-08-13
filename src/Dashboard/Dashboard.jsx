@@ -147,10 +147,10 @@ export default function Dashboard() {
           return null;
         })()}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Centered Tab Navigation */}
-        <div className="mb-6 flex justify-center">
-          <div className="flex bg-[#2A2A2E]/80 backdrop-blur-xl rounded-2xl p-1 shadow-lg max-w-xs">
+        <div className="mb-4 sm:mb-6 flex justify-center">
+          <div className="flex bg-[#2A2A2E]/80 backdrop-blur-xl rounded-2xl p-1 shadow-lg max-w-[200px] sm:max-w-xs">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -159,13 +159,16 @@ export default function Dashboard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                  className={`flex-1 flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 rounded-xl font-medium transition-all duration-200 text-xs sm:text-sm lg:text-base ${
                     isActive
                       ? "bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black shadow"
                       : "text-gray-400 hover:text-white hover:bg-[#2E2E32]/50"
                   }`}
                 >
-                  <Icon size={16} className="mr-2" />
+                  <Icon
+                    size={12}
+                    className="sm:size-14 lg:size-16 mr-1 sm:mr-1.5 lg:mr-2"
+                  />
                   {tab.label}
                 </button>
               );
@@ -175,27 +178,25 @@ export default function Dashboard() {
 
         {/* Tab Content */}
         {activeTab === "dashboard" && (
-          <div className="flex justify-center">
-            <div className="w-full max-w-6xl">
-              <GeneratedLinks />
-            </div>
+          <div className="w-full">
+            <GeneratedLinks />
           </div>
         )}
 
         {activeTab === "billing" && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8 px-2 sm:px-0">
             {/* Billing Header */}
-            <div className="bg-[#2A2A2E] rounded-xl p-6 shadow-lg border border-[#2E2E32]">
-              <div className="flex items-center justify-between">
+            <div className="bg-[#2A2A2E] rounded-xl p-4 sm:p-6 shadow-lg border border-[#2E2E32]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-white">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">
                     Billing & Plans
                   </h2>
-                  <p className="text-gray-400 mt-1">
+                  <p className="text-gray-400 mt-1 text-sm sm:text-base">
                     Manage your subscription and billing preferences
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="text-left sm:text-right">
                   <p className="text-sm text-gray-400">Current Plan</p>
                   <p className="text-lg font-semibold text-white capitalize">
                     {subscription?.plan || "Free"}
@@ -210,7 +211,7 @@ export default function Dashboard() {
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-[#2A2A2E] rounded-xl shadow-lg p-6 border border-[#2E2E32]">
+            <div className="bg-[#2A2A2E] rounded-xl shadow-lg p-4 sm:p-6 border border-[#2E2E32]">
               <h3 className="text-lg font-semibold mb-4 text-white">
                 Quick Stats
               </h3>
