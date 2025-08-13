@@ -23,6 +23,15 @@ export default function CheckoutPage() {
 
         // Check for payment status
         const paymentStatus = searchParams.get("payment");
+        const transactionId = searchParams.get("_ptxn");
+
+        // If we have a transaction ID from Paddle, treat as success
+        if (transactionId) {
+          setStatus("success");
+          toast.success("Payment successful! Welcome to LinkNuke Pro!");
+          setTimeout(() => navigate("/dashboard"), 3000);
+          return;
+        }
 
         if (paymentStatus === "success") {
           setStatus("success");
