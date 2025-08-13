@@ -168,7 +168,12 @@ export default function PricingPage() {
         }
       );
 
-      window.location.href = response.data.checkoutUrl;
+      // Redirect to checkout page with the checkout URL
+      navigate(
+        `/checkout?checkout_url=${encodeURIComponent(
+          response.data.checkoutUrl
+        )}`
+      );
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,
