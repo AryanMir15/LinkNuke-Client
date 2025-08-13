@@ -9,6 +9,29 @@ export default function CheckoutPage() {
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
 
+  const loadPaddleScript = () => {
+    return new Promise((resolve, reject) => {
+      if (window.Paddle && window.Paddle.Checkout) {
+        resolve(window.Paddle);
+        return;
+      }
+      const existing = document.querySelector(
+        'script[src="https://cdn.paddle.com/paddle/v2/paddle.js"]'
+      );
+      if (existing) {
+        existing.addEventListener("load", () => resolve(window.Paddle));
+        existing.addEventListener("error", reject);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
+      script.async = true;
+      script.onload = () => resolve(window.Paddle);
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
+  };
+
   useEffect(() => {
     const handleCheckout = async () => {
       try {
@@ -23,14 +46,41 @@ export default function CheckoutPage() {
 
         // Check for payment status
         const paymentStatus = searchParams.get("payment");
-        const transactionId = searchParams.get("_ptxn");
+        const transactionId =
+          searchParams.get("_ptxn") || searchParams.get("transaction_id");
 
-        // If we have a transaction ID from Paddle, treat as success
-        if (transactionId) {
-          setStatus("success");
-          toast.success("Payment successful! Welcome to LinkNuke Pro!");
-          setTimeout(() => navigate("/dashboard"), 3000);
-          return;
+        // If we have a transaction ID from Paddle, open checkout overlay
+        if (transactionId && !paymentStatus) {
+          try {
+            const Paddle = await loadPaddleScript();
+            if (!Paddle || !Paddle.Checkout) {
+              throw new Error("Paddle script failed to load");
+            }
+
+            // Optional: set environment from env var
+            const env = import.meta.env.VITE_PADDLE_ENV || "production";
+            if (env && Paddle.Environment && Paddle.Environment.set) {
+              Paddle.Environment.set(env);
+            }
+
+            // Initialize if client token is available (recommended by Paddle)
+            const clientToken = import.meta.env.VITE_PADDLE_CLIENT_TOKEN;
+            if (clientToken && Paddle.Initialize) {
+              Paddle.Initialize({ token: clientToken });
+            }
+
+            // Open overlay checkout for this transaction
+            Paddle.Checkout.open({ transactionId });
+            setStatus("loading");
+            return;
+          } catch (e) {
+            console.error("Failed to open Paddle checkout:", e);
+            // As a fallback, try redirecting to Paddle-hosted checkout if provided by server
+            setError(
+              "Unable to open checkout. Please go back to pricing and try again."
+            );
+            return;
+          }
         }
 
         if (paymentStatus === "success") {
