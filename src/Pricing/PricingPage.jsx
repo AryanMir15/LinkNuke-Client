@@ -147,28 +147,30 @@ export default function PricingPage() {
   const handleUpgrade = async (tier) => {
     try {
       setLoading(true);
-      setSelectedTier(tier);
-
       const token = localStorage.getItem("token");
-      if (!token) {
-        navigate(`/login?returnUrl=${encodeURIComponent("/pricing")}`);
-        return;
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        {
+          productType: tier.name.toLowerCase(),
+          billingCycle: "monthly",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.checkoutUrl) {
+        // Redirect directly to Paddle's hosted checkout
+        window.location.href = response.data.checkoutUrl;
       }
-
-      // Redirect to our custom checkout page
-      navigate(`/checkout?plan=${tier.name.toLowerCase()}`);
-
-      posthog.capture("upgrade_clicked", {
-        tier: tier.name,
-        billingCycle,
-        fromPage: "pricing",
-      });
     } catch (error) {
       console.error("Upgrade error:", error);
-      toast.error("Failed to initiate upgrade. Please try again.");
+      toast.error("Failed to process upgrade. Please try again.");
     } finally {
       setLoading(false);
-      setSelectedTier(null);
     }
   };
 
