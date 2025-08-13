@@ -16,23 +16,24 @@ export default function CheckoutPage() {
         const checkoutUrl = searchParams.get("checkout_url");
 
         if (checkoutUrl) {
-          // Redirect to Paddle checkout
+          // Redirect to Paddle checkout immediately
           window.location.href = checkoutUrl;
-        } else {
-          // Check for payment status
-          const paymentStatus = searchParams.get("payment");
+          return; // Exit early to prevent infinite loop
+        }
 
-          if (paymentStatus === "success") {
-            setStatus("success");
-            toast.success("Payment successful! Welcome to LinkNuke Pro!");
-            setTimeout(() => navigate("/dashboard"), 3000);
-          } else if (paymentStatus === "cancelled") {
-            setStatus("cancelled");
-            toast.error("Payment was cancelled");
-            setTimeout(() => navigate("/pricing"), 3000);
-          } else {
-            setError("Invalid checkout session");
-          }
+        // Check for payment status
+        const paymentStatus = searchParams.get("payment");
+
+        if (paymentStatus === "success") {
+          setStatus("success");
+          toast.success("Payment successful! Welcome to LinkNuke Pro!");
+          setTimeout(() => navigate("/dashboard"), 3000);
+        } else if (paymentStatus === "cancelled") {
+          setStatus("cancelled");
+          toast.error("Payment was cancelled");
+          setTimeout(() => navigate("/pricing"), 3000);
+        } else {
+          setError("Invalid checkout session");
         }
       } catch (error) {
         console.error("Checkout error:", error);
