@@ -35,14 +35,13 @@ export default function CustomCheckoutPage() {
         }
 
         // Get user details
-        const userResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/v1/auth/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const apiUrl = `${import.meta.env.VITE_API_URL}/auth/me`;
+        console.log("API URL:", apiUrl);
+        const userResponse = await fetch(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (userResponse.ok) {
           const userData = await userResponse.json();
@@ -110,20 +109,21 @@ export default function CustomCheckoutPage() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/paddle/create-checkout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            productType: searchParams.get("plan"),
-            billingCycle: "monthly",
-          }),
-        }
-      );
+      const paddleUrl = `${
+        import.meta.env.VITE_API_URL
+      }/paddle/create-checkout`;
+      console.log("Paddle API URL:", paddleUrl);
+      const response = await fetch(paddleUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productType: searchParams.get("plan"),
+          billingCycle: "monthly",
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
