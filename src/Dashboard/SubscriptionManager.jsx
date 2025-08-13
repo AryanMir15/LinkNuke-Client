@@ -23,7 +23,15 @@ export default function SubscriptionManager() {
   const fetchSubscriptionStatus = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/v1/paddle/subscription-status");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+          withCredentials: true,
+        }
+      );
       setSubscription(response.data.subscription);
     } catch (err) {
       console.error("Error fetching subscription:", err);
@@ -44,7 +52,16 @@ export default function SubscriptionManager() {
 
     try {
       setCancelling(true);
-      await axios.post("/api/v1/paddle/cancel-subscription");
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+          withCredentials: true,
+        }
+      );
       await fetchSubscriptionStatus();
       alert("Subscription cancelled successfully");
     } catch (err) {

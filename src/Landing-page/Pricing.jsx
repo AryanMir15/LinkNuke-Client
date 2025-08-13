@@ -82,9 +82,18 @@ export default function PricingSection() {
         return;
       }
 
-      const response = await axios.post("/api/v1/paddle/create-checkout", {
-        productType: tier.name.toLowerCase(),
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        {
+          productType: tier.name.toLowerCase(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+          withCredentials: true,
+        }
+      );
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,
