@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ImageModal from "./modals/ImageModal";
 import VideoModal from "./modals/VideoModal";
 import TextModal from "./modals/TextModal";
@@ -10,12 +10,15 @@ import {
   FileText,
   FileAudio,
   FileText as DocumentIcon,
+  Lock,
 } from "lucide-react";
 import { Check, ChevronDown } from "lucide-react";
 import React from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { AnimatePresence, motion } from "framer-motion";
 import { trackEvent } from "../lib/analytics";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const formats = [
   {
@@ -27,6 +30,7 @@ const formats = [
         strokeWidth={1.5}
       />
     ),
+    premium: false,
   },
   {
     label: "Video",
@@ -37,6 +41,7 @@ const formats = [
         strokeWidth={1.5}
       />
     ),
+    premium: true,
   },
   {
     label: "Text",
@@ -47,6 +52,7 @@ const formats = [
         strokeWidth={1.5}
       />
     ),
+    premium: false,
   },
   {
     label: "Audio",
@@ -57,6 +63,7 @@ const formats = [
         strokeWidth={1.5}
       />
     ),
+    premium: true,
   },
   {
     label: "Doc",
@@ -67,15 +74,51 @@ const formats = [
         strokeWidth={1.5}
       />
     ),
+    premium: true,
   },
 ];
 
 const Configurator = () => {
   const [activeType, setActiveType] = useState("Image");
+  const [subscription, setSubscription] = useState(null);
+
+  useEffect(() => {
+    fetchSubscriptionStatus();
+  }, []);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      setSubscription(response.data.subscription);
+    } catch (error) {
+      console.error("Error fetching subscription:", error);
+    }
+  };
 
   const closeModal = () => setActiveType(null);
 
   const handleFormatSelect = (formatLabel) => {
+    const format = formats.find((f) => f.label === formatLabel);
+
+    // Check if format requires premium and user doesn't have it
+    if (
+      format.premium &&
+      (!subscription?.plan || subscription?.plan === "free")
+    ) {
+      toast.error(
+        "This format requires a Pro or Lifetime plan. Upgrade to unlock all file types."
+      );
+      return;
+    }
+
     setActiveType(formatLabel);
 
     // Track core feature usage
@@ -85,6 +128,9 @@ const Configurator = () => {
       timestamp: new Date().toISOString(),
     });
   };
+
+  const isPremiumUser =
+    subscription?.plan === "pro" || subscription?.plan === "lifetime";
 
   return (
     <section className="w-full px-4 sm:px-6 py-8 sm:py-16 bg-[#1F1F23]">
@@ -101,11 +147,13 @@ const Configurator = () => {
               const isActive = format.label === activeType;
               const isFirst = idx === 0;
               const isLast = idx === formats.length - 1;
+              const isDisabled = format.premium && !isPremiumUser;
 
               return (
                 <div key={idx} className="relative">
                   <button
                     onClick={() => handleFormatSelect(format.label)}
+                    disabled={isDisabled}
                     className={`group relative flex items-center justify-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 transition-all duration-300 ease-out
                       ${isFirst ? "rounded-l-lg sm:rounded-l-xl" : ""} 
                       ${isLast ? "rounded-r-lg sm:rounded-r-xl" : ""}
@@ -113,21 +161,39 @@ const Configurator = () => {
                       ${
                         isActive
                           ? "bg-[#1de4bf]/10 text-white shadow-lg"
+                          : isDisabled
+                          ? "text-gray-500 cursor-not-allowed opacity-50"
                           : "text-gray-300 hover:text-white hover:bg-[#2E2E32]/80"
                       }
                     `}
                   >
-                    <div
-                      className={`transition-all duration-300 ${
-                        isActive ? "text-[#1de4bf]" : "text-gray-300"
-                      }`}
-                    >
-                      {React.cloneElement(format.icon, {
-                        size: 24,
-                        className: `${
-                          isActive ? "text-[#00ffff]" : "text-gray-400"
-                        } transition-colors duration-300 group-hover:text-gray-300`,
-                      })}
+                    <div className="relative">
+                      <div
+                        className={`transition-all duration-300 ${
+                          isActive
+                            ? "text-[#1de4bf]"
+                            : isDisabled
+                            ? "text-gray-500"
+                            : "text-gray-300"
+                        }`}
+                      >
+                        {React.cloneElement(format.icon, {
+                          size: 24,
+                          className: `${
+                            isActive
+                              ? "text-[#00ffff]"
+                              : isDisabled
+                              ? "text-gray-500"
+                              : "text-gray-400"
+                          } transition-colors duration-300 group-hover:text-gray-300`,
+                        })}
+                      </div>
+                      {format.premium && !isPremiumUser && (
+                        <Lock
+                          size={12}
+                          className="absolute -top-1 -right-1 text-[#1de4bf]"
+                        />
+                      )}
                     </div>
                   </button>
 
@@ -144,6 +210,16 @@ const Configurator = () => {
             })}
           </div>
         </div>
+
+        {/* Premium Notice */}
+        {!isPremiumUser && (
+          <div className="bg-gradient-to-r from-[#1de4bf]/10 to-[#0bf3a2]/10 border border-[#1de4bf]/20 rounded-xl p-4 max-w-md mx-auto">
+            <p className="text-sm text-gray-300">
+              <Lock size={14} className="inline mr-1 text-[#1de4bf]" />
+              Video, Audio, and Document formats require a Pro or Lifetime plan
+            </p>
+          </div>
+        )}
 
         {/* Modals */}
         <div>

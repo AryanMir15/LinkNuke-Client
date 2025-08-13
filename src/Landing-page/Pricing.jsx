@@ -8,15 +8,29 @@ import posthog from "../lib/posthog.js";
 
 const tiers = [
   {
+    name: "Free",
+    price: "$0",
+    description: "Perfect for trying out LinkNuke.",
+    features: [
+      "5 secure links/month",
+      "50 MB storage",
+      "Image & Text formats only",
+      "1 file per link",
+      "50 MB max file size",
+      "Basic customization",
+    ],
+    featured: false,
+  },
+  {
     name: "Starter",
-    id: "tier-starter",
-    href: "#",
-    priceMonthly: "$9",
-    description: "Essential features for basic link management.",
+    price: "$9",
+    description: "Perfect for individuals and small teams.",
     features: [
       "50 secure links/month",
       "1 GB storage",
       "Image & Text formats",
+      "Up to 5 files per link",
+      "100 MB max file size",
       "Basic customization",
       "Email support",
     ],
@@ -24,14 +38,14 @@ const tiers = [
   },
   {
     name: "Pro",
-    id: "tier-pro",
-    href: "#",
-    priceMonthly: "$19",
-    description: "For marketers and power users with higher limits.",
+    price: "$19",
+    description: "For power users and growing businesses.",
     features: [
       "500 secure links/month",
       "10 GB storage",
       "All file formats (Image, Video, Text, Audio, Doc)",
+      "Up to 10 files per link",
+      "500 MB max file size",
       "Advanced customization",
       "Feedback system",
       "Priority email support",
@@ -40,14 +54,14 @@ const tiers = [
   },
   {
     name: "Lifetime",
-    id: "tier-lifetime",
-    href: "#",
-    priceMonthly: "$59",
-    description: "Buy once, help shape LinkNukes future.",
+    price: "$59",
+    description: "One-time payment, lifetime access.",
     features: [
       "Unlimited secure links",
       "Unlimited storage",
       "All file formats",
+      "Unlimited files per link",
+      "Unlimited file size",
       "Advanced customization",
       "Feedback system",
       "Priority support",
@@ -96,7 +110,7 @@ export default function PricingSection() {
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,
-        price: tier.priceMonthly,
+        price: tier.price,
         featured: tier.featured,
         fromPage: "landing",
         timestamp: new Date().toISOString(),
@@ -173,7 +187,7 @@ export default function PricingSection() {
       >
         {tiers.map((tier) => (
           <div
-            key={tier.id}
+            key={tier.name}
             className={classNames(
               "relative rounded-3xl p-8 sm:p-10 flex flex-col ring-1 ring-white/10 backdrop-blur-md bg-white/5 transition-all duration-300",
               "hover:scale-[1.03] hover:ring-[#1de4bf]/40 hover:shadow-lg hover:shadow-[#1de4bf]/20",
@@ -186,7 +200,7 @@ export default function PricingSection() {
                 Most Popular
               </div>
             )}
-            <h3 id={tier.id} className="text-lg font-semibold mb-4">
+            <h3 id={tier.name} className="text-lg font-semibold mb-4">
               {tier.name}
             </h3>
             <div className="flex flex-col items-center mb-6">
@@ -196,7 +210,7 @@ export default function PricingSection() {
                 </span>
               )}
               <div className="flex items-baseline gap-x-2">
-                <span className="text-5xl font-bold">{tier.priceMonthly}</span>
+                <span className="text-5xl font-bold">{tier.price}</span>
                 <span className="text-gray-300 text-sm">
                   {tier.name === "Lifetime" ? "one-time" : "/month"}
                 </span>

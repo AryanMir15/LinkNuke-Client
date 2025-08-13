@@ -1,19 +1,59 @@
 import posthog from "posthog-js";
 
-// Initialize PostHog
-if (typeof window !== "undefined") {
-  posthog.init(import.meta.env.VITE_POSTHOG_API_KEY, {
-    api_host: import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com",
-    loaded: (posthog) => {
-      if (import.meta.env.DEV) posthog.debug();
-      // Start session recording after initialization
-      if (import.meta.env.MODE === "production") {
-        posthog.startSessionRecording();
-      }
-    },
-    capture_pageview: true, // Required for automatic pageleave tracking
-    capture_pageleave: true, // Enable automatic pageleave events
-  });
+// Only initialize PostHog if the API key is available and we're in production
+if (import.meta.env.VITE_POSTHOG_KEY && import.meta.env.PROD) {
+  try {
+    posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
+      api_host: import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com",
+      // Disable automatic pageview tracking to reduce noise
+      loaded: (posthog) => {
+        if (import.meta.env.DEV) posthog.debug();
+      },
+      // Handle ad blocker gracefully
+      capture_pageview: false,
+      capture_pageleave: false,
+      // Reduce retry attempts to prevent spam
+      retry_attempts: 2,
+      retry_delay: 1000,
+    });
+  } catch (error) {
+    console.warn(
+      "PostHog initialization failed (likely blocked by ad blocker):",
+      error
+    );
+  }
 }
 
-export default posthog;
+// Create a safe wrapper that won't break if PostHog is blocked
+const safePostHog = {
+  capture: (...args) => {
+    try {
+      if (posthog && typeof posthog.capture === "function") {
+        posthog.capture(...args);
+      }
+    } catch (error) {
+      // Silently fail if PostHog is blocked
+      console.debug("PostHog capture failed:", error);
+    }
+  },
+  identify: (...args) => {
+    try {
+      if (posthog && typeof posthog.identify === "function") {
+        posthog.identify(...args);
+      }
+    } catch (error) {
+      console.debug("PostHog identify failed:", error);
+    }
+  },
+  set: (...args) => {
+    try {
+      if (posthog && typeof posthog.set === "function") {
+        posthog.set(...args);
+      }
+    } catch (error) {
+      console.debug("PostHog set failed:", error);
+    }
+  },
+};
+
+export default safePostHog;

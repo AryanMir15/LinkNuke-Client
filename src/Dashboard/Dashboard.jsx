@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-hot-toast";
 import Topbar from "./Topbar";
 import GeneratedLinks from "./GeneratedLinks";
 import SubscriptionManager from "./SubscriptionManager";
@@ -10,13 +9,13 @@ import { useLinksContext } from "../context/useLinksContext";
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showTrialExpired, setShowTrialExpired] = useState(false);
-  const { links, loading: linksLoading } = useLinksContext();
+  const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
+  const { links } = useLinksContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSubscriptionStatus();
-  }, []);
+  }, [links]); // Add links as dependency
 
   const fetchSubscriptionStatus = async () => {
     try {
@@ -32,16 +31,23 @@ export default function Dashboard() {
 
       setSubscription(response.data.subscription);
 
-      // Check if trial has expired
+      // Check if user is on free plan and has reached limit
       if (
-        response.data.subscription?.isTrial &&
-        response.data.subscription?.endDate
+        !response.data.subscription?.plan ||
+        response.data.subscription?.plan === "free"
       ) {
-        const trialEndDate = new Date(response.data.subscription.endDate);
-        const now = new Date();
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
 
-        if (now > trialEndDate) {
-          setShowTrialExpired(true);
+        // Ensure links is an array before filtering
+        const safeLinks = Array.isArray(links) ? links : [];
+        const linksThisMonth = safeLinks.filter(
+          (link) => new Date(link.createdAt) >= startOfMonth
+        ).length;
+
+        if (linksThisMonth >= 5) {
+          setShowFreePlanLimit(true);
         }
       }
     } catch (error) {
@@ -69,20 +75,20 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Topbar />
 
-      {/* Trial Expired Banner */}
-      {showTrialExpired && (
-        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3">
+      {/* Free Plan Limit Banner */}
+      {showFreePlanLimit && (
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div>
-              <h3 className="font-semibold">Trial Expired</h3>
+              <h3 className="font-semibold">Free Plan Limit Reached</h3>
               <p className="text-sm opacity-90">
-                Your free trial has ended. Upgrade to continue using premium
-                features.
+                You've used all 5 free links this month. Upgrade to create more
+                links and unlock premium features.
               </p>
             </div>
             <button
               onClick={handleUpgrade}
-              className="bg-white text-red-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
               Upgrade Now
             </button>
@@ -90,27 +96,28 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Trial Ending Soon Banner */}
-      {subscription?.isTrial &&
-        subscription?.endDate &&
-        !showTrialExpired &&
+      {/* Free Plan Usage Banner */}
+      {(!subscription?.plan || subscription?.plan === "free") &&
+        !showFreePlanLimit &&
         (() => {
-          const trialEndDate = new Date(subscription.endDate);
-          const now = new Date();
-          const daysLeft = Math.ceil(
-            (trialEndDate - now) / (1000 * 60 * 60 * 24)
-          );
+          const startOfMonth = new Date();
+          startOfMonth.setDate(1);
+          startOfMonth.setHours(0, 0, 0, 0);
 
-          if (daysLeft <= 1) {
+          const safeLinks = Array.isArray(links) ? links : [];
+          const linksThisMonth = safeLinks.filter(
+            (link) => new Date(link.createdAt) >= startOfMonth
+          ).length;
+
+          if (linksThisMonth >= 3) {
             return (
               <div className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold">Trial Ending Soon</h3>
+                    <h3 className="font-semibold">Free Plan Usage</h3>
                     <p className="text-sm opacity-90">
-                      Your trial ends in {daysLeft} day
-                      {daysLeft !== 1 ? "s" : ""}. Upgrade to keep your data and
-                      continue using premium features.
+                      You've used {linksThisMonth}/5 free links this month.
+                      Upgrade to create unlimited links.
                     </p>
                   </div>
                   <button
@@ -145,25 +152,38 @@ export default function Dashboard() {
                   <span className="text-gray-600 dark:text-gray-400">
                     Total Links
                   </span>
-                  <span className="font-semibold">{links.length}</span>
+                  <span className="font-semibold">
+                    {Array.isArray(links) ? links.length : 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Plan</span>
                   <span className="font-semibold capitalize">
                     {subscription?.plan || "Free"}
-                    {subscription?.isTrial && " (Trial)"}
                   </span>
                 </div>
-                {subscription?.isTrial && subscription?.endDate && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      Trial Ends
-                    </span>
-                    <span className="font-semibold">
-                      {new Date(subscription.endDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
+                {(!subscription?.plan || subscription?.plan === "free") &&
+                  (() => {
+                    const startOfMonth = new Date();
+                    startOfMonth.setDate(1);
+                    startOfMonth.setHours(0, 0, 0, 0);
+
+                    const safeLinks = Array.isArray(links) ? links : [];
+                    const linksThisMonth = safeLinks.filter(
+                      (link) => new Date(link.createdAt) >= startOfMonth
+                    ).length;
+
+                    return (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Links This Month
+                        </span>
+                        <span className="font-semibold">
+                          {linksThisMonth}/5
+                        </span>
+                      </div>
+                    );
+                  })()}
               </div>
             </div>
           </div>

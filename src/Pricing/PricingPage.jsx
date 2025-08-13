@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckIcon, Sparkles, Clock, Zap, Shield } from "lucide-react";
 import axios from "axios";
@@ -6,6 +6,23 @@ import { toast } from "react-hot-toast";
 import posthog from "../lib/posthog";
 
 const tiers = [
+  {
+    name: "Free",
+    id: "tier-free",
+    priceMonthly: "$0",
+    priceYearly: "$0",
+    description: "Perfect for trying out LinkNuke.",
+    features: [
+      "5 secure links/month",
+      "50 MB storage",
+      "Image & Text formats only",
+      "1 file per link",
+      "50 MB max file size",
+      "Basic customization",
+    ],
+    featured: false,
+    trialDays: 0,
+  },
   {
     name: "Starter",
     id: "tier-starter",
@@ -16,12 +33,13 @@ const tiers = [
       "50 secure links/month",
       "1 GB storage",
       "Image & Text formats",
+      "Up to 5 files per link",
+      "100 MB max file size",
       "Basic customization",
       "Email support",
-      "3-day free trial",
     ],
     featured: false,
-    trialDays: 3,
+    trialDays: 0,
   },
   {
     name: "Pro",
@@ -33,13 +51,14 @@ const tiers = [
       "500 secure links/month",
       "10 GB storage",
       "All file formats (Image, Video, Text, Audio, Doc)",
+      "Up to 10 files per link",
+      "500 MB max file size",
       "Advanced customization",
       "Feedback system",
       "Priority email support",
-      "3-day free trial",
     ],
     featured: true,
-    trialDays: 3,
+    trialDays: 0,
   },
   {
     name: "Lifetime",
@@ -51,12 +70,13 @@ const tiers = [
       "Unlimited secure links",
       "Unlimited storage",
       "All file formats",
+      "Unlimited files per link",
+      "Unlimited file size",
       "Advanced customization",
       "Feedback system",
       "Priority support",
       "Founding Member badge",
       "Early access to new features",
-      "No trial needed",
     ],
     featured: false,
     trialDays: 0,
@@ -77,21 +97,27 @@ export default function PricingPage() {
       // Check if user is logged in
       const token = localStorage.getItem("token");
       if (!token) {
-        // Redirect to register with trial info
+        // Redirect to register with plan info
         navigate(
-          `/register?trial=${tier.name.toLowerCase()}&returnUrl=${encodeURIComponent(
+          `/register?plan=${tier.name.toLowerCase()}&returnUrl=${encodeURIComponent(
             "/dashboard"
           )}`
         );
         return;
       }
 
-      // User is logged in, start trial
+      // For free plan, just redirect to dashboard
+      if (tier.name.toLowerCase() === "free") {
+        navigate("/dashboard");
+        return;
+      }
+
+      // For paid plans, redirect to checkout
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/start-trial`,
+        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
         {
-          plan: tier.name.toLowerCase(),
-          trialDays: tier.trialDays,
+          productType: tier.name.toLowerCase(),
+          billingCycle,
         },
         {
           headers: {
@@ -101,20 +127,16 @@ export default function PricingPage() {
         }
       );
 
-      toast.success(
-        `Started ${tier.name} trial! You have ${tier.trialDays} days to explore.`
-      );
-      navigate("/dashboard");
+      window.location.href = response.data.checkoutUrl;
 
-      // Track trial start
-      posthog.capture("trial_started", {
-        plan: tier.name,
-        trialDays: tier.trialDays,
+      posthog.capture("upgrade_clicked", {
+        tier: tier.name,
         billingCycle,
+        fromPage: "pricing",
       });
     } catch (error) {
-      console.error("Trial start error:", error);
-      toast.error("Failed to start trial. Please try again.");
+      console.error("Upgrade error:", error);
+      toast.error("Failed to initiate upgrade. Please try again.");
     } finally {
       setLoading(false);
       setSelectedTier(null);
@@ -277,7 +299,22 @@ export default function PricingPage() {
                 </ul>
 
                 <div className="mt-8 space-y-3">
-                  {tier.trialDays > 0 ? (
+                  {tier.name === "Free" ? (
+                    <button
+                      onClick={() => handleStartTrial(tier)}
+                      disabled={loading && selectedTier?.id === tier.id}
+                      className="w-full py-3 px-6 rounded-xl font-semibold bg-gray-800 text-white hover:bg-gray-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading && selectedTier?.id === tier.id ? (
+                        "Processing..."
+                      ) : (
+                        <>
+                          <Zap className="w-4 h-4 inline mr-2" />
+                          Get Started Free
+                        </>
+                      )}
+                    </button>
+                  ) : tier.trialDays > 0 ? (
                     <button
                       onClick={() => handleStartTrial(tier)}
                       disabled={loading && selectedTier?.id === tier.id}
@@ -307,7 +344,9 @@ export default function PricingPage() {
                       ) : (
                         <>
                           <Shield className="w-4 h-4 inline mr-2" />
-                          Get Lifetime Access
+                          {tier.name === "Lifetime"
+                            ? "Get Lifetime Access"
+                            : `Upgrade to ${tier.name}`}
                         </>
                       )}
                     </button>
@@ -336,20 +375,21 @@ export default function PricingPage() {
           <div className="space-y-6">
             <div>
               <h3 className="text-lg font-semibold mb-2">
-                Can I cancel my trial anytime?
+                What's included in the free plan?
               </h3>
               <p className="text-gray-400">
-                Yes, you can cancel your trial at any time. No charges will be
-                made until the trial period ends.
+                The free plan includes 5 secure links per month, 50MB storage,
+                and support for image and text files only. You can upload 1 file
+                per link with a maximum size of 50MB.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2">
-                What happens after my trial ends?
+                Can I upgrade anytime?
               </h3>
               <p className="text-gray-400">
-                You'll receive an email reminder before your trial expires. You
-                can upgrade to continue using premium features.
+                Yes! You can upgrade to any paid plan at any time. Your usage
+                limits will be updated immediately after payment.
               </p>
             </div>
             <div>

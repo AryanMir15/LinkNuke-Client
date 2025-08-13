@@ -109,7 +109,7 @@ const NukedLinksMobile = () => {
   };
 
   return (
-    <section className="sm:hidden w-full min-h-screen bg-gradient-to-br from-[#1F1F23] via-[#1A1A1E] to-[#1F1F23] px-4 py-6">
+    <section className="sm:hidden w-full bg-gradient-to-br from-[#1F1F23] via-[#1A1A1E] to-[#1F1F23] px-4 py-6">
       <Toaster position="top-center" />
 
       {/* Header */}
@@ -144,13 +144,13 @@ const NukedLinksMobile = () => {
                   key={opt.value}
                   onClick={() => setActiveFilter(opt.value)}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center gap-2 px-4 py-3 transition-all duration-200 font-medium rounded-xl whitespace-nowrap ${
+                  className={`flex items-center gap-2 px-3 py-2 transition-all duration-200 font-medium rounded-xl whitespace-nowrap text-sm ${
                     active
                       ? "bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black shadow-lg"
                       : "text-gray-400 hover:text-white hover:bg-[#2E2E32]/50"
                   }`}
                 >
-                  <IconComponent size={16} />
+                  <IconComponent size={14} />
                   {opt.label}
                 </motion.button>
               );
@@ -164,7 +164,7 @@ const NukedLinksMobile = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-12"
+          className="flex flex-col items-center justify-center py-8"
         >
           <div className="w-12 h-12 border-3 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin mb-4"></div>
           <p className="text-gray-400 text-sm">Loading your links...</p>
@@ -176,7 +176,7 @@ const NukedLinksMobile = () => {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 text-center"
+          className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 text-center mb-4"
         >
           <p className="text-red-400 text-sm">{error}</p>
         </motion.div>
@@ -188,10 +188,10 @@ const NukedLinksMobile = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center justify-center py-16"
+          className="flex flex-col items-center justify-center py-12"
         >
-          <div className="w-20 h-20 bg-gradient-to-br from-[#2A2A2E] to-[#1F1F23] rounded-full flex items-center justify-center mb-4 border border-gray-700/30">
-            <LinkIcon className="w-10 h-10 text-gray-500" />
+          <div className="w-16 h-16 bg-gradient-to-br from-[#2A2A2E] to-[#1F1F23] rounded-full flex items-center justify-center mb-4 border border-gray-700/30">
+            <LinkIcon className="w-8 h-8 text-gray-500" />
           </div>
           <h3 className="text-gray-300 text-lg font-semibold mb-2">
             {activeFilter === "all"
@@ -212,7 +212,7 @@ const NukedLinksMobile = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-4"
+          className="space-y-3"
         >
           <AnimatePresence mode="popLayout">
             {filteredLinks.map((link, index) => {
