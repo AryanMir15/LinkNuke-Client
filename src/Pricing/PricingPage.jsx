@@ -155,22 +155,8 @@ export default function PricingPage() {
         return;
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
-        {
-          productType: tier.name.toLowerCase(),
-          billingCycle,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-
-      // Redirect directly to Paddle's hosted checkout
-      window.location.href = response.data.checkoutUrl;
+      // Redirect to our custom checkout page
+      navigate(`/checkout?plan=${tier.name.toLowerCase()}`);
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,

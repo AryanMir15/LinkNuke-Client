@@ -13,6 +13,7 @@ import FeedbackForm from "../../Dashboard/FeedbackForm";
 import OAuthSuccess from "../OAuthSuccess";
 import ProgressBar from "./ProgressBar";
 import PricingPage from "../../Pricing/PricingPage";
+import CustomCheckoutPage from "../../Checkout/CustomCheckoutPage";
 
 // Auth protection component
 const ProtectedRoute = ({ children }) => {
@@ -78,6 +79,7 @@ function AppWrapper() {
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/checkout" element={<CustomCheckoutPage />} />
 
           {/* Protected routes */}
           <Route
