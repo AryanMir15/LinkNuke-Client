@@ -23,18 +23,15 @@ export default function CheckoutPage() {
 
         // Check for payment status
         const paymentStatus = searchParams.get("payment");
-        const transactionId =
-          searchParams.get("_ptxn") || searchParams.get("transaction_id");
-        const originalCheckoutUrl = searchParams.get("original_checkout_url");
+        const transactionId = searchParams.get("_ptxn");
 
         // If we have a transaction ID from Paddle, redirect to original checkout URL
         if (transactionId && !paymentStatus) {
+          const originalCheckoutUrl = searchParams.get("original_checkout_url");
           if (originalCheckoutUrl) {
             window.location.href = originalCheckoutUrl;
           } else {
-            // Fallback to constructed URL
-            const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}/checkout`;
-            window.location.href = paddleCheckoutUrl;
+            setError("Missing checkout URL");
           }
           return;
         }
