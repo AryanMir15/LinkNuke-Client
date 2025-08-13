@@ -9,29 +9,6 @@ export default function CheckoutPage() {
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState(null);
 
-  const loadPaddleScript = () => {
-    return new Promise((resolve, reject) => {
-      if (window.Paddle && window.Paddle.Checkout) {
-        resolve(window.Paddle);
-        return;
-      }
-      const existing = document.querySelector(
-        'script[src="https://cdn.paddle.com/paddle/v2/paddle.js"]'
-      );
-      if (existing) {
-        existing.addEventListener("load", () => resolve(window.Paddle));
-        existing.addEventListener("error", reject);
-        return;
-      }
-      const script = document.createElement("script");
-      script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
-      script.async = true;
-      script.onload = () => resolve(window.Paddle);
-      script.onerror = reject;
-      document.body.appendChild(script);
-    });
-  };
-
   useEffect(() => {
     const handleCheckout = async () => {
       try {
@@ -50,56 +27,16 @@ export default function CheckoutPage() {
           searchParams.get("_ptxn") || searchParams.get("transaction_id");
         const originalCheckoutUrl = searchParams.get("original_checkout_url");
 
-        // If we have a transaction ID from Paddle, open checkout overlay
+        // If we have a transaction ID from Paddle, redirect to original checkout URL
         if (transactionId && !paymentStatus) {
-          try {
-            const Paddle = await loadPaddleScript();
-            if (!Paddle || !Paddle.Checkout) {
-              throw new Error("Paddle script failed to load");
-            }
-
-            // Get client token from backend
-            const token = localStorage.getItem("token");
-            if (!token) {
-              throw new Error("No authentication token found");
-            }
-
-            const response = await fetch(
-              `${import.meta.env.VITE_API_URL}/paddle/client-token`,
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-
-            if (!response.ok) {
-              throw new Error("Failed to get client token");
-            }
-
-            const { clientToken } = await response.json();
-
-            // Initialize Paddle with client token
-            Paddle.Initialize({ token: clientToken });
-
-            // Open overlay checkout for this transaction
-            Paddle.Checkout.open({ transactionId });
-            setStatus("loading");
-            return;
-          } catch (e) {
-            console.error("Failed to open Paddle checkout:", e);
-            // As a fallback, redirect to the original checkout URL
-            if (originalCheckoutUrl) {
-              window.location.href = originalCheckoutUrl;
-            } else {
-              // Last resort fallback
-              const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}/checkout`;
-              window.location.href = paddleCheckoutUrl;
-            }
-            return;
+          if (originalCheckoutUrl) {
+            window.location.href = originalCheckoutUrl;
+          } else {
+            // Fallback to constructed URL
+            const paddleCheckoutUrl = `https://checkout.paddle.com/transaction/${transactionId}/checkout`;
+            window.location.href = paddleCheckoutUrl;
           }
+          return;
         }
 
         if (paymentStatus === "success") {
