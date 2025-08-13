@@ -198,7 +198,25 @@ const VideoModal = ({ closeModal }) => {
       });
       setForm(initialState);
       setFiles([]);
-      setSuccessLink(newLink.url || newLink.shortUrl || newLink._id);
+
+      // Handle different possible response structures
+      let linkUrl = null;
+      if (newLink && newLink.link) {
+        // If the response has a nested link object
+        linkUrl = newLink.link.url || newLink.link.linkId;
+      } else if (newLink) {
+        // If the response is the link object directly
+        linkUrl = newLink.url || newLink.linkId;
+      }
+
+      if (linkUrl) {
+        setSuccessLink(linkUrl);
+      } else {
+        console.error("No valid URL found in response:", newLink);
+        setErrors({
+          submit: "Link created but URL is missing. Please try again.",
+        });
+      }
     } catch {
       setErrors({ submit: "Failed to create link. Try again." });
     }

@@ -204,7 +204,25 @@ const ImageModal = ({ closeModal }) => {
       console.log("Link created successfully:", newLink);
       setForm(initialState);
       setFiles([]);
-      setSuccessLink(newLink.url || newLink.shortUrl || newLink._id);
+
+      // Handle different possible response structures
+      let linkUrl = null;
+      if (newLink && newLink.link) {
+        // If the response has a nested link object
+        linkUrl = newLink.link.url || newLink.link.linkId;
+      } else if (newLink) {
+        // If the response is the link object directly
+        linkUrl = newLink.url || newLink.linkId;
+      }
+
+      if (linkUrl) {
+        setSuccessLink(linkUrl);
+      } else {
+        console.error("No valid URL found in response:", newLink);
+        setErrors({
+          submit: "Link created but URL is missing. Please try again.",
+        });
+      }
     } catch (error) {
       console.error("Link creation failed:", error);
       setErrors({ submit: "Failed to create link. Try again." });
@@ -220,8 +238,24 @@ const ImageModal = ({ closeModal }) => {
   // Success Modal
   if (successLink) {
     // Build the preview URL for the frontend
-    const linkId = successLink.split("/").pop();
-    const previewUrl = `/preview/${linkId}`;
+    let linkId = null;
+    let previewUrl = null;
+
+    try {
+      // Try to extract linkId from the URL
+      if (successLink.includes("/")) {
+        linkId = successLink.split("/").pop();
+      } else {
+        // If it's just an ID, use it directly
+        linkId = successLink;
+      }
+      previewUrl = `/preview/${linkId}`;
+    } catch (error) {
+      console.error("Error extracting linkId:", error);
+      // Fallback: use the full successLink as the preview URL
+      previewUrl = successLink;
+    }
+
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F1F23]/40 p-4">
         <div
