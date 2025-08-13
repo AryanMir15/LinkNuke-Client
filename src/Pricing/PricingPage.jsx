@@ -168,14 +168,8 @@ export default function PricingPage() {
         }
       );
 
-      // Redirect to checkout page with the checkout URL
-      navigate(
-        `/checkout?checkout_url=${encodeURIComponent(
-          response.data.checkoutUrl
-        )}&original_checkout_url=${encodeURIComponent(
-          response.data.originalCheckoutUrl
-        )}`
-      );
+      // Redirect directly to Paddle checkout
+      window.location.href = response.data.checkoutUrl;
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,

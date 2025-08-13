@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import Topbar from "./Topbar";
 import GeneratedLinks from "./GeneratedLinks";
 import SubscriptionManager from "./SubscriptionManager";
@@ -12,6 +14,19 @@ export default function Dashboard() {
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
   const { links } = useLinksContext();
+  const [searchParams] = useSearchParams();
+
+  // Handle payment success/cancel messages
+  useEffect(() => {
+    const paymentStatus = searchParams.get("payment");
+    if (paymentStatus === "success") {
+      toast.success("Payment successful! Welcome to LinkNuke Pro!");
+      // Refresh subscription status
+      fetchSubscriptionStatus();
+    } else if (paymentStatus === "cancelled") {
+      toast.error("Payment was cancelled");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchSubscriptionStatus();
