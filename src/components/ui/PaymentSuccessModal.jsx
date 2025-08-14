@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { CheckCircle } from "lucide-react";
-import { Button } from "./navigation-menu";
+import { Button } from "@headlessui/react";
 
 export default function PaymentSuccessModal() {
   useEffect(() => {
