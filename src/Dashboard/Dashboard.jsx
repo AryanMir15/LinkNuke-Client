@@ -7,6 +7,7 @@ import GeneratedLinks from "./GeneratedLinks";
 import SubscriptionManager from "./SubscriptionManager";
 import { useLinksContext } from "../context/useLinksContext";
 import { BarChart3, CreditCard } from "lucide-react";
+import PaymentSuccessModal from "../components/ui/PaymentSuccessModal";
 
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
@@ -15,6 +16,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const { links } = useLinksContext();
   const [searchParams] = useSearchParams();
+  const paymentSuccess = searchParams.get("payment") === "success";
 
   // Handle payment success/cancel messages
   useEffect(() => {
@@ -78,11 +80,14 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#1F1F23]">
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#1de4bf]"></div>
+      <>
+        {paymentSuccess && <PaymentSuccessModal />}
+        <div className="min-h-screen bg-[#1F1F23]">
+          <div className="flex items-center justify-center h-screen">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#1de4bf]"></div>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
