@@ -20,6 +20,10 @@ export default function Dashboard() {
 
   // Handle payment success/cancel messages
   useEffect(() => {
+    console.log(
+      "Payment URL Params:",
+      Object.fromEntries(searchParams.entries())
+    );
     const paymentStatus = searchParams.get("payment");
     if (paymentStatus === "success") {
       toast.success("Payment successful! Welcome to LinkNuke Pro!");
