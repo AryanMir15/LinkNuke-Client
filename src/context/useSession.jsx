@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import jwtDecode from "jwt-decode";
 
 const SessionContext = createContext(null);
 
@@ -8,7 +9,21 @@ export function SessionProvider({ children }) {
   useEffect(() => {
     // Example: check localStorage or fetch user data here
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) setUser(storedUser);
+    const storedToken = localStorage.getItem("token");
+
+    if (storedUser && storedToken) {
+      // Verify token validity before setting user
+      try {
+        const decoded = jwtDecode(storedToken);
+        if (decoded.exp * 1000 > Date.now()) {
+          setUser(storedUser);
+        } else {
+          localStorage.clear();
+        }
+      } catch {
+        localStorage.clear();
+      }
+    }
   }, []);
 
   return (
