@@ -84,13 +84,17 @@ export default function VerifyPin() {
         }
       );
 
-      const data = await res.json();
+      const responseData = await res.json();
 
       if (!res.ok) {
-        toast.error(data?.error || "Invalid PIN. Try again.");
+        toast.error(responseData?.error || "Invalid PIN. Try again.");
         return;
       }
 
+      const { token, user: userData } = responseData;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(userData));
       toast.success("Account verified!");
       navigate("/dashboard");
     } catch {
