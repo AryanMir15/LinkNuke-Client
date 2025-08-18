@@ -174,7 +174,7 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Centered Tab Navigation */}
         <div className="mb-4 sm:mb-6 flex justify-center">
-          <div className="flex bg-[#2A2A2E]/80 backdrop-blur-xl rounded-2xl p-1 shadow-lg max-w-[200px] sm:max-w-xs">
+          <div className="flex bg-[#2A2A2E]/80 backdrop-blur-xl rounded-xl p-1.5 shadow-lg max-w-[320px]">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -183,16 +183,13 @@ export default function Dashboard() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 rounded-xl font-medium transition-all duration-200 text-xs sm:text-sm lg:text-base ${
+                  className={`flex-1 flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm ${
                     isActive
                       ? "bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black shadow"
                       : "text-gray-400 hover:text-white hover:bg-[#2E2E32]/50"
                   }`}
                 >
-                  <Icon
-                    size={12}
-                    className="sm:size-14 lg:size-16 mr-1 sm:mr-1.5 lg:mr-2"
-                  />
+                  <Icon className="size-4 mr-2" />
                   {tab.label}
                 </button>
               );
