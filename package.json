@@ -25,6 +25,7 @@
     "emailjs": "^4.0.3",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^12.23.0",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.525.0",
     "next-auth": "^4.24.11",
     "phosphor-react": "^1.4.1",
