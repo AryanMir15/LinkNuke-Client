@@ -29,9 +29,10 @@ const NukedLinksTable = () => {
   }, [deletingId]);
 
   const filteredLinks =
-    activeFilter === "all"
-      ? links
-      : links.filter((l) => l.format?.toLowerCase() === activeFilter);
+    links?.filter((link) => {
+      if (activeFilter === "all") return true;
+      return link.format?.toLowerCase() === activeFilter.toLowerCase();
+    }) || [];
 
   const isLinkExpired = (link) => {
     const now = new Date();
@@ -186,7 +187,7 @@ const NukedLinksTable = () => {
                         </a>
                       </td>
                       <td className="px-4 py-3 text-gray-300 text-sm">
-                        {link.views}/{link.maxViews}
+                        {link.views ?? 0}/{link.maxViews || "∞"}
                       </td>
                       <td className="px-4 py-3 text-gray-300 text-sm">
                         {!link.expiresAt

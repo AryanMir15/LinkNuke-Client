@@ -53,13 +53,10 @@ const NukedLinksMobile = () => {
   const filteredLinks = React.useMemo(() => {
     if (!Array.isArray(links)) return [];
 
-    if (activeFilter === "all") {
-      return links;
-    }
-
     return links.filter((link) => {
+      if (activeFilter === "all") return true;
       const linkFormat = link.format?.toLowerCase();
-      return linkFormat === activeFilter;
+      return linkFormat === activeFilter.toLowerCase();
     });
   }, [links, activeFilter]);
 
@@ -300,7 +297,7 @@ const NukedLinksMobile = () => {
                       <div className="flex items-center gap-1">
                         <ViewsIcon size={12} />
                         <span>
-                          {link.views}/{link.maxViews || "∞"}
+                          {link.views ?? 0}/{link.maxViews || "∞"}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
