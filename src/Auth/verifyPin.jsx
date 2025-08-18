@@ -57,11 +57,17 @@ export default function VerifyPin() {
   };
 
   const handlePaste = (e) => {
-    const txt = e.clipboardData.getData("text").trim();
-    if (/^\d{6}$/.test(txt)) {
-      const arr = txt.split("");
-      setPin(arr);
+    const pastedText = e.clipboardData.getData("text").trim();
+    const cleanDigits = pastedText.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+
+    if (cleanDigits.length >= 6) {
+      const digitsArray = cleanDigits.split("").slice(0, 6);
+      setPin(digitsArray);
       inputRefs.current[5]?.focus();
+      toast.success("PIN pasted successfully!");
+    } else {
+      toast.error("Invalid format - please paste 6 digits");
+      e.preventDefault();
     }
   };
 
