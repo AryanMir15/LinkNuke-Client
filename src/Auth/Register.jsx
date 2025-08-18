@@ -13,7 +13,7 @@ export default function Register() {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  // Removed unused state
   const navigate = useNavigate();
 
   // Get trial info from URL params
@@ -77,7 +77,14 @@ export default function Register() {
       }
 
       toast.success("Account created! Verification PIN sent to email.");
-      localStorage.setItem("token", data.token);
+
+      // Redirect to verification page
+      navigate("/verify-pin", {
+        state: {
+          email: form.email,
+          newRegistration: true,
+        },
+      });
 
       // Track registration event
       trackEvent("user_registered", {
@@ -111,8 +118,7 @@ export default function Register() {
         }
       }
 
-      setShowSuccess(true);
-      setTimeout(() => navigate(returnUrl), 2000);
+      // Remove automatic redirect to dashboard
     } catch {
       toast.error("Network error. Check your connection.");
     } finally {
@@ -122,16 +128,6 @@ export default function Register() {
 
   return (
     <div className="min-h-screen w-full bg-black text-gray-100 flex flex-col sm:flex-row">
-      {showSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md">
-          <div className="bg-[#1F1F23] rounded-lg shadow-xl p-8 max-w-md w-full text-center">
-            <h2 className="text-2xl font-bold mb-2">Account created!</h2>
-            <p className="mb-4 text-gray-400">Redirecting to verification...</p>
-            <Loader2 className="animate-spin mx-auto text-[#1de4bf]" />
-          </div>
-        </div>
-      )}
-
       {/* Left: Form */}
       <div className="w-full sm:w-1/2 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md space-y-6">
