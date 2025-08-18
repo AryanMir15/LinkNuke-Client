@@ -225,7 +225,8 @@ const NukedLinksMobile = () => {
           <AnimatePresence mode="popLayout">
             {filteredLinks.map((link, index) => {
               const preview = `${window.location.origin}/preview/${
-                link.linkId || link.url.split("/").pop()
+                link.linkId ||
+                (link.url ? link.url.split("/").pop() : "invalid-link")
               }`;
               const expired = isLinkExpired(link);
 
