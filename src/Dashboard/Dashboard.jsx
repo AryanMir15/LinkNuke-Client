@@ -20,11 +20,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      await fetchLinks();
-      await fetchSubscriptionStatus();
+      try {
+        await fetchLinks();
+        await fetchSubscriptionStatus();
+      } catch (error) {
+        console.error("Failed to load initial data:", error);
+        toast.error("Failed to load dashboard data");
+      }
     };
     fetchInitialData();
-  }, []);
+  }, [fetchLinks]); // Add fetchLinks to dependency array
 
   // Handle payment success/cancel messages
   useEffect(() => {
