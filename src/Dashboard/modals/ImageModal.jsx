@@ -190,10 +190,10 @@ const ImageModal = ({ closeModal }) => {
 
     const linkData = {
       title: form.title,
+      imageUrl: imageUrl,
       format: "image",
       maxViews,
       expiresAt,
-      imageUrl,
       extraSecure,
     };
 

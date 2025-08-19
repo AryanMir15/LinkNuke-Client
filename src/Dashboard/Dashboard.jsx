@@ -14,9 +14,17 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const { links } = useLinksContext();
+  const { links, fetchLinks } = useLinksContext();
   const [searchParams] = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      await fetchLinks();
+      await fetchSubscriptionStatus();
+    };
+    fetchInitialData();
+  }, []);
 
   // Handle payment success/cancel messages
   useEffect(() => {
