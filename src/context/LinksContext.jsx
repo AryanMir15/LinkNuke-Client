@@ -70,11 +70,25 @@ export function LinksProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    // Only fetch links if user is logged in
-    if (isLoggedIn()) {
-      fetchLinks();
-    }
-  }, [fetchLinks]);
+    const loadData = async () => {
+      try {
+        await fetchLinks();
+        localStorage.setItem("cachedLinks", JSON.stringify(links));
+      } catch (err) {
+        const cached = localStorage.getItem("cachedLinks");
+        if (cached) {
+          setLinks(JSON.parse(cached));
+          toast.error("Using cached links - Couldn't refresh: " + err.message);
+        } else {
+          toast.error("Failed to load links: " + err.message);
+        }
+      }
+    };
+
+    if (isLoggedIn()) loadData();
+    window.addEventListener("focus", loadData);
+    return () => window.removeEventListener("focus", loadData);
+  }, [fetchLinks, links.length]);
 
   // Create link
   const create = async (link) => {

@@ -15,6 +15,9 @@ export default function SubscriptionManager() {
   const [error, setError] = useState(null);
   const [cancelling, setCancelling] = useState(false);
 
+  const [usage, setUsage] = useState(null);
+  const [billingPeriod, setBillingPeriod] = useState(null);
+
   useEffect(() => {
     fetchSubscriptionStatus();
   }, []);
@@ -32,6 +35,8 @@ export default function SubscriptionManager() {
         }
       );
       setSubscription(response.data.subscription);
+      setUsage(response.data.usage);
+      setBillingPeriod(response.data.billing_period);
     } catch (err) {
       console.error("Error fetching subscription:", err);
       setError("Failed to load subscription status");
@@ -68,19 +73,6 @@ export default function SubscriptionManager() {
       alert("Failed to cancel subscription. Please try again.");
     } finally {
       setCancelling(false);
-    }
-  };
-
-  const getPlanLimits = (plan) => {
-    switch (plan) {
-      case "starter":
-        return { links: 50, storage: "1 GB" };
-      case "pro":
-        return { links: 500, storage: "10 GB" };
-      case "lifetime":
-        return { links: "Unlimited", storage: "Unlimited" };
-      default:
-        return { links: 5, storage: "50 MB" };
     }
   };
 
@@ -156,8 +148,6 @@ export default function SubscriptionManager() {
     );
   }
 
-  const limits = getPlanLimits(subscription.plan);
-
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
@@ -203,15 +193,37 @@ export default function SubscriptionManager() {
       </div>
 
       <div className="mt-6 p-4 bg-[#2E2E32] rounded-lg">
-        <h4 className="font-medium mb-3 text-white">Plan Limits</h4>
+        <h4 className="font-medium mb-3 text-white">Usage & Billing</h4>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-400">Links per month</p>
-            <p className="font-semibold text-white">{limits.links}</p>
+            <p className="text-sm text-gray-400">Links used</p>
+            <p className="font-semibold text-white">
+              {usage?.links?.current ?? 0} /{" "}
+              {usage?.links?.limit ?? "Unlimited"}
+              {usage?.links?.percent && (
+                <span className="text-[#1de4bf] ml-2">
+                  ({usage.links.percent}%)
+                </span>
+              )}
+            </p>
+            {usage?.links?.limit && (
+              <div className="mt-2 h-1 bg-gray-700 rounded-full">
+                <div
+                  className="h-full bg-[#1de4bf] rounded-full transition-all duration-500"
+                  style={{ width: `${usage.links.percent}%` }}
+                />
+              </div>
+            )}
           </div>
           <div>
-            <p className="text-sm text-gray-400">Storage</p>
-            <p className="font-semibold text-white">{limits.storage}</p>
+            <p className="text-sm text-gray-400">Billing period</p>
+            <p className="font-semibold text-white">
+              {billingPeriod?.remaining_days ?? "N/A"} days remaining
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              {formatDate(billingPeriod?.start)} -{" "}
+              {formatDate(billingPeriod?.end)}
+            </p>
           </div>
         </div>
       </div>

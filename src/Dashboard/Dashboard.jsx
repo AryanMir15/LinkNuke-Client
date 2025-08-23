@@ -24,17 +24,27 @@ export default function Dashboard() {
   const paymentSuccess = searchParams.get("payment") === "success";
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchData = async () => {
       try {
+        if (!isMounted) return;
         await fetchLinks();
-        await fetchSubscriptionStatus();
-      } catch (error) {
-        console.error("Failed to load initial data:", error);
-        toast.error("Failed to load dashboard data");
+        if (isMounted) await fetchSubscriptionStatus();
+      } catch (err) {
+        if (isMounted && err.name !== "AbortError") {
+          toast.error(err.message || "Failed to load dashboard");
+        }
       }
     };
-    fetchInitialData();
-  }, [fetchLinks]); // Add fetchLinks to dependency array
+
+    fetchData();
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [fetchLinks, subscription?.plan]);
 
   // Handle payment success/cancel messages
   useEffect(() => {
