@@ -1,4 +1,5 @@
 import React from "react";
+// import posthog from 'posthog-js'  // Disabled analytics
 import { Routes, Route } from "react-router-dom";
 import Hero from "./Landing-page/Hero";
 import FeatureSection from "./Landing-page/Features";

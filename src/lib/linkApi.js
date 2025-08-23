@@ -57,17 +57,6 @@ export async function createLink(link) {
 }
 
 export async function getLinks() {
-  // First attempt token refresh
-  try {
-    await fetch(`${API_BASE}/auth/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
-  } catch (err) {
-    console.error("Token refresh failed:", err);
-    throw new Error("Session expired - Please login again");
-  }
-
   const res = await fetch(LINKS_URL, {
     headers: authHeaders(),
     credentials: "include",
