@@ -85,3 +85,11 @@ export async function getPublicLink(linkId) {
   const res = await fetch(`${PUBLIC_LINKS_URL}/${linkId}`);
   return handleResponse(res);
 }
+
+export async function getUsageStats() {
+  const res = await fetch(`${LINKS_URL}/usage`, {
+    headers: authHeaders(),
+    credentials: "include",
+  });
+  return handleResponse(res);
+}

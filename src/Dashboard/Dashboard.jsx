@@ -6,6 +6,7 @@ import Topbar from "./Topbar";
 import GeneratedLinks from "./GeneratedLinks";
 import SubscriptionManager from "./SubscriptionManager";
 import { useLinksContext } from "../context/useLinksContext";
+import { getUsageStats } from "../lib/linkApi";
 import { BarChart3, CreditCard } from "lucide-react";
 import PaymentSuccessModal from "../components/ui/PaymentSuccessModal";
 
@@ -14,6 +15,10 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [usageStats, setUsageStats] = useState({
+    monthlyTotal: 0,
+    allTimeTotal: 0,
+  });
   const { links, fetchLinks } = useLinksContext();
   const [searchParams] = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
@@ -95,6 +100,19 @@ export default function Dashboard() {
     setActiveTab("billing");
   };
 
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await getUsageStats();
+        setUsageStats(data);
+      } catch (error) {
+        console.error("Failed to fetch usage stats:", error);
+        toast.error("Failed to load usage statistics");
+      }
+    };
+    fetchStats();
+  }, [links]);
+
   if (loading) {
     return (
       <>
@@ -120,15 +138,6 @@ export default function Dashboard() {
       icon: CreditCard,
     },
   ];
-
-  const getLinksThisMonth = () => {
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
-    const safeLinks = Array.isArray(links) ? links : [];
-    return safeLinks.filter((link) => new Date(link.createdAt) >= startOfMonth)
-      .length;
-  };
 
   return (
     <div className="min-h-screen bg-[#1F1F23]">
@@ -159,16 +168,15 @@ export default function Dashboard() {
       {(!subscription?.plan || subscription?.plan === "free") &&
         !showFreePlanLimit &&
         (() => {
-          const linksThisMonth = getLinksThisMonth();
-          if (linksThisMonth >= 3) {
+          if (usageStats.monthlyTotal >= 3) {
             return (
               <div className="bg-gradient-to-r from-[#1de4bf]/20 to-[#0bf3a2]/20 border border-[#1de4bf]/30 text-white px-4 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold">Free Plan Usage</h3>
                     <p className="text-sm opacity-90">
-                      You've used {linksThisMonth}/5 free links this month.
-                      Upgrade to create unlimited links.
+                      You've used {usageStats.monthlyTotal}/5 free links this
+                      month. Upgrade to create unlimited links.
                     </p>
                   </div>
                   <button
@@ -266,7 +274,7 @@ export default function Dashboard() {
                   <div className="flex justify-between">
                     <span className="text-gray-400">Links This Month</span>
                     <span className="font-semibold text-white">
-                      {getLinksThisMonth()}/5
+                      {usageStats.monthlyTotal}/5
                     </span>
                   </div>
                 )}
