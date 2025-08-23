@@ -5,6 +5,26 @@ const API_BASE = import.meta.env.VITE_API_URL;
 const LINKS_URL = API_BASE + "/links";
 const PUBLIC_LINKS_URL = API_BASE + "/public/links";
 
+// Retry configuration
+const MAX_RETRIES = 3;
+const RETRY_DELAYS = [1000, 3000, 9000]; // 1s, 3s, 9s
+
+async function fetchWithRetry(url, options = {}, retryCount = 0) {
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok && retryCount < MAX_RETRIES) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return response;
+  } catch (error) {
+    if (retryCount >= MAX_RETRIES) throw error;
+    await new Promise((resolve) =>
+      setTimeout(resolve, RETRY_DELAYS[retryCount])
+    );
+    return fetchWithRetry(url, options, retryCount + 1);
+  }
+}
+
 function getToken() {
   return localStorage.getItem("token");
 }
@@ -27,7 +47,7 @@ async function handleResponse(res) {
 }
 
 export async function createLink(link) {
-  const res = await fetch(LINKS_URL, {
+  const res = await fetchWithRetry(LINKS_URL, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(link),
@@ -63,7 +83,7 @@ export async function getLinks() {
 }
 
 export async function getLink(id) {
-  const res = await fetch(`${LINKS_URL}/${id}`, {
+  const res = await fetchWithRetry(`${LINKS_URL}/${id}`, {
     headers: authHeaders(),
     credentials: "include",
   });
@@ -71,7 +91,7 @@ export async function getLink(id) {
 }
 
 export async function trackLink(id) {
-  const res = await fetch(`${LINKS_URL}/track/${id}`, {
+  const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
     method: "POST",
     headers: authHeaders(),
     credentials: "include",
@@ -80,7 +100,7 @@ export async function trackLink(id) {
 }
 
 export async function updateLink(id, updates) {
-  const res = await fetch(`${LINKS_URL}/${id}`, {
+  const res = await fetchWithRetry(`${LINKS_URL}/${id}`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify(updates),
@@ -100,7 +120,7 @@ export async function deleteLink(id) {
 
 // For public preview (not authenticated)
 export async function getPublicLink(linkId) {
-  const res = await fetch(`${PUBLIC_LINKS_URL}/${linkId}`);
+  const res = await fetchWithRetry(`${PUBLIC_LINKS_URL}/${linkId}`);
   return handleResponse(res);
 }
 
