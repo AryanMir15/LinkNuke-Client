@@ -82,7 +82,6 @@ export async function getLink(id) {
 export async function trackLink(id) {
   const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
     method: "POST",
-    headers: authHeaders(),
     credentials: "include",
   });
   return handleResponse(res);
@@ -114,7 +113,7 @@ export async function getPublicLink(linkId) {
 }
 
 export async function getUsageStats() {
-  const res = await fetch(`${LINKS_URL}/usage`, {
+  const res = await fetch(`${LINKS_URL}/usage-stats`, {
     headers: authHeaders(),
     credentials: "include",
   });

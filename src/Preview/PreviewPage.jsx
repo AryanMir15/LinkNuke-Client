@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { trackLink } from "../lib/linkApi";
 
 const PreviewPage = () => {
   const { linkId } = useParams();
@@ -86,6 +87,9 @@ const PreviewPage = () => {
         const data = await res.json();
         console.log("Fetched link data:", data);
         setLink(data);
+        if (data?.linkId) {
+          await trackLink(data.linkId);
+        }
       } catch (error) {
         console.error("Error fetching link:", error);
         setError("Network error. Try again later.");
