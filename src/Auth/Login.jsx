@@ -52,7 +52,7 @@ export default function Login() {
       }
 
       toast.success("Login successful!");
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken); // Match server response field name
 
       // Track user login event
       trackEvent("user_logged_in", {

@@ -1,30 +1,52 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { Loader2 } from "lucide-react";
 
 const SessionContext = createContext(null);
 
 export function SessionProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    // Example: check localStorage or fetch user data here
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const storedToken = localStorage.getItem("token");
+  const [loading, setLoading] = useState(true);
 
-    if (storedUser && storedToken) {
-      // Verify token validity before setting user
-      try {
-        const decoded = jwtDecode(storedToken);
-        if (decoded.exp * 1000 > Date.now()) {
-          setUser(storedUser);
-        } else {
-          localStorage.clear();
-        }
-      } catch {
-        localStorage.clear();
+  useEffect(() => {
+    const verifySession = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "/login";
+        return;
       }
-    }
+
+      try {
+        // Verify token validity with server
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          throw new Error("Invalid session");
+        }
+
+        const userData = await res.json();
+        setUser(userData);
+      } catch (error) {
+        localStorage.clear();
+        window.location.href = "/login";
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifySession();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin w-8 h-8 text-[#1de4bf]" />
+      </div>
+    );
+  }
 
   return (
     <SessionContext.Provider value={{ user, setUser }}>
