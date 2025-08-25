@@ -55,9 +55,12 @@ export function LinksProvider({ children }) {
       // Ensure data is always an array before sorting
       const safeLinks = Array.isArray(data) ? data : [];
       // Sort by newest first
-      setLinks(
-        safeLinks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      const sortedLinks = safeLinks.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
+      setLinks(sortedLinks);
+      // Cache the links after successful fetch
+      localStorage.setItem("cachedLinks", JSON.stringify(sortedLinks));
     } catch (err) {
       setError(err.message);
       // Only show toast error if user is logged in (to avoid unauthorized errors on public pages)
@@ -73,7 +76,6 @@ export function LinksProvider({ children }) {
     const loadData = async () => {
       try {
         await fetchLinks();
-        localStorage.setItem("cachedLinks", JSON.stringify(links));
       } catch (err) {
         const cached = localStorage.getItem("cachedLinks");
         if (cached) {
@@ -88,7 +90,7 @@ export function LinksProvider({ children }) {
     if (isLoggedIn()) loadData();
     window.addEventListener("focus", loadData);
     return () => window.removeEventListener("focus", loadData);
-  }, [fetchLinks, links.length]);
+  }, [fetchLinks]); // Remove links.length dependency to prevent circular updates
 
   // Create link
   const create = async (link) => {

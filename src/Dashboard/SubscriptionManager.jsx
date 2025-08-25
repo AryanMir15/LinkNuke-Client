@@ -27,21 +27,35 @@ export default function SubscriptionManager() {
   const fetchSubscriptionStatus = async () => {
     try {
       setLoading(true);
+      setError(null);
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No authentication token found");
+        return;
+      }
+
+      console.log("Fetching subscription status...");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
         }
       );
+
+      console.log("Subscription response:", response.data);
       setSubscription(response.data.subscription);
       setUsage(response.data.usage);
       setBillingPeriod(response.data.billing_period);
     } catch (err) {
       console.error("Error fetching subscription:", err);
-      setError("Failed to load subscription status");
+      console.error("Error response:", err.response?.data);
+      setError(
+        err.response?.data?.error || "Failed to load subscription status"
+      );
     } finally {
       setLoading(false);
     }

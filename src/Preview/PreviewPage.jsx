@@ -87,8 +87,8 @@ const PreviewPage = () => {
         const data = await res.json();
         console.log("Fetched link data:", data);
         setLink(data);
-        if (data?.linkId) {
-          await trackLink(data.linkId);
+        if (data?._id) {
+          await trackLink(data._id);
         }
       } catch (error) {
         console.error("Error fetching link:", error);

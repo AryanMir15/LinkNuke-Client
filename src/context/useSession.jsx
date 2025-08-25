@@ -5,15 +5,26 @@ const SessionContext = createContext(null);
 
 export function SessionProvider({ children }) {
   const [user, setUser] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const verifySession = async () => {
       const token = localStorage.getItem("token");
+      const currentPath = window.location.pathname;
+
+      // Don't verify session on auth pages to prevent redirect loops
+      if (
+        currentPath === "/login" ||
+        currentPath === "/register" ||
+        currentPath === "/verify-pin" ||
+        currentPath === "/forgot-password"
+      ) {
+        setLoading(false);
+        return;
+      }
 
       if (!token) {
-        window.location.href = "/login";
+        setLoading(false);
         return;
       }
 
@@ -31,7 +42,13 @@ export function SessionProvider({ children }) {
         setUser(userData);
       } catch (error) {
         localStorage.clear();
-        window.location.href = "/login";
+        // Only redirect if not already on auth pages
+        if (
+          !currentPath.includes("/login") &&
+          !currentPath.includes("/register")
+        ) {
+          window.location.href = "/login";
+        }
       } finally {
         setLoading(false);
       }
