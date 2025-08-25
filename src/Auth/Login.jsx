@@ -26,9 +26,8 @@ export default function Login() {
         body: JSON.stringify(form),
       });
 
-      const data = await res.json();
-
       if (!res.ok) {
+        const data = await res.json();
         switch (res.status) {
           case 400:
             toast.error("Invalid request. Fill in all fields properly.");
@@ -52,7 +51,6 @@ export default function Login() {
       }
 
       toast.success("Login successful!");
-      localStorage.setItem("token", data.accessToken); // Match server response field name
 
       // Track user login event
       trackEvent("user_logged_in", {
