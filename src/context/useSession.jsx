@@ -9,7 +9,6 @@ export function SessionProvider({ children }) {
 
   useEffect(() => {
     const verifySession = async () => {
-      const token = localStorage.getItem("token");
       const currentPath = window.location.pathname;
 
       // Don't verify session on auth pages to prevent redirect loops
@@ -23,15 +22,10 @@ export function SessionProvider({ children }) {
         return;
       }
 
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
       try {
         // Verify token validity with server
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
-          headers: { Authorization: `Bearer ${token}` },
+          credentials: "include",
         });
 
         if (!res.ok) {
