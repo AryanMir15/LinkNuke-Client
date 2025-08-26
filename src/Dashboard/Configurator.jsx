@@ -83,7 +83,11 @@ const Configurator = () => {
   const [subscription, setSubscription] = useState(null);
 
   useEffect(() => {
-    fetchSubscriptionStatus();
+    // Only fetch subscription status if user has a paid plan
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user.plan && user.plan !== "free") {
+      fetchSubscriptionStatus();
+    }
   }, []);
 
   const fetchSubscriptionStatus = async () => {

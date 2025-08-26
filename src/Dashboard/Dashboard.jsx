@@ -31,7 +31,13 @@ export default function Dashboard() {
       try {
         if (!isMounted) return;
         await fetchLinks();
-        if (isMounted) await fetchSubscriptionStatus();
+        // Only fetch subscription status if user has a paid plan
+        if (isMounted) {
+          const user = JSON.parse(localStorage.getItem("user") || "{}");
+          if (user.plan && user.plan !== "free") {
+            await fetchSubscriptionStatus();
+          }
+        }
       } catch (err) {
         if (isMounted && err.name !== "AbortError") {
           toast.error(err.message || "Failed to load dashboard");
@@ -44,7 +50,7 @@ export default function Dashboard() {
       isMounted = false;
       controller.abort();
     };
-  }, [fetchLinks, subscription?.plan]);
+  }, [fetchLinks]);
 
   // Handle payment success/cancel messages
   useEffect(() => {
@@ -55,16 +61,15 @@ export default function Dashboard() {
     const paymentStatus = searchParams.get("payment");
     if (paymentStatus === "success") {
       toast.success("Payment successful! Welcome to LinkNuke Pro!");
-      // Refresh subscription status
-      fetchSubscriptionStatus();
+      // Refresh subscription status only for paid users
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      if (user.plan && user.plan !== "free") {
+        fetchSubscriptionStatus();
+      }
     } else if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
     }
   }, [searchParams]);
-
-  useEffect(() => {
-    fetchSubscriptionStatus();
-  }, [links]);
 
   const fetchSubscriptionStatus = async () => {
     try {
