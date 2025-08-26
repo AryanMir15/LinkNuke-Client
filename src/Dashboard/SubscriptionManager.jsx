@@ -35,7 +35,7 @@ export default function SubscriptionManager() {
 
       console.log("Fetching subscription status...");
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/subscription-status`,
         {
           withCredentials: true,
         }
@@ -68,7 +68,7 @@ export default function SubscriptionManager() {
     try {
       setCancelling(true);
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/cancel-subscription`,
         {},
         {
           withCredentials: true,

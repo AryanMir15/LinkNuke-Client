@@ -114,7 +114,7 @@ export default function PricingPage() {
 
       // For paid plans, redirect to checkout
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/create-checkout`,
         {
           productType: tier.name.toLowerCase(),
           billingCycle,
@@ -145,7 +145,7 @@ export default function PricingPage() {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/create-checkout`,
         {
           productType: tier.name.toLowerCase(),
           billingCycle: "monthly",

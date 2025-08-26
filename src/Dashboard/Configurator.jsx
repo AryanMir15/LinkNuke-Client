@@ -93,7 +93,7 @@ const Configurator = () => {
   const fetchSubscriptionStatus = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/subscription-status`,
         {
           withCredentials: true,
         }

@@ -35,18 +35,21 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + "/auth/register", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: form.name.split(" ")[0],
-          lastName: form.name.split(" ")[1] || "",
-          email: form.email,
-          password: form.password,
-          confirmPassword: form.confirmPassword,
-        }),
-      });
+      const res = await fetch(
+        import.meta.env.VITE_API_URL + "/api/v1/auth/register",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: form.name.split(" ")[0],
+            lastName: form.name.split(" ")[1] || "",
+            email: form.email,
+            password: form.password,
+            confirmPassword: form.confirmPassword,
+          }),
+        }
+      );
 
       const data = await res.json();
 

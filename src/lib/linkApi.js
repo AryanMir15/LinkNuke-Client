@@ -2,8 +2,8 @@
 
 // Use the environment variable for the API base URL
 const API_BASE = import.meta.env.VITE_API_URL;
-const LINKS_URL = API_BASE + "/links";
-const PUBLIC_LINKS_URL = API_BASE + "/public/links";
+const LINKS_URL = API_BASE + "/api/v1/links";
+const PUBLIC_LINKS_URL = API_BASE + "/api/v1/public/links";
 
 // Retry configuration
 const MAX_RETRIES = 3;
