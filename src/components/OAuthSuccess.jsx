@@ -18,8 +18,8 @@ export default function OAuthSuccess() {
       return;
     }
 
-    // Store the token in localStorage
-    localStorage.setItem("token", token);
+    // Store the session indicator in localStorage
+    localStorage.setItem("session", "active");
 
     // Update status to success
     setStatus("success");

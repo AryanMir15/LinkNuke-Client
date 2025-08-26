@@ -7,6 +7,21 @@ export function SessionProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const logout = async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("session");
+      setUser(null);
+      window.location.href = "/login";
+    }
+  };
+
   useEffect(() => {
     const verifySession = async () => {
       const currentPath = window.location.pathname;
@@ -23,7 +38,13 @@ export function SessionProvider({ children }) {
       }
 
       try {
-        // Verify token validity with server
+        // Check if we have a session indicator
+        const session = localStorage.getItem("session");
+        if (!session) {
+          throw new Error("No session");
+        }
+
+        // Verify session validity with server
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           credentials: "include",
         });
@@ -33,9 +54,9 @@ export function SessionProvider({ children }) {
         }
 
         const userData = await res.json();
-        setUser(userData);
+        setUser(userData.user || userData);
       } catch (error) {
-        localStorage.clear();
+        localStorage.removeItem("session");
         // Only redirect if not already on auth pages
         if (
           !currentPath.includes("/login") &&
@@ -60,7 +81,7 @@ export function SessionProvider({ children }) {
   }
 
   return (
-    <SessionContext.Provider value={{ user, setUser }}>
+    <SessionContext.Provider value={{ user, setUser, logout }}>
       {children}
     </SessionContext.Provider>
   );
