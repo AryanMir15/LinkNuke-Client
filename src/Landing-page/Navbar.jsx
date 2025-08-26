@@ -21,7 +21,7 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const isLoggedIn =
-    typeof window !== "undefined" && localStorage.getItem("token");
+    typeof window !== "undefined" && localStorage.getItem("session");
 
   useEffect(() => {
     const handleScroll = () => {

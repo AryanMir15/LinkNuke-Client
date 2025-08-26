@@ -102,7 +102,7 @@ export default function PricingSection() {
         },
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            // Session-based auth - no Authorization header needed
           },
           withCredentials: true,
         }

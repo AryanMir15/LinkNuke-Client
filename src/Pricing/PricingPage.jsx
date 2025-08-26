@@ -95,8 +95,8 @@ export default function PricingPage() {
       setSelectedTier(tier);
 
       // Check if user is logged in
-      const token = localStorage.getItem("token");
-      if (!token) {
+      const session = localStorage.getItem("session");
+      if (!session) {
         // Redirect to register with plan info
         navigate(
           `/register?plan=${tier.name.toLowerCase()}&returnUrl=${encodeURIComponent(
@@ -120,9 +120,6 @@ export default function PricingPage() {
           billingCycle,
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           withCredentials: true,
         }
       );
@@ -147,8 +144,6 @@ export default function PricingPage() {
   const handleUpgrade = async (tier) => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
         {
@@ -156,9 +151,7 @@ export default function PricingPage() {
           billingCycle: "monthly",
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         }
       );
 

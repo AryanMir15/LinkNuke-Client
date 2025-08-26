@@ -97,9 +97,9 @@ export default function VerifyPin() {
         return;
       }
 
-      const { token, user: userData } = responseData;
+      const { user: userData } = responseData;
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("session", "active");
       localStorage.setItem("user", JSON.stringify(userData));
       toast.success("Account verified!");
       navigate("/dashboard");

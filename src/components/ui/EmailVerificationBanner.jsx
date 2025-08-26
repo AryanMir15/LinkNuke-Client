@@ -14,17 +14,15 @@ const EmailVerificationBanner = () => {
 
   const checkEmailVerificationStatus = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
+      const session = localStorage.getItem("session");
+      if (!session) return;
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/email/subscription`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+             const response = await fetch(
+         `${import.meta.env.VITE_API_URL}/api/v1/email/subscription`,
+         {
+           credentials: "include",
+         }
+       );
 
       if (response.ok) {
         const data = await response.json();

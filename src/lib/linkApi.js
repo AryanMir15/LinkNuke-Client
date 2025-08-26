@@ -25,15 +25,9 @@ async function fetchWithRetry(url, options = {}, retryCount = 0) {
   }
 }
 
-function getToken() {
-  return localStorage.getItem("token");
-}
-
 function authHeaders() {
-  const token = getToken();
   return {
     "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 }
 
@@ -63,7 +57,7 @@ export async function getLinks() {
   });
 
   if (res.status === 401) {
-    localStorage.removeItem("token");
+    localStorage.removeItem("session");
     window.location.href = "/login";
     return [];
   }

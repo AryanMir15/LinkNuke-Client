@@ -71,9 +71,6 @@ export default function Dashboard() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
           withCredentials: true,
         }
       );

@@ -29,19 +29,10 @@ export default function SubscriptionManager() {
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setError("No authentication token found");
-        return;
-      }
-
       console.log("Fetching subscription status...");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           withCredentials: true,
         }
       );
@@ -76,9 +67,6 @@ export default function SubscriptionManager() {
         `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-          },
           withCredentials: true,
         }
       );
