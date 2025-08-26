@@ -99,18 +99,21 @@ export default function Register() {
       // If trial plan was selected, start trial after registration
       if (trialPlan) {
         try {
-          await fetch(`${import.meta.env.VITE_API_URL}/paddle/start-trial`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${data.token}`,
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              plan: trialPlan,
-              trialDays: 3,
-            }),
-          });
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/api/v1/paddle/start-trial`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${data.token}`,
+              },
+              credentials: "include",
+              body: JSON.stringify({
+                plan: trialPlan,
+                trialDays: 3,
+              }),
+            }
+          );
 
           toast.success(
             `Started ${trialPlan} trial! You have 3 days to explore.`
@@ -229,7 +232,7 @@ export default function Register() {
             onClick={() =>
               (window.location.href = `${
                 import.meta.env.VITE_API_URL
-              }/auth/google`)
+              }/api/v1/auth/google`)
             }
             className="w-full py-2.5 rounded-full bg-[#1F1F23] text-white font-medium text-sm hover:bg-[#2E2E32] transition flex items-center justify-center gap-2 shadow-md"
           >

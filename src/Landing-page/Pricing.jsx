@@ -96,7 +96,7 @@ export default function PricingSection() {
       }
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        `${import.meta.env.VITE_API_URL}/api/v1/paddle/create-checkout`,
         {
           productType: tier.name.toLowerCase(),
         },
