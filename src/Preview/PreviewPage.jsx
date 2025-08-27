@@ -70,34 +70,58 @@ const PreviewPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(
+        console.log("🔍🔍🔍 PREVIEW: Fetching public link:", linkId);
+        console.log(
+          "🔍🔍🔍 PREVIEW: API URL:",
           import.meta.env.VITE_API_URL + `/public/links/${linkId}`
         );
+
+        const res = await fetch(
+          import.meta.env.VITE_API_URL + `/public/links/${linkId}`,
+          {
+            // Explicitly no credentials for public endpoint
+            credentials: "omit",
+            headers: {
+              "Content-Type": "application/json",
+              // NO Authorization header for public endpoint
+            },
+          }
+        );
+
+        console.log("🔍🔍🔍 PREVIEW: Response status:", res.status);
+        console.log("🔍🔍🔍 PREVIEW: Response ok:", res.ok);
+
         if (!res.ok) {
+          console.log("🔍🔍🔍 PREVIEW: Response not ok, status:", res.status);
           if (res.status === 404) {
             setError("File not found or expired.");
           } else if (res.status === 410) {
             setError("Link has expired.");
           } else {
-            setError("Failed to load file.");
+            setError(`Failed to load file (${res.status}).`);
           }
           setLoading(false);
           return;
         }
+
         const data = await res.json();
-        console.log("Fetched link data:", data);
+        console.log("🔍🔍🔍 PREVIEW: Fetched link data:", data);
         setLink(data);
+
         // Track link view - but don't fail the preview if tracking fails
         if (data?._id) {
           try {
             await trackLink(data._id);
           } catch (trackError) {
-            console.log("Track link failed (non-critical):", trackError);
+            console.log(
+              "🔍🔍🔍 PREVIEW: Track link failed (non-critical):",
+              trackError
+            );
             // Don't throw - preview should still work even if tracking fails
           }
         }
       } catch (error) {
-        console.error("Error fetching link:", error);
+        console.error("🔍🔍🔍 PREVIEW: Network error:", error);
         setError("Network error. Try again later.");
       } finally {
         setLoading(false);
@@ -109,22 +133,9 @@ const PreviewPage = () => {
   // Only show the file (e.g., image) in a secure, centered, mobile-friendly way
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black px-4">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <Toaster position="top-center" />
-        <div className="w-full max-w-lg">
-          {/* Loading skeleton matching the actual preview UI */}
-          <div className="bg-gray-900 rounded-2xl shadow-2xl p-0 border border-gray-700 overflow-hidden">
-            <div className="aspect-square bg-gray-800 animate-pulse flex items-center justify-center">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-16 h-16 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
-                <p className="text-[#1de4bf] text-lg font-medium">
-                  Loading secure content...
-                </p>
-                <div className="w-32 h-2 bg-gray-700 rounded animate-pulse"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="w-8 h-8 border-2 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
       </div>
     );
   }
