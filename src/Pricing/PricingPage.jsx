@@ -23,24 +23,7 @@ const tiers = [
     featured: false,
     trialDays: 0,
   },
-  {
-    name: "Starter",
-    id: "tier-starter",
-    priceMonthly: "$9",
-    priceYearly: "$90",
-    description: "Perfect for individuals and small teams.",
-    features: [
-      "50 secure links/month",
-      "1 GB storage",
-      "Image & Text formats",
-      "Up to 5 files per link",
-      "100 MB max file size",
-      "Basic customization",
-      "Email support",
-    ],
-    featured: false,
-    trialDays: 0,
-  },
+
   {
     name: "Pro",
     id: "tier-pro",
@@ -120,7 +103,9 @@ export default function PricingPage() {
           billingCycle,
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -144,6 +129,7 @@ export default function PricingPage() {
   const handleUpgrade = async (tier) => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/paddle/create-checkout`,
         {
@@ -151,7 +137,9 @@ export default function PricingPage() {
           billingCycle: "monthly",
         },
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

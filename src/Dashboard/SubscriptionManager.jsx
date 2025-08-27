@@ -39,10 +39,13 @@ export default function SubscriptionManager() {
       setError(null);
 
       console.log("Fetching subscription status...");
+      const token = localStorage.getItem("token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -72,11 +75,14 @@ export default function SubscriptionManager() {
 
     try {
       setCancelling(true);
+      const token = localStorage.getItem("token");
       await axios.post(
         `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
         {},
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       await fetchSubscriptionStatus();

@@ -21,21 +21,7 @@ const tiers = [
     ],
     featured: false,
   },
-  {
-    name: "Starter",
-    price: "$9",
-    description: "Perfect for individuals and small teams.",
-    features: [
-      "50 secure links/month",
-      "1 GB storage",
-      "Image & Text formats",
-      "Up to 5 files per link",
-      "100 MB max file size",
-      "Basic customization",
-      "Email support",
-    ],
-    featured: false,
-  },
+
   {
     name: "Pro",
     price: "$19",
@@ -89,7 +75,8 @@ export default function PricingSection() {
 
       // Check if user is logged in by checking localStorage
       const storedUser = localStorage.getItem("user");
-      if (!storedUser) {
+      const token = localStorage.getItem("token");
+      if (!storedUser || !token) {
         // Redirect to pricing page for better flow
         window.location.href = `/pricing?trial=${tier.name.toLowerCase()}`;
         return;
@@ -102,9 +89,8 @@ export default function PricingSection() {
         },
         {
           headers: {
-            // Session-based auth - no Authorization header needed
+            Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
         }
       );
 
