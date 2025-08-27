@@ -19,12 +19,17 @@ export default function Login() {
     setLoading(true);
 
     try {
+      console.log(
+        "Login: Attempting login with URL:",
+        import.meta.env.VITE_API_URL + "/auth/login"
+      );
       const res = await fetch(import.meta.env.VITE_API_URL + "/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      console.log("Login: Response status:", res.status);
 
       if (!res.ok) {
         const data = await res.json();

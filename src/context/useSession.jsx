@@ -52,6 +52,7 @@ export function SessionProvider({ children }) {
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           credentials: "include",
         });
+        console.log("Session verification response status:", res.status);
 
         if (!res.ok) {
           throw new Error("Invalid session");
@@ -60,12 +61,14 @@ export function SessionProvider({ children }) {
         const userData = await res.json();
         setUser(userData.user || userData);
       } catch (error) {
+        console.log("Session verification failed with error:", error);
         localStorage.removeItem("session");
         // Only redirect if not already on auth pages
         if (
           !currentPath.includes("/login") &&
           !currentPath.includes("/register")
         ) {
+          console.log("Redirecting to /login from useSession");
           window.location.href = "/login";
         }
       } finally {

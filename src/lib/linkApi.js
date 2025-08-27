@@ -32,11 +32,20 @@ function authHeaders() {
 }
 
 async function handleResponse(res) {
+  console.log(
+    "handleResponse called with status:",
+    res.status,
+    "for URL:",
+    res.url
+  );
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
+    console.log("handleResponse error - status:", res.status, "data:", data);
     const error = data?.message || data?.error || res.statusText;
+    console.log("handleResponse throwing error:", error);
     throw new Error(error);
   }
+  console.log("handleResponse success - data:", data);
   return data;
 }
 
@@ -51,12 +60,14 @@ export async function createLink(link) {
 }
 
 export async function getLinks() {
+  console.log("getLinks called with URL:", LINKS_URL);
   const res = await fetch(LINKS_URL, {
     headers: authHeaders(),
     credentials: "include",
   });
 
   if (res.status === 401) {
+    console.log("getLinks: 401 error, redirecting to /login");
     localStorage.removeItem("session");
     window.location.href = "/login";
     return [];
@@ -112,5 +123,9 @@ export async function getUsageStats() {
     headers: authHeaders(),
     credentials: "include",
   });
+  console.log("getUsageStats response status:", res.status);
+  if (!res.ok) {
+    console.log("getUsageStats failed with status:", res.status);
+  }
   return handleResponse(res);
 }
