@@ -88,7 +88,8 @@ export async function getLinks() {
     console.log(
       "🔍🔍🔍 FRONTEND: 401 error in getLinks, redirecting to /login"
     );
-    localStorage.removeItem("session");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     window.location.href = "/login";
     return [];
   }
@@ -99,7 +100,6 @@ export async function getLinks() {
 export async function getLink(id) {
   const res = await fetchWithRetry(`${LINKS_URL}/${id}`, {
     headers: authHeaders(),
-    credentials: "include",
   });
   return handleResponse(res);
 }
@@ -107,7 +107,6 @@ export async function getLink(id) {
 export async function trackLink(id) {
   const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
     method: "POST",
-    credentials: "include",
   });
   return handleResponse(res);
 }
@@ -117,7 +116,6 @@ export async function updateLink(id, updates) {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify(updates),
-    credentials: "include",
   });
   return handleResponse(res);
 }
@@ -126,7 +124,6 @@ export async function deleteLink(id) {
   const res = await fetch(`${LINKS_URL}/${id}`, {
     method: "DELETE",
     headers: authHeaders(),
-    credentials: "include",
   });
   return handleResponse(res);
 }

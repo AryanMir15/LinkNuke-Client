@@ -37,7 +37,6 @@ export default function Register() {
     try {
       const res = await fetch(import.meta.env.VITE_API_URL + "/auth/register", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firstName: form.name.split(" ")[0],
@@ -102,7 +101,7 @@ export default function Register() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${data.token}`,
             },
-            credentials: "include",
+
             body: JSON.stringify({
               plan: trialPlan,
               trialDays: 3,

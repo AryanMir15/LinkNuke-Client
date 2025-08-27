@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   const isLoggedIn =
-    typeof window !== "undefined" && localStorage.getItem("session");
+    typeof window !== "undefined" && localStorage.getItem("token");
 
   return (
     <section

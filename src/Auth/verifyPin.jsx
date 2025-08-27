@@ -84,7 +84,6 @@ export default function VerifyPin() {
         import.meta.env.VITE_API_URL + "/auth/verify-pin",
         {
           method: "POST",
-          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, pin: code }),
         }
@@ -118,7 +117,6 @@ export default function VerifyPin() {
         import.meta.env.VITE_API_URL + "/auth/resend-pin",
         {
           method: "POST",
-          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         }

@@ -16,8 +16,8 @@ import PricingPage from "../../Pricing/PricingPage";
 
 // Auth protection component
 const ProtectedRoute = ({ children }) => {
-  const session = localStorage.getItem("session");
-  if (!session) {
+  const token = localStorage.getItem("token");
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
   return children;

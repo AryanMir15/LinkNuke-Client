@@ -14,14 +14,11 @@ const EmailVerificationBanner = () => {
 
   const checkEmailVerificationStatus = async () => {
     try {
-      const session = localStorage.getItem("session");
-      if (!session) return;
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/email/subscription`,
-        {
-          credentials: "include",
-        }
+        `${import.meta.env.VITE_API_URL}/email/subscription`
       );
 
       if (response.ok) {

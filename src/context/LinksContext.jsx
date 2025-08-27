@@ -38,7 +38,7 @@ export function LinksProvider({ children }) {
 
   // Check if user is logged in
   const isLoggedIn = () => {
-    return typeof window !== "undefined" && localStorage.getItem("session");
+    return typeof window !== "undefined" && localStorage.getItem("token");
   };
 
   // Fetch all links

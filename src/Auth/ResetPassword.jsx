@@ -34,7 +34,6 @@ export default function ResetPassword() {
         import.meta.env.VITE_API_URL + `/auth/reset-password/${token}`,
         {
           method: "POST",
-          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             password: form.password,
