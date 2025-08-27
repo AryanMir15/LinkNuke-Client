@@ -32,11 +32,26 @@ function authHeaders() {
 }
 
 async function handleResponse(res) {
-  const data = await res.json().catch(() => ({}));
+  console.log("🔍🔍🔍 FRONTEND: handleResponse called");
+  console.log("🔍🔍🔍 FRONTEND: Response status:", res.status);
+  console.log("🔍🔍🔍 FRONTEND: Response URL:", res.url);
+  console.log("🔍🔍🔍 FRONTEND: Response ok:", res.ok);
+
+  const data = await res.json().catch((error) => {
+    console.log("🔍🔍🔍 FRONTEND: JSON parse error:", error);
+    return {};
+  });
+
+  console.log("🔍🔍🔍 FRONTEND: Parsed response data:", data);
+
   if (!res.ok) {
+    console.log("🔍🔍🔍 FRONTEND: Response not ok, throwing error");
     const error = data?.message || data?.error || res.statusText;
+    console.log("🔍🔍🔍 FRONTEND: Error message:", error);
     throw new Error(error);
   }
+
+  console.log("🔍🔍🔍 FRONTEND: Response ok, returning data");
   return data;
 }
 
@@ -51,12 +66,23 @@ export async function createLink(link) {
 }
 
 export async function getLinks() {
+  console.log("🔍🔍🔍 FRONTEND: getLinks called");
+  console.log("🔍🔍🔍 FRONTEND: LINKS_URL:", LINKS_URL);
+  console.log("🔍🔍🔍 FRONTEND: authHeaders():", authHeaders());
+
   const res = await fetch(LINKS_URL, {
     headers: authHeaders(),
     credentials: "include",
   });
 
+  console.log("🔍🔍🔍 FRONTEND: getLinks response received");
+  console.log("🔍🔍🔍 FRONTEND: Response status:", res.status);
+  console.log("🔍🔍🔍 FRONTEND: Response URL:", res.url);
+
   if (res.status === 401) {
+    console.log(
+      "🔍🔍🔍 FRONTEND: 401 error in getLinks, redirecting to /login"
+    );
     localStorage.removeItem("session");
     window.location.href = "/login";
     return [];
@@ -107,9 +133,24 @@ export async function getPublicLink(linkId) {
 }
 
 export async function getUsageStats() {
+  console.log("🔍🔍🔍 FRONTEND: getUsageStats called");
+  console.log("🔍🔍🔍 FRONTEND: LINKS_URL:", LINKS_URL);
+  console.log("🔍🔍🔍 FRONTEND: Full URL:", `${LINKS_URL}/usage-stats`);
+  console.log("🔍🔍🔍 FRONTEND: authHeaders():", authHeaders());
+
   const res = await fetch(`${LINKS_URL}/usage-stats`, {
     headers: authHeaders(),
     credentials: "include",
   });
+
+  console.log("🔍🔍🔍 FRONTEND: Fetch response received");
+  console.log("🔍🔍🔍 FRONTEND: Response status:", res.status);
+  console.log("🔍🔍🔍 FRONTEND: Response URL:", res.url);
+  console.log(
+    "🔍🔍🔍 FRONTEND: Response headers:",
+    Object.fromEntries(res.headers.entries())
+  );
+  console.log("🔍🔍🔍 FRONTEND: Response ok:", res.ok);
+
   return handleResponse(res);
 }

@@ -114,14 +114,22 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchStats = async () => {
+      console.log("🔍🔍🔍 DASHBOARD: fetchStats called");
+      console.log("🔍🔍🔍 DASHBOARD: links dependency:", links);
       try {
+        console.log("🔍🔍🔍 DASHBOARD: Calling getUsageStats()");
         const { data } = await getUsageStats();
+        console.log("🔍🔍🔍 DASHBOARD: getUsageStats success, data:", data);
         setUsageStats(data);
+        console.log("🔍🔍🔍 DASHBOARD: setUsageStats called");
       } catch (error) {
-        console.error("Failed to fetch usage stats:", error);
+        console.error("🔍🔍🔍 DASHBOARD: Failed to fetch usage stats:", error);
+        console.error("🔍🔍🔍 DASHBOARD: Error message:", error.message);
+        console.error("🔍🔍🔍 DASHBOARD: Error stack:", error.stack);
         toast.error("Failed to load usage statistics");
       }
     };
+    console.log("🔍🔍🔍 DASHBOARD: useEffect triggered, calling fetchStats");
     fetchStats();
   }, [links]);
 

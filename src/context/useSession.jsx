@@ -45,24 +45,52 @@ export function SessionProvider({ children }) {
         }
 
         // Verify session validity with server
+        console.log("🔍🔍🔍 SESSION: Starting session verification");
+        console.log(
+          "🔍🔍🔍 SESSION: VITE_API_URL:",
+          import.meta.env.VITE_API_URL
+        );
+        console.log(
+          "🔍🔍🔍 SESSION: Full URL:",
+          `${import.meta.env.VITE_API_URL}/auth/verify`
+        );
+
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           credentials: "include",
         });
 
+        console.log("🔍🔍🔍 SESSION: Verification response received");
+        console.log("🔍🔍🔍 SESSION: Response status:", res.status);
+        console.log("🔍🔍🔍 SESSION: Response URL:", res.url);
+
         if (!res.ok) {
+          console.log(
+            "🔍🔍🔍 SESSION: Session verification failed, status:",
+            res.status
+          );
           throw new Error("Invalid session");
         }
 
+        console.log("🔍🔍🔍 SESSION: Session verification successful");
         const userData = await res.json();
+        console.log("🔍🔍🔍 SESSION: User data received:", userData);
         setUser(userData.user || userData);
       } catch (error) {
+        console.log(
+          "🔍🔍🔍 SESSION: Session verification error caught:",
+          error
+        );
+        console.log("🔍🔍🔍 SESSION: Current path:", currentPath);
         localStorage.removeItem("session");
         // Only redirect if not already on auth pages
         if (
           !currentPath.includes("/login") &&
           !currentPath.includes("/register")
         ) {
+          console.log("🔍🔍🔍 SESSION: Redirecting to /login");
           window.location.href = "/login";
+        } else {
+          console.log("🔍🔍🔍 SESSION: Already on auth page, not redirecting");
         }
       } finally {
         setLoading(false);
