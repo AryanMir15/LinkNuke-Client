@@ -143,7 +143,7 @@ const PreviewPage = () => {
         <Toaster position="top-center" />
         <div className="relative bg-gray-900 rounded-2xl shadow-2xl p-0 max-w-lg w-full flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
           <div className="aspect-square w-full flex items-center justify-center bg-gray-900/80 backdrop-blur-sm">
-            <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
           </div>
         </div>
       </div>
@@ -211,7 +211,7 @@ const PreviewPage = () => {
           {/* Loading State */}
           {imageLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm z-10">
-              <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
+              <div className="w-12 h-12 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
             </div>
           )}
 
