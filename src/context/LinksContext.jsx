@@ -87,10 +87,14 @@ export function LinksProvider({ children }) {
       }
     };
 
-    if (isLoggedIn()) loadData();
-    window.addEventListener("focus", loadData);
+    if (isLoggedIn()) {
+      loadData();
+      // Only add focus listener once
+      window.addEventListener("focus", loadData);
+    }
+
     return () => window.removeEventListener("focus", loadData);
-  }, [fetchLinks]); // Remove links.length dependency to prevent circular updates
+  }, []); // Remove fetchLinks dependency to prevent loops
 
   // Create link
   const create = async (link) => {

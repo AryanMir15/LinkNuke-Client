@@ -44,17 +44,31 @@ async function handleResponse(res) {
   console.log("🔍🔍🔍 FRONTEND: Response URL:", res.url);
   console.log("🔍🔍🔍 FRONTEND: Response ok:", res.ok);
 
-  const data = await res.json().catch((error) => {
+  let data;
+  try {
+    data = await res.json();
+  } catch (error) {
     console.log("🔍🔍🔍 FRONTEND: JSON parse error:", error);
-    return {};
-  });
+    // If JSON parse fails, return empty object for non-ok responses, null for ok responses
+    data = res.ok ? null : {};
+  }
 
   console.log("🔍🔍🔍 FRONTEND: Parsed response data:", data);
 
   if (!res.ok) {
     console.log("🔍🔍🔍 FRONTEND: Response not ok, throwing error");
-    const error = data?.message || data?.error || res.statusText;
+    const error =
+      data?.message || data?.error || `HTTP ${res.status}: ${res.statusText}`;
     console.log("🔍🔍🔍 FRONTEND: Error message:", error);
+
+    // Handle specific HTTP status codes
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+      throw new Error("Authentication expired. Please login again.");
+    }
+
     throw new Error(error);
   }
 

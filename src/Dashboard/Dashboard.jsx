@@ -30,7 +30,12 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         if (!isMounted) return;
-        await fetchLinks();
+
+        // Only fetch links if we don't have any yet
+        if (!links || links.length === 0) {
+          await fetchLinks();
+        }
+
         // Only fetch subscription status if user has a paid plan
         if (isMounted) {
           const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -50,9 +55,9 @@ export default function Dashboard() {
       isMounted = false;
       controller.abort();
     };
-  }, [fetchLinks]);
+  }, []); // Remove fetchLinks dependency to prevent loops
 
-  // Handle payment success/cancel messages
+  // Handle payment success/cancel messages (run only once)
   useEffect(() => {
     console.log(
       "Payment URL Params:",
@@ -69,7 +74,7 @@ export default function Dashboard() {
     } else if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
     }
-  }, [searchParams]);
+  }, [paymentSuccess]); // Only depend on paymentSuccess to avoid re-running
 
   const fetchSubscriptionStatus = async () => {
     try {
@@ -118,23 +123,33 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       console.log("🔍🔍🔍 DASHBOARD: fetchStats called");
-      console.log("🔍🔍🔍 DASHBOARD: links dependency:", links);
+      console.log("🔍🔍🔍 DASHBOARD: links length:", links?.length || 0);
       try {
         console.log("🔍🔍🔍 DASHBOARD: Calling getUsageStats()");
-        const { data } = await getUsageStats();
+        const data = await getUsageStats();
         console.log("🔍🔍🔍 DASHBOARD: getUsageStats success, data:", data);
-        setUsageStats(data);
-        console.log("🔍🔍🔍 DASHBOARD: setUsageStats called");
+        if (data && typeof data === "object") {
+          setUsageStats(data);
+          console.log("🔍🔍🔍 DASHBOARD: setUsageStats called with:", data);
+        } else {
+          console.warn("🔍🔍🔍 DASHBOARD: Invalid usage stats data:", data);
+          setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
+        }
       } catch (error) {
         console.error("🔍🔍🔍 DASHBOARD: Failed to fetch usage stats:", error);
         console.error("🔍🔍🔍 DASHBOARD: Error message:", error.message);
         console.error("🔍🔍🔍 DASHBOARD: Error stack:", error.stack);
         toast.error("Failed to load usage statistics");
+        setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
       }
     };
-    console.log("🔍🔍🔍 DASHBOARD: useEffect triggered, calling fetchStats");
-    fetchStats();
-  }, [links]);
+
+    // Only fetch stats once when component mounts or when links length changes significantly
+    if (links !== null) {
+      console.log("🔍🔍🔍 DASHBOARD: useEffect triggered, calling fetchStats");
+      fetchStats();
+    }
+  }, [links?.length]);
 
   if (loading) {
     return (
