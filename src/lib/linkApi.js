@@ -122,7 +122,15 @@ export async function trackLink(id) {
   const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
     method: "POST",
   });
-  return handleResponse(res);
+
+  // Don't use handleResponse for tracking - it redirects on 401
+  // Tracking should be non-critical and not affect preview
+  if (!res.ok) {
+    console.log("Track link failed (non-critical):", res.status);
+    return null; // Fail silently
+  }
+
+  return res.json().catch(() => null);
 }
 
 export async function updateLink(id, updates) {

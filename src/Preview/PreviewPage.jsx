@@ -135,7 +135,12 @@ const PreviewPage = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <Toaster position="top-center" />
-        <div className="w-8 h-8 border-2 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
+          <p className="text-[#00ffff] text-sm font-medium">
+            Loading secure content...
+          </p>
+        </div>
       </div>
     );
   }
