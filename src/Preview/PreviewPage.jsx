@@ -172,7 +172,7 @@ const PreviewPage = () => {
         }}
       >
         <Toaster position="top-center" />
-        <div className="relative bg-gray-900 rounded-2xl shadow-2xl p-0 max-w-lg w-full flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
+        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 max-w-lg w-full flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
           {/* Anti-screenshot overlay */}
           {link.extraSecure && (
             <div
