@@ -141,9 +141,20 @@ const PreviewPage = () => {
         }}
       >
         <Toaster position="top-center" />
-        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
-          <div className="aspect-square w-full flex items-center justify-center bg-gray-800/50">
-            <div className="w-12 h-12 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
+        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
+          <div className="aspect-square w-full flex items-center justify-center relative">
+            {/* Modern pulsing dots loader */}
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
+              <div
+                className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                style={{ animationDelay: "0.2s" }}
+              ></div>
+              <div
+                className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                style={{ animationDelay: "0.4s" }}
+              ></div>
+            </div>
           </div>
         </div>
       </div>
@@ -172,7 +183,7 @@ const PreviewPage = () => {
         }}
       >
         <Toaster position="top-center" />
-        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
+        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
           {/* Anti-screenshot overlay */}
           {link.extraSecure && (
             <div
@@ -210,8 +221,29 @@ const PreviewPage = () => {
 
           {/* Loading State */}
           {imageLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-800/50 z-10">
-              <div className="w-12 h-12 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm bg-gray-900/60 z-10">
+              <div className="flex flex-col items-center gap-4">
+                {/* Modern wave loader */}
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-8 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
+                  <div
+                    className="w-2 h-12 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                    style={{ animationDelay: "0.1s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-6 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                    style={{ animationDelay: "0.2s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-10 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                    style={{ animationDelay: "0.3s" }}
+                  ></div>
+                  <div
+                    className="w-2 h-4 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                    style={{ animationDelay: "0.4s" }}
+                  ></div>
+                </div>
+              </div>
             </div>
           )}
 
