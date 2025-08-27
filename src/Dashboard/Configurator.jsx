@@ -132,19 +132,14 @@ const Configurator = () => {
   const handleFormatSelect = (formatLabel) => {
     const format = formats.find((f) => f.label === formatLabel);
 
-    // Check if user has reached the 5/5 limit for free plan
-    if (
-      (!subscription?.plan || subscription?.plan === "free") &&
-      usageStats.monthlyTotal >= 5
-    ) {
-      // Don't open modal, the lock overlay will handle this
-      return;
-    }
-
-    // Check if format requires premium and user doesn't have it
+    // Check if format requires premium and user doesn't have it (but not if limit reached)
     if (
       format.premium &&
-      (!subscription?.plan || subscription?.plan === "free")
+      (!subscription?.plan || subscription?.plan === "free") &&
+      !(
+        (!subscription?.plan || subscription?.plan === "free") &&
+        usageStats.monthlyTotal >= 5
+      )
     ) {
       toast.error(
         "This format requires a Pro or Lifetime plan. Upgrade to unlock all file types."
@@ -260,11 +255,11 @@ const Configurator = () => {
 
         {/* Modals */}
         <div>
-          {/* Modals */}
+          {/* Show Lock Message if limit reached, otherwise show modals */}
           <AnimatePresence mode="wait">
-            {activeType === "Image" && (
+            {isLimitReached && activeType ? (
               <motion.div
-                key="Image"
+                key="LimitReached"
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 24 }}
@@ -274,120 +269,133 @@ const Configurator = () => {
                     window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
                 }}
               >
-                <ImageModal closeModal={closeModal} />
+                <div className="bg-[#1F1F23] border border-[#2E2E32] rounded-2xl p-8 max-w-2xl mx-auto text-center shadow-2xl">
+                  {/* Lock Icon */}
+                  <div className="mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#1de4bf] to-[#0bf3a2] rounded-full flex items-center justify-center mx-auto">
+                      <Lock size={28} className="text-[#1F1F23]" />
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-2xl font-bold text-white mb-3">
+                    Monthly Limit Reached
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-400 mb-6 leading-relaxed">
+                    You've used all{" "}
+                    <span className="text-[#1de4bf] font-semibold">
+                      {usageStats.monthlyTotal}/5
+                    </span>{" "}
+                    free links this month. Upgrade to create unlimited secure
+                    links.
+                  </p>
+
+                  {/* View Plans Button */}
+                  <button
+                    onClick={() => navigate("/pricing")}
+                    className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-[#1F1F23] font-semibold py-3 px-8 rounded-xl hover:shadow-lg hover:shadow-[#1de4bf]/20 transition-all duration-300 flex items-center justify-center gap-2 group mx-auto"
+                  >
+                    View Plans
+                    <ArrowRight
+                      size={18}
+                      className="group-hover:translate-x-1 transition-transform duration-300"
+                    />
+                  </button>
+                </div>
               </motion.div>
-            )}
-            {activeType === "Video" && (
-              <motion.div
-                key="Video"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={{
-                  duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                  ease:
-                    window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
-                }}
-              >
-                <VideoModal closeModal={closeModal} />
-              </motion.div>
-            )}
-            {activeType === "Text" && (
-              <motion.div
-                key="Text"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={{
-                  duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                  ease:
-                    window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
-                }}
-              >
-                <TextModal closeModal={closeModal} />
-              </motion.div>
-            )}
-            {activeType === "Audio" && (
-              <motion.div
-                key="Audio"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={{
-                  duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                  ease:
-                    window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
-                }}
-              >
-                <AudioModal closeModal={closeModal} />
-              </motion.div>
-            )}
-            {activeType === "Doc" && (
-              <motion.div
-                key="Doc"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={{
-                  duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                  ease:
-                    window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
-                }}
-              >
-                <DocumentsModal closeModal={closeModal} />
-              </motion.div>
+            ) : (
+              <>
+                {activeType === "Image" && (
+                  <motion.div
+                    key="Image"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{
+                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
+                      ease:
+                        window.innerWidth < 768
+                          ? "easeOut"
+                          : [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <ImageModal closeModal={closeModal} />
+                  </motion.div>
+                )}
+                {activeType === "Video" && (
+                  <motion.div
+                    key="Video"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{
+                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
+                      ease:
+                        window.innerWidth < 768
+                          ? "easeOut"
+                          : [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <VideoModal closeModal={closeModal} />
+                  </motion.div>
+                )}
+                {activeType === "Text" && (
+                  <motion.div
+                    key="Text"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{
+                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
+                      ease:
+                        window.innerWidth < 768
+                          ? "easeOut"
+                          : [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <TextModal closeModal={closeModal} />
+                  </motion.div>
+                )}
+                {activeType === "Audio" && (
+                  <motion.div
+                    key="Audio"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{
+                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
+                      ease:
+                        window.innerWidth < 768
+                          ? "easeOut"
+                          : [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <AudioModal closeModal={closeModal} />
+                  </motion.div>
+                )}
+                {activeType === "Doc" && (
+                  <motion.div
+                    key="Doc"
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 24 }}
+                    transition={{
+                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
+                      ease:
+                        window.innerWidth < 768
+                          ? "easeOut"
+                          : [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <DocumentsModal closeModal={closeModal} />
+                  </motion.div>
+                )}
+              </>
             )}
           </AnimatePresence>
         </div>
-
-        {/* Lock Overlay for 5/5 Limit */}
-        {isLimitReached && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="bg-[#1F1F23] border border-[#2E2E32] rounded-2xl p-8 max-w-md w-full text-center shadow-2xl"
-            >
-              {/* Lock Icon */}
-              <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#1de4bf] to-[#0bf3a2] rounded-full flex items-center justify-center mx-auto">
-                  <Lock size={28} className="text-[#1F1F23]" />
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className="text-2xl font-bold text-white mb-3">
-                Monthly Limit Reached
-              </h3>
-
-              {/* Description */}
-              <p className="text-gray-400 mb-6 leading-relaxed">
-                You've used all{" "}
-                <span className="text-[#1de4bf] font-semibold">
-                  {usageStats.monthlyTotal}/5
-                </span>{" "}
-                free links this month. Upgrade to create unlimited secure links.
-              </p>
-
-              {/* View Plans Button */}
-              <button
-                onClick={() => navigate("/pricing")}
-                className="w-full bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-[#1F1F23] font-semibold py-3 px-6 rounded-xl hover:shadow-lg hover:shadow-[#1de4bf]/20 transition-all duration-300 flex items-center justify-center gap-2 group"
-              >
-                View Plans
-                <ArrowRight
-                  size={18}
-                  className="group-hover:translate-x-1 transition-transform duration-300"
-                />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
       </div>
     </section>
   );
