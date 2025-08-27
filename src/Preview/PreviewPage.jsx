@@ -130,16 +130,21 @@ const PreviewPage = () => {
     fetchLink();
   }, [linkId]);
 
-  // Only show the file (e.g., image) in a secure, centered, mobile-friendly way
+  // Show the same loader style during initial loading
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
+      <div
+        className="min-h-screen flex items-center justify-center px-2 py-6 sm:px-4 sm:py-12"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,255,157,0.8) 100%)",
+        }}
+      >
         <Toaster position="top-center" />
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
-          <p className="text-[#00ffff] text-sm font-medium">
-            Loading secure content...
-          </p>
+        <div className="relative bg-gray-900 rounded-2xl shadow-2xl p-0 max-w-lg w-full flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
+          <div className="aspect-square w-full flex items-center justify-center bg-gray-900/80 backdrop-blur-sm">
+            <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
+          </div>
         </div>
       </div>
     );
@@ -206,12 +211,7 @@ const PreviewPage = () => {
           {/* Loading State */}
           {imageLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm z-10">
-              <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
-                <p className="text-[#00ffff] text-sm font-medium">
-                  Loading image...
-                </p>
-              </div>
+              <div className="w-12 h-12 border-4 border-[#00ffff]/20 border-t-[#00ffff] rounded-full animate-spin"></div>
             </div>
           )}
 
