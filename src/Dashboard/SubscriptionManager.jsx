@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   CreditCard,
   Calendar,
@@ -12,6 +13,7 @@ import {
 import ErrorBoundary from "../components/ui/ErrorBoundary";
 
 export default function SubscriptionManager() {
+  const navigate = useNavigate();
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,6 +27,9 @@ export default function SubscriptionManager() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     if (user.plan && user.plan !== "free") {
       fetchSubscriptionStatus();
+    } else {
+      // For free users, set loading to false immediately
+      setLoading(false);
     }
   }, []);
 
@@ -176,13 +181,13 @@ export default function SubscriptionManager() {
             You're currently on the free plan. Upgrade to unlock premium
             features.
           </p>
-          <a
-            href="/pricing"
+          <button
+            onClick={() => navigate("/pricing")}
             className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
           >
             View Plans
             <ArrowRight size={16} className="ml-2" />
-          </a>
+          </button>
         </div>
       </div>
     );
@@ -277,12 +282,12 @@ export default function SubscriptionManager() {
           >
             {cancelling ? "Cancelling..." : "Cancel Subscription"}
           </button>
-          <a
-            href="/pricing"
+          <button
+            onClick={() => navigate("/pricing")}
             className="px-4 py-2 text-[#1de4bf] border border-[#1de4bf] rounded-lg hover:bg-[#1de4bf]/10 transition-colors"
           >
             Change Plan
-          </a>
+          </button>
         </div>
       )}
 
