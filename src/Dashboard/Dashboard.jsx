@@ -41,12 +41,16 @@ export default function Dashboard() {
           const user = JSON.parse(localStorage.getItem("user") || "{}");
           if (user.plan && user.plan !== "free") {
             await fetchSubscriptionStatus();
+          } else {
+            // For free users, set loading to false here
+            setLoading(false);
           }
         }
       } catch (err) {
         if (isMounted && err.name !== "AbortError") {
           toast.error(err.message || "Failed to load dashboard");
         }
+        setLoading(false); // Ensure loading is set to false on error
       }
     };
 
@@ -144,10 +148,13 @@ export default function Dashboard() {
       }
     };
 
-    // Only fetch stats once when component mounts or when links length changes significantly
-    if (links !== null) {
+    // Only fetch stats once when we have links data (avoid double calls)
+    if (links !== null && Array.isArray(links)) {
       console.log("🔍🔍🔍 DASHBOARD: useEffect triggered, calling fetchStats");
-      fetchStats();
+
+      // Debounce to prevent rapid successive calls
+      const timeoutId = setTimeout(fetchStats, 100);
+      return () => clearTimeout(timeoutId);
     }
   }, [links?.length]);
 
