@@ -219,30 +219,27 @@ const PreviewPage = () => {
             </a>
           )}
 
-          {/* Loading State */}
-          {imageLoading && (
-            <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm bg-gray-900/60 z-10">
-              <div className="flex flex-col items-center gap-4">
-                {/* Modern wave loader */}
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-8 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
-                  <div
-                    className="w-2 h-12 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                    style={{ animationDelay: "0.1s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-6 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                    style={{ animationDelay: "0.2s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-10 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                    style={{ animationDelay: "0.3s" }}
-                  ></div>
-                  <div
-                    className="w-2 h-4 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                    style={{ animationDelay: "0.4s" }}
-                  ></div>
-                </div>
+          {/* Loading State - only for images */}
+          {imageLoading && link.imageUrl && (
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-8 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
+                <div
+                  className="w-2 h-12 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.1s" }}
+                ></div>
+                <div
+                  className="w-2 h-6 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="w-2 h-10 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.3s" }}
+                ></div>
+                <div
+                  className="w-2 h-4 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
               </div>
             </div>
           )}
