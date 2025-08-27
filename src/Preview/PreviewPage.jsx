@@ -87,8 +87,14 @@ const PreviewPage = () => {
         const data = await res.json();
         console.log("Fetched link data:", data);
         setLink(data);
+        // Track link view - but don't fail the preview if tracking fails
         if (data?._id) {
-          await trackLink(data._id);
+          try {
+            await trackLink(data._id);
+          } catch (trackError) {
+            console.log("Track link failed (non-critical):", trackError);
+            // Don't throw - preview should still work even if tracking fails
+          }
         }
       } catch (error) {
         console.error("Error fetching link:", error);
@@ -103,9 +109,22 @@ const PreviewPage = () => {
   // Only show the file (e.g., image) in a secure, centered, mobile-friendly way
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="min-h-screen flex items-center justify-center bg-black px-4">
         <Toaster position="top-center" />
-        <div className="text-gray-400 text-lg">Loading...</div>
+        <div className="w-full max-w-lg">
+          {/* Loading skeleton matching the actual preview UI */}
+          <div className="bg-gray-900 rounded-2xl shadow-2xl p-0 border border-gray-700 overflow-hidden">
+            <div className="aspect-square bg-gray-800 animate-pulse flex items-center justify-center">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 border-4 border-[#1de4bf]/20 border-t-[#1de4bf] rounded-full animate-spin"></div>
+                <p className="text-[#1de4bf] text-lg font-medium">
+                  Loading secure content...
+                </p>
+                <div className="w-32 h-2 bg-gray-700 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
