@@ -103,6 +103,7 @@ export function LinksProvider({ children }) {
     try {
       const newLink = await api.createLink(link);
       setLinks((prev) => [newLink, ...prev]);
+
       toast.success("Link created!");
       return newLink;
     } catch (err) {
