@@ -26,9 +26,16 @@ async function fetchWithRetry(url, options = {}, retryCount = 0) {
 }
 
 function authHeaders() {
-  return {
+  const token = localStorage.getItem("token");
+  const headers = {
     "Content-Type": "application/json",
   };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 }
 
 async function handleResponse(res) {
@@ -60,7 +67,6 @@ export async function createLink(link) {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(link),
-    credentials: "include",
   });
   return handleResponse(res);
 }
@@ -72,7 +78,6 @@ export async function getLinks() {
 
   const res = await fetch(LINKS_URL, {
     headers: authHeaders(),
-    credentials: "include",
   });
 
   console.log("🔍🔍🔍 FRONTEND: getLinks response received");
@@ -140,7 +145,6 @@ export async function getUsageStats() {
 
   const res = await fetch(`${LINKS_URL}/usage-stats`, {
     headers: authHeaders(),
-    credentials: "include",
   });
 
   console.log("🔍🔍🔍 FRONTEND: Fetch response received");

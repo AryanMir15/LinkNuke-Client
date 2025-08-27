@@ -9,16 +9,13 @@ export function SessionProvider({ children }) {
 
   const logout = async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      localStorage.removeItem("session");
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setUser(null);
       window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
@@ -38,59 +35,64 @@ export function SessionProvider({ children }) {
       }
 
       try {
-        // Check if we have a session indicator
-        const session = localStorage.getItem("session");
-        if (!session) {
-          throw new Error("No session");
+        // Check if we have a JWT token
+        const token = localStorage.getItem("token");
+        const userData = localStorage.getItem("user");
+
+        console.log("🔍🔍🔍 JWT SESSION: Starting session verification");
+        console.log("🔍🔍🔍 JWT SESSION: Token exists:", !!token);
+        console.log("🔍🔍🔍 JWT SESSION: User data exists:", !!userData);
+
+        if (!token || !userData) {
+          throw new Error("No token or user data");
         }
 
-        // Verify session validity with server
-        console.log("🔍🔍🔍 SESSION: Starting session verification");
-        console.log(
-          "🔍🔍🔍 SESSION: VITE_API_URL:",
-          import.meta.env.VITE_API_URL
+        // Parse user data from localStorage
+        const parsedUser = JSON.parse(userData);
+        console.log("🔍🔍🔍 JWT SESSION: Parsed user:", parsedUser);
+
+        // Verify token with server by making a test API call
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/links/usage-stats`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
+
         console.log(
-          "🔍🔍🔍 SESSION: Full URL:",
-          `${import.meta.env.VITE_API_URL}/auth/verify`
+          "🔍🔍🔍 JWT SESSION: Verification response status:",
+          response.status
         );
 
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
-          credentials: "include",
-        });
-
-        console.log("🔍🔍🔍 SESSION: Verification response received");
-        console.log("🔍🔍🔍 SESSION: Response status:", res.status);
-        console.log("🔍🔍🔍 SESSION: Response URL:", res.url);
-
-        if (!res.ok) {
-          console.log(
-            "🔍🔍🔍 SESSION: Session verification failed, status:",
-            res.status
-          );
-          throw new Error("Invalid session");
+        if (!response.ok) {
+          throw new Error(`Verification failed: ${response.status}`);
         }
 
-        console.log("🔍🔍🔍 SESSION: Session verification successful");
-        const userData = await res.json();
-        console.log("🔍🔍🔍 SESSION: User data received:", userData);
-        setUser(userData.user || userData);
+        // Token is valid, set user
+        setUser(parsedUser);
+        console.log("🔍🔍🔍 JWT SESSION: Session verified successfully");
       } catch (error) {
-        console.log(
-          "🔍🔍🔍 SESSION: Session verification error caught:",
-          error
-        );
-        console.log("🔍🔍🔍 SESSION: Current path:", currentPath);
-        localStorage.removeItem("session");
-        // Only redirect if not already on auth pages
+        console.error("🔍🔍🔍 JWT SESSION: Verification failed:", error);
+
+        // Clear invalid token/data
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+
+        // Redirect to login if not already on an auth page
         if (
-          !currentPath.includes("/login") &&
-          !currentPath.includes("/register")
+          currentPath !== "/login" &&
+          currentPath !== "/register" &&
+          currentPath !== "/verify-pin" &&
+          currentPath !== "/forgot-password"
         ) {
-          console.log("🔍🔍🔍 SESSION: Redirecting to /login");
+          console.log("🔍🔍🔍 JWT SESSION: Redirecting to login");
           window.location.href = "/login";
-        } else {
-          console.log("🔍🔍🔍 SESSION: Already on auth page, not redirecting");
+          return;
         }
       } finally {
         setLoading(false);
@@ -102,20 +104,19 @@ export function SessionProvider({ children }) {
 
   if (loading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin w-8 h-8 text-[#1de4bf]" />
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <Loader2 className="animate-spin text-[#1de4bf]" size={32} />
       </div>
     );
   }
 
   return (
-    <SessionContext.Provider value={{ user, setUser, logout }}>
+    <SessionContext.Provider value={{ user, logout }}>
       {children}
     </SessionContext.Provider>
   );
 }
 
-// Custom hook to consume the session context
 export function useSession() {
   const context = useContext(SessionContext);
   if (!context) {

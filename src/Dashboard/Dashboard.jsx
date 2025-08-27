@@ -73,10 +73,13 @@ export default function Dashboard() {
 
   const fetchSubscriptionStatus = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

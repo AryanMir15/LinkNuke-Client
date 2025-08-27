@@ -50,10 +50,11 @@ export default function Login() {
         return;
       }
 
-      await res.json();
+      const data = await res.json();
 
-      // Store a session indicator in localStorage
-      localStorage.setItem("session", "active");
+      // Store JWT token in localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
       toast.success("Login successful!");
 
