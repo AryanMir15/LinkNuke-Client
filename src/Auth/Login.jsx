@@ -19,15 +19,12 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        import.meta.env.VITE_API_URL + "/api/v1/auth/login",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
-        }
-      );
+      const res = await fetch(import.meta.env.VITE_API_URL + "/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
       if (!res.ok) {
         const data = await res.json();
@@ -81,7 +78,7 @@ export default function Login() {
 
   // Google
   const handleGoogleLogin = () => {
-    window.location.href = import.meta.env.VITE_API_URL + "/api/v1/auth/google";
+    window.location.href = import.meta.env.VITE_API_URL + "/auth/google";
   };
 
   return (
