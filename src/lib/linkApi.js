@@ -107,6 +107,7 @@ export async function getPublicLink(linkId) {
 }
 
 export async function getUsageStats() {
+  console.log("getUsageStats called with URL:", `${LINKS_URL}/usage-stats`);
   const res = await fetch(`${LINKS_URL}/usage-stats`, {
     headers: authHeaders(),
     credentials: "include",

@@ -45,6 +45,10 @@ export function SessionProvider({ children }) {
         }
 
         // Verify session validity with server
+        console.log(
+          "Session verification URL:",
+          `${import.meta.env.VITE_API_URL}/auth/verify`
+        );
         const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
           credentials: "include",
         });
