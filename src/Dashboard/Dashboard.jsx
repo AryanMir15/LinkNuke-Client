@@ -114,14 +114,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      console.log("Dashboard: Starting to fetch usage stats");
       try {
         const { data } = await getUsageStats();
-        console.log("Dashboard: Successfully fetched usage stats:", data);
         setUsageStats(data);
       } catch (error) {
-        console.error("Dashboard: Failed to fetch usage stats:", error);
-        console.error("Dashboard: Error details:", error.message, error.stack);
+        console.error("Failed to fetch usage stats:", error);
         toast.error("Failed to load usage statistics");
       }
     };
