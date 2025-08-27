@@ -53,7 +53,7 @@ export default function Login() {
         return;
       }
 
-      const data = await res.json();
+      await res.json();
 
       // Store a session indicator in localStorage
       localStorage.setItem("session", "active");
