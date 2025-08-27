@@ -18,7 +18,7 @@ const EmailVerificationBanner = () => {
       if (!session) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/email/subscription`,
+        `${import.meta.env.VITE_API_URL}/email/subscription`,
         {
           credentials: "include",
         }
@@ -43,7 +43,7 @@ const EmailVerificationBanner = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/v1/auth/resend-pin`,
+        `${import.meta.env.VITE_API_URL}/auth/resend-pin`,
         {
           method: "POST",
           headers: {

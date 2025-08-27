@@ -9,7 +9,7 @@ export function SessionProvider({ children }) {
 
   const logout = async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/logout`, {
+      await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -45,12 +45,9 @@ export function SessionProvider({ children }) {
         }
 
         // Verify session validity with server
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/v1/auth/verify`,
-          {
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+          credentials: "include",
+        });
 
         if (!res.ok) {
           throw new Error("Invalid session");
