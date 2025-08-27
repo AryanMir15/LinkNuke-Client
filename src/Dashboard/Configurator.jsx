@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ImageModal from "./modals/ImageModal";
 import VideoModal from "./modals/VideoModal";
 import TextModal from "./modals/TextModal";
@@ -11,14 +12,14 @@ import {
   FileAudio,
   FileText as DocumentIcon,
   Lock,
+  ArrowRight,
 } from "lucide-react";
-import { Check, ChevronDown } from "lucide-react";
 import React from "react";
-import * as Popover from "@radix-ui/react-popover";
 import { AnimatePresence, motion } from "framer-motion";
 import { trackEvent } from "../lib/analytics";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { getUsageStats } from "../lib/linkApi";
 
 const formats = [
   {
@@ -79,8 +80,13 @@ const formats = [
 ];
 
 const Configurator = () => {
+  const navigate = useNavigate();
   const [activeType, setActiveType] = useState("Image");
   const [subscription, setSubscription] = useState(null);
+  const [usageStats, setUsageStats] = useState({
+    monthlyTotal: 0,
+    allTimeTotal: 0,
+  });
 
   useEffect(() => {
     // Only fetch subscription status if user has a paid plan
@@ -88,7 +94,21 @@ const Configurator = () => {
     if (user.plan && user.plan !== "free") {
       fetchSubscriptionStatus();
     }
+
+    // Always fetch usage stats for limit checking
+    fetchUsageStats();
   }, []);
+
+  const fetchUsageStats = async () => {
+    try {
+      const data = await getUsageStats();
+      if (data && typeof data === "object") {
+        setUsageStats(data);
+      }
+    } catch (error) {
+      console.error("Error fetching usage stats:", error);
+    }
+  };
 
   const fetchSubscriptionStatus = async () => {
     try {
@@ -111,6 +131,15 @@ const Configurator = () => {
 
   const handleFormatSelect = (formatLabel) => {
     const format = formats.find((f) => f.label === formatLabel);
+
+    // Check if user has reached the 5/5 limit for free plan
+    if (
+      (!subscription?.plan || subscription?.plan === "free") &&
+      usageStats.monthlyTotal >= 5
+    ) {
+      // Don't open modal, the lock overlay will handle this
+      return;
+    }
 
     // Check if format requires premium and user doesn't have it
     if (
@@ -135,6 +164,10 @@ const Configurator = () => {
 
   const isPremiumUser =
     subscription?.plan === "pro" || subscription?.plan === "lifetime";
+
+  const isLimitReached =
+    (!subscription?.plan || subscription?.plan === "free") &&
+    usageStats.monthlyTotal >= 5;
 
   return (
     <section className="w-full px-4 sm:px-6 py-8 sm:py-16 bg-[#1F1F23]">
@@ -306,6 +339,55 @@ const Configurator = () => {
             )}
           </AnimatePresence>
         </div>
+
+        {/* Lock Overlay for 5/5 Limit */}
+        {isLimitReached && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="bg-[#1F1F23] border border-[#2E2E32] rounded-2xl p-8 max-w-md w-full text-center shadow-2xl"
+            >
+              {/* Lock Icon */}
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#1de4bf] to-[#0bf3a2] rounded-full flex items-center justify-center mx-auto">
+                  <Lock size={28} className="text-[#1F1F23]" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-2xl font-bold text-white mb-3">
+                Monthly Limit Reached
+              </h3>
+
+              {/* Description */}
+              <p className="text-gray-400 mb-6 leading-relaxed">
+                You've used all{" "}
+                <span className="text-[#1de4bf] font-semibold">
+                  {usageStats.monthlyTotal}/5
+                </span>{" "}
+                free links this month. Upgrade to create unlimited secure links.
+              </p>
+
+              {/* View Plans Button */}
+              <button
+                onClick={() => navigate("/pricing")}
+                className="w-full bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-[#1F1F23] font-semibold py-3 px-6 rounded-xl hover:shadow-lg hover:shadow-[#1de4bf]/20 transition-all duration-300 flex items-center justify-center gap-2 group"
+              >
+                View Plans
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1 transition-transform duration-300"
+                />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </section>
   );
