@@ -126,23 +126,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      console.log("🔍🔍🔍 DASHBOARD: fetchStats called");
-      console.log("🔍🔍🔍 DASHBOARD: links length:", links?.length || 0);
       try {
-        console.log("🔍🔍🔍 DASHBOARD: Calling getUsageStats()");
         const data = await getUsageStats();
-        console.log("🔍🔍🔍 DASHBOARD: getUsageStats success, data:", data);
         if (data && typeof data === "object") {
           setUsageStats(data);
-          console.log("🔍🔍🔍 DASHBOARD: setUsageStats called with:", data);
         } else {
-          console.warn("🔍🔍🔍 DASHBOARD: Invalid usage stats data:", data);
           setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
         }
       } catch (error) {
-        console.error("🔍🔍🔍 DASHBOARD: Failed to fetch usage stats:", error);
-        console.error("🔍🔍🔍 DASHBOARD: Error message:", error.message);
-        console.error("🔍🔍🔍 DASHBOARD: Error stack:", error.stack);
+        console.error("Failed to fetch usage stats:", error);
         toast.error("Failed to load usage statistics");
         setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
       }
@@ -150,8 +142,6 @@ export default function Dashboard() {
 
     // Only fetch stats once when we have links data (avoid double calls)
     if (links !== null && Array.isArray(links)) {
-      console.log("🔍🔍🔍 DASHBOARD: useEffect triggered, calling fetchStats");
-
       // Debounce to prevent rapid successive calls
       const timeoutId = setTimeout(fetchStats, 100);
       return () => clearTimeout(timeoutId);
