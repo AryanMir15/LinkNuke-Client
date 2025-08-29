@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -22,6 +22,7 @@ export default function Dashboard() {
   const { links, fetchLinks } = useLinksContext();
   const [searchParams] = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
+  const paymentProcessed = useRef(false);
 
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
@@ -155,31 +156,34 @@ export default function Dashboard() {
 
   // Handle payment success/cancel messages (run only once)
   useEffect(() => {
-    console.log(
-      "Payment URL Params:",
-      Object.fromEntries(searchParams.entries())
-    );
     const paymentStatus = searchParams.get("payment");
-    if (paymentStatus === "success") {
-      toast.success("Payment successful! Welcome to LinkNuke Pro!");
-      // Always refresh subscription status after payment success
-      // This will update the UI to show the new Pro plan
-      fetchSubscriptionStatus();
-      // Also refresh user session data
-      refreshUserSession();
-      // Force a page reload to ensure UI updates with new subscription data
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    } else if (paymentStatus === "cancelled") {
-      toast.error("Payment was cancelled");
+
+    // Only process if there's a payment parameter and we haven't processed it yet
+    if (paymentStatus && !paymentProcessed.current) {
+      paymentProcessed.current = true;
+
+      console.log(
+        "Payment URL Params:",
+        Object.fromEntries(searchParams.entries())
+      );
+
+      if (paymentStatus === "success") {
+        toast.success("Payment successful! Welcome to LinkNuke Pro!");
+        // Always refresh subscription status after payment success
+        // This will update the UI to show the new Pro plan
+        fetchSubscriptionStatus();
+        // Also refresh user session data
+        refreshUserSession();
+        // Force a page reload to ensure UI updates with new subscription data
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else if (paymentStatus === "cancelled") {
+        toast.error("Payment was cancelled");
+      }
     }
-  }, [
-    paymentSuccess,
-    fetchSubscriptionStatus,
-    searchParams,
-    refreshUserSession,
-  ]); // Add missing dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentSuccess]); // Only depend on paymentSuccess to avoid infinite loop
 
   const handleUpgrade = () => {
     setActiveTab("billing");
