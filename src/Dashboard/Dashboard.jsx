@@ -23,6 +23,46 @@ export default function Dashboard() {
   const [searchParams] = useSearchParams();
   const paymentSuccess = searchParams.get("payment") === "success";
 
+  const fetchSubscriptionStatus = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSubscription(response.data.subscription);
+
+      // Check if user is on free plan and has reached limit
+      if (
+        !response.data.subscription?.plan ||
+        response.data.subscription?.plan === "free"
+      ) {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        // Ensure links is an array before filtering
+        const safeLinks = Array.isArray(links) ? links : [];
+        const linksThisMonth = safeLinks.filter(
+          (link) => new Date(link.createdAt) >= startOfMonth
+        ).length;
+
+        if (linksThisMonth >= 5) {
+          setShowFreePlanLimit(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching subscription:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [links]);
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -88,46 +128,6 @@ export default function Dashboard() {
     searchParams,
     refreshUserSession,
   ]); // Add missing dependencies
-
-  const fetchSubscriptionStatus = useCallback(async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setSubscription(response.data.subscription);
-
-      // Check if user is on free plan and has reached limit
-      if (
-        !response.data.subscription?.plan ||
-        response.data.subscription?.plan === "free"
-      ) {
-        const startOfMonth = new Date();
-        startOfMonth.setDate(1);
-        startOfMonth.setHours(0, 0, 0, 0);
-
-        // Ensure links is an array before filtering
-        const safeLinks = Array.isArray(links) ? links : [];
-        const linksThisMonth = safeLinks.filter(
-          (link) => new Date(link.createdAt) >= startOfMonth
-        ).length;
-
-        if (linksThisMonth >= 5) {
-          setShowFreePlanLimit(true);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching subscription:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [links]);
 
   const refreshUserSession = useCallback(async () => {
     try {
