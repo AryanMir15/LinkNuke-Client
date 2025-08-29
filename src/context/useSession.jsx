@@ -53,7 +53,7 @@ export function SessionProvider({ children }) {
 
         // Verify token with server by making a test API call
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/links/usage-stats`,
+          `${import.meta.env.VITE_API_URL}/auth/verify`,
           {
             method: "GET",
             headers: {
