@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -59,7 +59,7 @@ export default function Dashboard() {
       isMounted = false;
       controller.abort();
     };
-  }, []); // Remove fetchLinks dependency to prevent loops
+  }, [fetchLinks, fetchSubscriptionStatus, links]); // Add all dependencies
 
   // Handle payment success/cancel messages (run only once)
   useEffect(() => {
@@ -75,12 +75,21 @@ export default function Dashboard() {
       fetchSubscriptionStatus();
       // Also refresh user session data
       refreshUserSession();
+      // Force a page reload to ensure UI updates with new subscription data
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
     }
-  }, [paymentSuccess]); // Only depend on paymentSuccess to avoid re-running
+  }, [
+    paymentSuccess,
+    fetchSubscriptionStatus,
+    searchParams,
+    refreshUserSession,
+  ]); // Add missing dependencies
 
-  const fetchSubscriptionStatus = async () => {
+  const fetchSubscriptionStatus = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
@@ -118,9 +127,9 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [links]);
 
-  const refreshUserSession = async () => {
+  const refreshUserSession = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       // Fetch fresh user data from the server
@@ -170,7 +179,7 @@ export default function Dashboard() {
         );
       }
     }
-  };
+  }, []);
 
   const handleUpgrade = () => {
     setActiveTab("billing");
@@ -198,7 +207,7 @@ export default function Dashboard() {
       const timeoutId = setTimeout(fetchStats, 100);
       return () => clearTimeout(timeoutId);
     }
-  }, [links?.length]);
+  }, [links]);
 
   if (loading) {
     return (

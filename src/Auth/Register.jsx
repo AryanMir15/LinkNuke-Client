@@ -19,7 +19,6 @@ export default function Register() {
   // Get trial info from URL params
   const urlParams = new URLSearchParams(window.location.search);
   const trialPlan = urlParams.get("trial");
-  const returnUrl = urlParams.get("returnUrl") || "/dashboard";
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -39,8 +38,8 @@ export default function Register() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName: form.name.split(" ")[0],
-          lastName: form.name.split(" ")[1] || "",
+          firstName: form.name.split(" ")[0] || form.name,
+          lastName: form.name.split(" ").slice(1).join(" ") || "User",
           email: form.email,
           password: form.password,
           confirmPassword: form.confirmPassword,

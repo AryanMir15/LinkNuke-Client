@@ -11,6 +11,7 @@ export default function OAuthSuccess() {
 
   useEffect(() => {
     const token = searchParams.get("token");
+    const userId = searchParams.get("userId");
 
     if (!token) {
       setStatus("error");
@@ -18,19 +19,48 @@ export default function OAuthSuccess() {
       return;
     }
 
-    // Store the session indicator in localStorage
+    // Store the token and session indicator in localStorage
+    localStorage.setItem("token", token);
     localStorage.setItem("session", "active");
 
-    // Update status to success
-    setStatus("success");
+    // Fetch user data using the token
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/auth/verify`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    // Track successful OAuth login
-    trackEvent("oauth_login_success", { provider: "Google" });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.user) {
+            // Store user data in localStorage
+            localStorage.setItem("user", JSON.stringify(data.user));
+            console.log("✅ OAuth: User data stored successfully");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data after OAuth:", error);
+      }
+    };
 
-    // Redirect to dashboard after a short delay
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 3000); // Increased delay to show the welcome message
+    // Fetch user data and then redirect
+    fetchUserData().then(() => {
+      // Update status to success
+      setStatus("success");
+
+      // Track successful OAuth login
+      trackEvent("oauth_login_success", { provider: "Google" });
+
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    });
   }, [searchParams, navigate]);
 
   if (status === "processing") {
