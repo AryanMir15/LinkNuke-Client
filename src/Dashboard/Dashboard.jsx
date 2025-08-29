@@ -70,11 +70,11 @@ export default function Dashboard() {
     const paymentStatus = searchParams.get("payment");
     if (paymentStatus === "success") {
       toast.success("Payment successful! Welcome to LinkNuke Pro!");
-      // Refresh subscription status only for paid users
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      if (user.plan && user.plan !== "free") {
-        fetchSubscriptionStatus();
-      }
+      // Always refresh subscription status after payment success
+      // This will update the UI to show the new Pro plan
+      fetchSubscriptionStatus();
+      // Also refresh user session data
+      refreshUserSession();
     } else if (paymentStatus === "cancelled") {
       toast.error("Payment was cancelled");
     }
@@ -117,6 +117,58 @@ export default function Dashboard() {
       console.error("Error fetching subscription:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshUserSession = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // Fetch fresh user data from the server
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/auth/verify`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.user) {
+        // Update localStorage with fresh user data
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log("✅ User session refreshed with updated subscription data");
+      }
+    } catch (error) {
+      console.error("Error refreshing user session:", error);
+      // Fallback: try to get user data from subscription status
+      try {
+        const token = localStorage.getItem("token");
+        const subResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (subResponse.data.subscription) {
+          // Update localStorage user data with subscription info
+          const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+          const updatedUser = {
+            ...currentUser,
+            subscription: subResponse.data.subscription,
+            plan: subResponse.data.subscription.plan,
+          };
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          console.log("✅ User session updated with subscription data");
+        }
+      } catch (subError) {
+        console.error(
+          "Error updating user session with subscription data:",
+          subError
+        );
+      }
     }
   };
 
