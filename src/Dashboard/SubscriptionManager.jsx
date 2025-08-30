@@ -23,14 +23,6 @@ export default function SubscriptionManager() {
   const [billingPeriod, setBillingPeriod] = useState(null);
   const subscriptionFetched = useRef(false);
 
-  useEffect(() => {
-    // Only fetch subscription status once on mount
-    if (!subscriptionFetched.current) {
-      subscriptionFetched.current = true;
-      fetchSubscriptionStatus();
-    }
-  }, [fetchSubscriptionStatus]);
-
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
       setLoading(true);
@@ -95,6 +87,14 @@ export default function SubscriptionManager() {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    // Only fetch subscription status once on mount
+    if (!subscriptionFetched.current) {
+      subscriptionFetched.current = true;
+      fetchSubscriptionStatus();
+    }
+  }, [fetchSubscriptionStatus]);
 
   const refreshUserSession = async (subscriptionData) => {
     try {
