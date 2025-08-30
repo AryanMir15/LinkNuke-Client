@@ -510,69 +510,71 @@ export default function SubscriptionManager() {
         </div>
       </div>
 
-      {subscription.status === "active" && subscription.plan !== "lifetime" && (
-        <div className="mt-6 flex flex-wrap gap-3">
-          {isRefundEligible() &&
-            (subscription.refundStatus === "none" ||
-              subscription.refundStatus === "failed") && (
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => setShowRefundModal(true)}
-                  className="px-4 py-2 text-orange-400 border border-orange-400 rounded-lg hover:bg-orange-400/10 transition-colors flex items-center gap-2"
-                >
-                  <RefreshCw className="h-4 w-4" />
-                  {subscription.refundStatus === "failed"
-                    ? "Retry Refund"
-                    : "Request Refund"}
-                  <span className="text-xs bg-orange-400/20 px-2 py-1 rounded">
-                    {getRefundDaysRemaining()}d left
-                  </span>
-                </button>
-                <button
-                  onClick={() => setShowRefundPolicyModal(true)}
-                  className="text-xs text-gray-400 hover:text-gray-300 transition-colors underline"
-                >
-                  View Refund Policy
-                </button>
+      {(subscription.status === "active" ||
+        subscription.status === "cancelled") &&
+        subscription.plan !== "lifetime" && (
+          <div className="mt-6 flex flex-wrap gap-3">
+            {isRefundEligible() &&
+              (subscription.refundStatus === "none" ||
+                subscription.refundStatus === "failed") && (
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setShowRefundModal(true)}
+                    className="px-4 py-2 text-orange-400 border border-orange-400 rounded-lg hover:bg-orange-400/10 transition-colors flex items-center gap-2"
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    {subscription.refundStatus === "failed"
+                      ? "Retry Refund"
+                      : "Request Refund"}
+                    <span className="text-xs bg-orange-400/20 px-2 py-1 rounded">
+                      {getRefundDaysRemaining()}d left
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => setShowRefundPolicyModal(true)}
+                    className="text-xs text-gray-400 hover:text-gray-300 transition-colors underline"
+                  >
+                    View Refund Policy
+                  </button>
+                </div>
+              )}
+
+            {!isRefundEligible() && subscription.refundStatus === "none" && (
+              <div className="px-4 py-2 text-gray-500 border border-gray-600 rounded-lg flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                Refund Window Expired
               </div>
             )}
 
-          {!isRefundEligible() && subscription.refundStatus === "none" && (
-            <div className="px-4 py-2 text-gray-500 border border-gray-600 rounded-lg flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Refund Window Expired
-            </div>
-          )}
+            {subscription.refundStatus === "requested" && (
+              <div className="px-4 py-2 text-yellow-400 border border-yellow-400 rounded-lg flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 animate-spin" />
+                Refund Processing...
+              </div>
+            )}
 
-          {subscription.refundStatus === "requested" && (
-            <div className="px-4 py-2 text-yellow-400 border border-yellow-400 rounded-lg flex items-center gap-2">
-              <RefreshCw className="h-4 w-4 animate-spin" />
-              Refund Processing...
-            </div>
-          )}
+            {subscription.refundStatus === "failed" && (
+              <div className="px-4 py-2 text-red-400 border border-red-400 rounded-lg flex items-center gap-2">
+                <XCircle className="h-4 w-4" />
+                Refund Failed - Click "Retry Refund" to try again
+              </div>
+            )}
 
-          {subscription.refundStatus === "failed" && (
-            <div className="px-4 py-2 text-red-400 border border-red-400 rounded-lg flex items-center gap-2">
-              <XCircle className="h-4 w-4" />
-              Refund Failed - Click "Retry Refund" to try again
-            </div>
-          )}
-
-          <button
-            onClick={handleCancelSubscription}
-            disabled={cancelling}
-            className="px-4 py-2 text-red-400 border border-red-400 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
-          >
-            {cancelling ? "Cancelling..." : "Cancel Subscription"}
-          </button>
-          <button
-            onClick={() => navigate("/pricing")}
-            className="px-4 py-2 text-[#1de4bf] border border-[#1de4bf] rounded-lg hover:bg-[#1de4bf]/10 transition-colors"
-          >
-            Change Plan
-          </button>
-        </div>
-      )}
+            <button
+              onClick={handleCancelSubscription}
+              disabled={cancelling}
+              className="px-4 py-2 text-red-400 border border-red-400 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
+            >
+              {cancelling ? "Cancelling..." : "Cancel Subscription"}
+            </button>
+            <button
+              onClick={() => navigate("/pricing")}
+              className="px-4 py-2 text-[#1de4bf] border border-[#1de4bf] rounded-lg hover:bg-[#1de4bf]/10 transition-colors"
+            >
+              Change Plan
+            </button>
+          </div>
+        )}
 
       {subscription.status === "cancelled" && (
         <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
