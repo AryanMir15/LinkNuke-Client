@@ -166,3 +166,4 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
 };
 
 export default RefundPolicyModal;
+
