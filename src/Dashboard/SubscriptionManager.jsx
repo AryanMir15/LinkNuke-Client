@@ -23,6 +23,42 @@ export default function SubscriptionManager() {
   const [billingPeriod, setBillingPeriod] = useState(null);
   const subscriptionFetched = useRef(false);
 
+  const refreshUserSession = useCallback(async (subscriptionData) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Fetch fresh user data from the server
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/auth/verify`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.user) {
+        // Update localStorage with fresh user data
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log("✅ SubscriptionManager: User session refreshed");
+      }
+    } catch (error) {
+      console.error("Error refreshing user session:", error);
+      // Fallback: update localStorage with subscription data
+      if (subscriptionData) {
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        const updatedUser = {
+          ...currentUser,
+          subscription: subscriptionData,
+          plan: subscriptionData.plan,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        console.log(
+          "✅ SubscriptionManager: User session updated with subscription data"
+        );
+      }
+    }
+  }, []);
+
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
       setLoading(true);
@@ -86,7 +122,7 @@ export default function SubscriptionManager() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [refreshUserSession]);
 
   useEffect(() => {
     // Only fetch subscription status once on mount
@@ -95,42 +131,6 @@ export default function SubscriptionManager() {
       fetchSubscriptionStatus();
     }
   }, [fetchSubscriptionStatus]);
-
-  const refreshUserSession = async (subscriptionData) => {
-    try {
-      const token = localStorage.getItem("token");
-      // Fetch fresh user data from the server
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/auth/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.user) {
-        // Update localStorage with fresh user data
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log("✅ SubscriptionManager: User session refreshed");
-      }
-    } catch (error) {
-      console.error("Error refreshing user session:", error);
-      // Fallback: update localStorage with subscription data
-      if (subscriptionData) {
-        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-        const updatedUser = {
-          ...currentUser,
-          subscription: subscriptionData,
-          plan: subscriptionData.plan,
-        };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        console.log(
-          "✅ SubscriptionManager: User session updated with subscription data"
-        );
-      }
-    }
-  };
 
   const handleCancelSubscription = async () => {
     if (
