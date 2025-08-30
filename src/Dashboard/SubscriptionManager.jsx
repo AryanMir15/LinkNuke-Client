@@ -8,9 +8,13 @@ import {
   CheckCircle,
   XCircle,
   ArrowRight,
+  RefreshCw,
+  Clock,
+  DollarSign,
 } from "lucide-react";
 
 import ErrorBoundary from "../components/ui/ErrorBoundary";
+import RefundPolicyModal from "../components/ui/RefundPolicyModal";
 
 export default function SubscriptionManager() {
   const navigate = useNavigate();
@@ -18,6 +22,10 @@ export default function SubscriptionManager() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cancelling, setCancelling] = useState(false);
+  const [refunding, setRefunding] = useState(false);
+  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
+  const [refundReason, setRefundReason] = useState("");
 
   const [usage, setUsage] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState(null);
@@ -201,12 +209,101 @@ export default function SubscriptionManager() {
     }
   };
 
+  const handleRequestRefund = async () => {
+    try {
+      setRefunding(true);
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/paddle/request-refund`,
+        { reason: refundReason },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      await fetchSubscriptionStatus();
+      setShowRefundModal(false);
+      setRefundReason("");
+
+      alert(
+        `Refund processed successfully! You've been refunded $${response.data.refundAmount} and your access has been removed immediately.`
+      );
+    } catch (err) {
+      console.error("Error requesting refund:", err);
+
+      let errorMessage = "Failed to process refund request. Please try again.";
+
+      if (err.response?.status === 400) {
+        const serverError = err.response.data?.error;
+        if (serverError?.includes("already requested")) {
+          errorMessage = "Refund has already been requested or processed.";
+        } else if (serverError?.includes("expired")) {
+          errorMessage =
+            "Refund window has expired. Refunds are only available within 15 days of first payment.";
+        } else if (serverError?.includes("No active subscription")) {
+          errorMessage = "No active subscription found to refund.";
+        } else {
+          errorMessage = serverError || errorMessage;
+        }
+      } else if (err.response?.status === 500) {
+        const serverError = err.response.data?.error;
+        if (serverError?.includes("already refunded")) {
+          errorMessage = "Transaction has already been refunded.";
+        } else if (serverError?.includes("not found")) {
+          errorMessage = "Transaction not found.";
+        } else {
+          errorMessage = serverError || "Server error. Please try again later.";
+        }
+      } else if (err.response?.status === 503) {
+        errorMessage =
+          "Payment service is temporarily unavailable. Please try again in a few minutes.";
+      }
+
+      alert(errorMessage);
+    } finally {
+      setRefunding(false);
+    }
+  };
+
+  // Check if user is eligible for refund (within 15 days)
+  const isRefundEligible = () => {
+    if (!subscription?.firstPaymentDate && !subscription?.startDate)
+      return false;
+
+    const firstPaymentDate = new Date(
+      subscription.firstPaymentDate || subscription.startDate
+    );
+    const daysSincePayment = Math.floor(
+      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24)
+    );
+
+    return daysSincePayment <= 15;
+  };
+
+  // Get days remaining in refund window
+  const getRefundDaysRemaining = () => {
+    if (!subscription?.firstPaymentDate && !subscription?.startDate) return 0;
+
+    const firstPaymentDate = new Date(
+      subscription.firstPaymentDate || subscription.startDate
+    );
+    const daysSincePayment = Math.floor(
+      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24)
+    );
+
+    return Math.max(0, 15 - daysSincePayment);
+  };
+
   const getStatusIcon = (status) => {
     switch (status) {
       case "active":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
       case "cancelled":
         return <XCircle className="h-5 w-5 text-red-500" />;
+      case "refunded":
+        return <RefreshCw className="h-5 w-5 text-orange-500" />;
       case "paused":
         return <AlertCircle className="h-5 w-5 text-yellow-500" />;
       default:
@@ -347,6 +444,34 @@ export default function SubscriptionManager() {
             {formatDate(subscription.endDate)}
           </p>
         </div>
+
+        {subscription.refundStatus && subscription.refundStatus !== "none" && (
+          <div>
+            <h4 className="font-medium text-gray-400 mb-2">Refund Status</h4>
+            <p className="text-sm text-gray-300 capitalize flex items-center gap-2">
+              {subscription.refundStatus === "completed" && (
+                <DollarSign className="h-4 w-4 text-green-400" />
+              )}
+              {subscription.refundStatus === "requested" && (
+                <RefreshCw className="h-4 w-4 text-yellow-400 animate-spin" />
+              )}
+              {subscription.refundStatus === "failed" && (
+                <XCircle className="h-4 w-4 text-red-400" />
+              )}
+              {subscription.refundStatus}
+            </p>
+          </div>
+        )}
+
+        {isRefundEligible() && subscription.refundStatus === "none" && (
+          <div>
+            <h4 className="font-medium text-gray-400 mb-2">Refund Window</h4>
+            <p className="text-sm text-orange-300 flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              {getRefundDaysRemaining()} days remaining
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="mt-6 p-4 bg-[#2E2E32] rounded-lg">
@@ -386,7 +511,42 @@ export default function SubscriptionManager() {
       </div>
 
       {subscription.status === "active" && subscription.plan !== "lifetime" && (
-        <div className="mt-6 flex gap-3">
+        <div className="mt-6 flex flex-wrap gap-3">
+          {isRefundEligible() && subscription.refundStatus === "none" && (
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => setShowRefundModal(true)}
+                className="px-4 py-2 text-orange-400 border border-orange-400 rounded-lg hover:bg-orange-400/10 transition-colors flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Request Refund
+                <span className="text-xs bg-orange-400/20 px-2 py-1 rounded">
+                  {getRefundDaysRemaining()}d left
+                </span>
+              </button>
+              <button
+                onClick={() => setShowRefundPolicyModal(true)}
+                className="text-xs text-gray-400 hover:text-gray-300 transition-colors underline"
+              >
+                View Refund Policy
+              </button>
+            </div>
+          )}
+
+          {!isRefundEligible() && subscription.refundStatus === "none" && (
+            <div className="px-4 py-2 text-gray-500 border border-gray-600 rounded-lg flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Refund Window Expired
+            </div>
+          )}
+
+          {subscription.refundStatus === "requested" && (
+            <div className="px-4 py-2 text-yellow-400 border border-yellow-400 rounded-lg flex items-center gap-2">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              Refund Processing...
+            </div>
+          )}
+
           <button
             onClick={handleCancelSubscription}
             disabled={cancelling}
@@ -411,6 +571,104 @@ export default function SubscriptionManager() {
           </p>
         </div>
       )}
+
+      {subscription.status === "refunded" && (
+        <div className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <RefreshCw className="h-5 w-5 text-orange-400" />
+            <h4 className="font-medium text-orange-400">Refund Processed</h4>
+          </div>
+          <p className="text-sm text-orange-300">
+            Your subscription has been refunded and your access has been removed
+            immediately.
+            {subscription.refundedAt && (
+              <span className="block mt-1">
+                Refunded on: {formatDate(subscription.refundedAt)}
+                {subscription.refundAmount && (
+                  <span className="ml-2">(${subscription.refundAmount})</span>
+                )}
+              </span>
+            )}
+          </p>
+        </div>
+      )}
+
+      {/* Refund Modal */}
+      {showRefundModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#1a1a1a] border border-gray-700 rounded-lg p-6 max-w-md w-full">
+            <div className="flex items-center gap-3 mb-4">
+              <RefreshCw className="h-6 w-6 text-orange-400" />
+              <h3 className="text-lg font-semibold text-white">
+                Request Refund
+              </h3>
+            </div>
+
+            <div className="mb-4 p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-orange-400" />
+                  <span className="text-sm font-medium text-orange-400">
+                    15-Day Refund Policy
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowRefundModal(false);
+                    setShowRefundPolicyModal(true);
+                  }}
+                  className="text-xs text-orange-300 hover:text-orange-200 underline"
+                >
+                  View Details
+                </button>
+              </div>
+              <p className="text-xs text-orange-300">
+                You have {getRefundDaysRemaining()} days remaining to request a
+                refund. Refunds are processed immediately and your access will
+                be removed.
+              </p>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Reason for refund (optional)
+              </label>
+              <textarea
+                value={refundReason}
+                onChange={(e) => setRefundReason(e.target.value)}
+                placeholder="Help us improve by sharing your feedback..."
+                className="w-full p-3 bg-[#2E2E32] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#1de4bf] focus:outline-none resize-none"
+                rows={3}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowRefundModal(false);
+                  setRefundReason("");
+                }}
+                className="flex-1 px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700/50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRequestRefund}
+                disabled={refunding}
+                className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {refunding ? "Processing..." : "Request Refund"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Refund Policy Modal */}
+      <RefundPolicyModal
+        isOpen={showRefundPolicyModal}
+        onClose={() => setShowRefundPolicyModal(false)}
+      />
     </div>
   );
 }

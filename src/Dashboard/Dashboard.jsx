@@ -38,10 +38,11 @@ export default function Dashboard() {
 
       setSubscription(response.data.subscription);
 
-      // Check if user is on free plan and has reached limit
+      // Check if user is on free plan or refunded and has reached limit
       if (
         !response.data.subscription?.plan ||
-        response.data.subscription?.plan === "free"
+        response.data.subscription?.plan === "free" ||
+        response.data.subscription?.status === "refunded"
       ) {
         const startOfMonth = new Date();
         startOfMonth.setDate(1);
@@ -373,7 +374,9 @@ export default function Dashboard() {
                     {subscription?.plan || "Free"}
                   </span>
                 </div>
-                {(!subscription?.plan || subscription?.plan === "free") && (
+                {(!subscription?.plan ||
+                  subscription?.plan === "free" ||
+                  subscription?.status === "refunded") && (
                   <div className="flex justify-between">
                     <span className="text-gray-400">Links This Month</span>
                     <span className="font-semibold text-white">
