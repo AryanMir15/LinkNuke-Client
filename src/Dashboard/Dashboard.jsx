@@ -22,6 +22,7 @@ export default function Dashboard() {
   const { links, fetchLinks } = useLinksContext();
   const [searchParams] = useSearchParams();
   const paymentProcessed = useRef(false);
+  const initialDataFetched = useRef(false);
 
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
@@ -121,7 +122,9 @@ export default function Dashboard() {
 
     const fetchData = async () => {
       try {
-        if (!isMounted) return;
+        if (!isMounted || initialDataFetched.current) return;
+
+        initialDataFetched.current = true;
 
         // Only fetch links if we don't have any yet
         if (!links || links.length === 0) {
@@ -151,7 +154,8 @@ export default function Dashboard() {
       isMounted = false;
       controller.abort();
     };
-  }, [fetchLinks, fetchSubscriptionStatus, links]); // Add all dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchLinks, fetchSubscriptionStatus]); // Remove links to prevent infinite loop
 
   // Handle payment success/cancel messages (run only once)
   useEffect(() => {
