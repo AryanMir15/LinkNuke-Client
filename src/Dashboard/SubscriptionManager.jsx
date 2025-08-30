@@ -23,8 +23,14 @@ export default function SubscriptionManager() {
   const [billingPeriod, setBillingPeriod] = useState(null);
 
   useEffect(() => {
-    // Always try to fetch subscription status - user might have upgraded
-    fetchSubscriptionStatus();
+    // Only fetch subscription status if user has a paid plan
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (user.plan && user.plan !== "free") {
+      fetchSubscriptionStatus();
+    } else {
+      // For free users, set loading to false immediately
+      setLoading(false);
+    }
   }, []);
 
   const fetchSubscriptionStatus = async () => {
@@ -47,11 +53,6 @@ export default function SubscriptionManager() {
       setSubscription(response.data.subscription);
       setUsage(response.data.usage);
       setBillingPeriod(response.data.billing_period);
-
-      // If we have subscription data, update localStorage user data
-      if (response.data.subscription) {
-        refreshUserSession(response.data.subscription);
-      }
     } catch (err) {
       console.error("Error fetching subscription:", err);
       console.error("Error response:", err.response?.data);
@@ -60,42 +61,6 @@ export default function SubscriptionManager() {
       );
     } finally {
       setLoading(false);
-    }
-  };
-
-  const refreshUserSession = async (subscriptionData) => {
-    try {
-      const token = localStorage.getItem("token");
-      // Fetch fresh user data from the server
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/auth/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.user) {
-        // Update localStorage with fresh user data
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log("✅ SubscriptionManager: User session refreshed");
-      }
-    } catch (error) {
-      console.error("Error refreshing user session:", error);
-      // Fallback: update localStorage with subscription data
-      if (subscriptionData) {
-        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-        const updatedUser = {
-          ...currentUser,
-          subscription: subscriptionData,
-          plan: subscriptionData.plan,
-        };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        console.log(
-          "✅ SubscriptionManager: User session updated with subscription data"
-        );
-      }
     }
   };
 
@@ -111,7 +76,7 @@ export default function SubscriptionManager() {
     try {
       setCancelling(true);
       const token = localStorage.getItem("token");
-      await axios.post(
+      const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
         {},
         {
@@ -120,11 +85,49 @@ export default function SubscriptionManager() {
           },
         }
       );
+
       await fetchSubscriptionStatus();
-      alert("Subscription cancelled successfully");
+
+      // Show appropriate message based on response
+      if (response.data.localCancellation) {
+        alert(
+          "Subscription cancelled! Due to network issues, the cancellation will be fully processed shortly. You'll receive a confirmation email from Paddle."
+        );
+      } else {
+        alert(
+          "Subscription cancelled successfully! You'll receive a confirmation email from Paddle."
+        );
+      }
     } catch (err) {
       console.error("Error cancelling subscription:", err);
-      alert("Failed to cancel subscription. Please try again.");
+
+      // Provide more specific error messages
+      let errorMessage = "Failed to cancel subscription. Please try again.";
+
+      if (err.response?.status === 500) {
+        const serverError = err.response.data?.error;
+        if (serverError?.includes("not found")) {
+          errorMessage =
+            "Subscription not found. It may have already been cancelled.";
+        } else if (serverError?.includes("already cancelled")) {
+          errorMessage = "Subscription has already been cancelled.";
+        } else if (serverError?.includes("unauthorized")) {
+          errorMessage = "You're not authorized to cancel this subscription.";
+        } else if (
+          serverError?.includes("timeout") ||
+          serverError?.includes("network")
+        ) {
+          errorMessage =
+            "Network timeout. The cancellation may still be processing. Please check your subscription status in a few minutes.";
+        }
+      } else if (err.response?.status === 503) {
+        errorMessage =
+          "Payment service is temporarily unavailable. Please try again in a few minutes.";
+      } else if (err.response?.status === 400) {
+        errorMessage = "No active subscription found to cancel.";
+      }
+
+      alert(errorMessage);
     } finally {
       setCancelling(false);
     }
