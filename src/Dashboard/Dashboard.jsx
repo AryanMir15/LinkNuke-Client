@@ -21,7 +21,6 @@ export default function Dashboard() {
   });
   const { links, fetchLinks } = useLinksContext();
   const [searchParams] = useSearchParams();
-  const paymentSuccess = searchParams.get("payment") === "success";
   const paymentProcessed = useRef(false);
 
   const fetchSubscriptionStatus = useCallback(async () => {
@@ -183,7 +182,7 @@ export default function Dashboard() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentSuccess]); // Only depend on paymentSuccess to avoid infinite loop
+  }, []); // Empty dependency array - run only once on mount
 
   const handleUpgrade = () => {
     setActiveTab("billing");
@@ -216,7 +215,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <>
-        {paymentSuccess && <PaymentSuccessModal />}
+        {searchParams.get("payment") === "success" && <PaymentSuccessModal />}
         <div className="min-h-screen bg-[#1F1F23]">
           <div className="flex items-center justify-center h-screen">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#1de4bf]"></div>
