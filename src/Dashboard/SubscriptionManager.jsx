@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,25 +21,30 @@ export default function SubscriptionManager() {
 
   const [usage, setUsage] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState(null);
+  const subscriptionFetched = useRef(false);
 
   useEffect(() => {
-    // Only fetch subscription status if user has a paid plan
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user.plan && user.plan !== "free") {
+    // Only fetch subscription status once on mount
+    if (!subscriptionFetched.current) {
+      subscriptionFetched.current = true;
       fetchSubscriptionStatus();
-    } else {
-      // For free users, set loading to false immediately
-      setLoading(false);
     }
-  }, []);
+  }, [fetchSubscriptionStatus]);
 
-  const fetchSubscriptionStatus = async () => {
+  const fetchSubscriptionStatus = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      console.log("Fetching subscription status...");
+      console.log("🔄 SubscriptionManager: Fetching subscription status...");
       const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("❌ No token found in localStorage");
+        setError("Authentication required");
+        return;
+      }
+
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
         {
@@ -49,18 +54,81 @@ export default function SubscriptionManager() {
         }
       );
 
-      console.log("Subscription response:", response.data);
+      console.log(
+        "✅ SubscriptionManager: Subscription response:",
+        response.data
+      );
       setSubscription(response.data.subscription);
       setUsage(response.data.usage);
       setBillingPeriod(response.data.billing_period);
+
+      // If we have subscription data, update localStorage user data
+      if (response.data.subscription) {
+        refreshUserSession(response.data.subscription);
+      }
     } catch (err) {
-      console.error("Error fetching subscription:", err);
-      console.error("Error response:", err.response?.data);
-      setError(
-        err.response?.data?.error || "Failed to load subscription status"
+      console.error(
+        "❌ SubscriptionManager: Error fetching subscription:",
+        err
       );
+      console.error(
+        "❌ SubscriptionManager: Error response:",
+        err.response?.data
+      );
+      console.error(
+        "❌ SubscriptionManager: Error status:",
+        err.response?.status
+      );
+
+      let errorMessage = "Failed to load subscription status";
+
+      if (err.response?.status === 401) {
+        errorMessage = "Authentication failed. Please log in again.";
+      } else if (err.response?.status === 500) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (err.response?.data?.error) {
+        errorMessage = err.response.data.error;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const refreshUserSession = async (subscriptionData) => {
+    try {
+      const token = localStorage.getItem("token");
+      // Fetch fresh user data from the server
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/auth/verify`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.user) {
+        // Update localStorage with fresh user data
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log("✅ SubscriptionManager: User session refreshed");
+      }
+    } catch (error) {
+      console.error("Error refreshing user session:", error);
+      // Fallback: update localStorage with subscription data
+      if (subscriptionData) {
+        const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+        const updatedUser = {
+          ...currentUser,
+          subscription: subscriptionData,
+          plan: subscriptionData.plan,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        console.log(
+          "✅ SubscriptionManager: User session updated with subscription data"
+        );
+      }
     }
   };
 
