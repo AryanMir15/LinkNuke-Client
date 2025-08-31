@@ -48,9 +48,9 @@ export default function Dashboard() {
         startOfMonth.setDate(1);
         startOfMonth.setHours(0, 0, 0, 0);
 
-        // Ensure links is an array before filtering
-        const safeLinks = Array.isArray(links) ? links : [];
-        const linksThisMonth = safeLinks.filter(
+        // Get links from context directly instead of dependency
+        const currentLinks = Array.isArray(links) ? links : [];
+        const linksThisMonth = currentLinks.filter(
           (link) => new Date(link.createdAt) >= startOfMonth
         ).length;
 
@@ -63,7 +63,8 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  }, [links]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Remove links dependency to prevent infinite loop
 
   const refreshUserSession = useCallback(async () => {
     try {
@@ -156,7 +157,7 @@ export default function Dashboard() {
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchLinks, fetchSubscriptionStatus]); // Remove links to prevent infinite loop
+  }, []); // Empty dependency array - run only once on mount
 
   // Handle payment success/cancel messages (run only once)
   useEffect(() => {
@@ -210,12 +211,13 @@ export default function Dashboard() {
     };
 
     // Only fetch stats once when we have links data (avoid double calls)
-    if (links !== null && Array.isArray(links)) {
+    if (links !== null && Array.isArray(links) && links.length > 0) {
       // Debounce to prevent rapid successive calls
-      const timeoutId = setTimeout(fetchStats, 100);
+      const timeoutId = setTimeout(fetchStats, 500);
       return () => clearTimeout(timeoutId);
     }
-  }, [links]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [links?.length]); // Only depend on links length, not the entire links array
 
   if (loading) {
     return (
