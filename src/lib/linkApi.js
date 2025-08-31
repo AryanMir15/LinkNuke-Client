@@ -42,7 +42,7 @@ async function handleResponse(res) {
   let data;
   try {
     data = await res.json();
-  } catch (error) {
+  } catch {
     // If JSON parse fails, return empty object for non-ok responses, null for ok responses
     data = res.ok ? null : {};
   }
@@ -97,18 +97,25 @@ export async function getLink(id) {
 }
 
 export async function trackLink(id) {
+  console.log("🔍 trackLink: Attempting to track link ID:", id);
+  console.log("🔍 trackLink: URL:", `${LINKS_URL}/track/${id}`);
+
   const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
     method: "POST",
   });
 
+  console.log("🔍 trackLink: Response status:", res.status);
+
   // Don't use handleResponse for tracking - it redirects on 401
   // Tracking should be non-critical and not affect preview
   if (!res.ok) {
-    console.log("Track link failed (non-critical):", res.status);
+    console.log("🔍 trackLink: Track link failed (non-critical):", res.status);
     return null; // Fail silently
   }
 
-  return res.json().catch(() => null);
+  const result = await res.json().catch(() => null);
+  console.log("🔍 trackLink: Tracking successful:", result);
+  return result;
 }
 
 export async function updateLink(id, updates) {

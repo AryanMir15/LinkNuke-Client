@@ -158,6 +158,10 @@ const NukedLinksTable = () => {
                   const preview =
                     link.url ||
                     `${window.location.origin}/preview/${link.linkId}`;
+
+                  console.log("🔍 Table - Link URL:", link.url);
+                  console.log("🔍 Table - LinkId:", link.linkId);
+                  console.log("🔍 Table - Final preview URL:", preview);
                   const expired = isLinkExpired(link);
                   return (
                     <motion.tr
