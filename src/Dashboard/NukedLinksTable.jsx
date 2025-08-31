@@ -155,10 +155,9 @@ const NukedLinksTable = () => {
                 </motion.tr>
               ) : (
                 filteredLinks.map((link, index) => {
-                  const preview = `${window.location.origin}/preview/${
-                    link.linkId ||
-                    (link.url ? link.url.split("/").pop() : "invalid-link")
-                  }`;
+                  const preview =
+                    link.url ||
+                    `${window.location.origin}/preview/${link.linkId}`;
                   const expired = isLinkExpired(link);
                   return (
                     <motion.tr
