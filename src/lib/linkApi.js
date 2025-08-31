@@ -98,9 +98,9 @@ export async function getLink(id) {
 
 export async function trackLink(id) {
   console.log("🔍 trackLink: Attempting to track link ID:", id);
-  console.log("🔍 trackLink: URL:", `${LINKS_URL}/track/${id}`);
+  console.log("🔍 trackLink: URL:", `${PUBLIC_LINKS_URL}/track/${id}`);
 
-  const res = await fetchWithRetry(`${LINKS_URL}/track/${id}`, {
+  const res = await fetchWithRetry(`${PUBLIC_LINKS_URL}/track/${id}`, {
     method: "POST",
   });
 
