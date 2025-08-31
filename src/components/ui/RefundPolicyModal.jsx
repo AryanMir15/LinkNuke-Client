@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   X,
   Clock,
@@ -9,11 +9,25 @@ import {
 } from "lucide-react";
 
 const RefundPolicyModal = ({ isOpen, onClose }) => {
+  // Lock scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#1a1a1a] border border-gray-700 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-[#1a1a1a] border border-[#2E2E32] rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <DollarSign className="h-6 w-6 text-[#1de4bf]" />
@@ -21,15 +35,15 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-[#2E2E32]"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         <div className="space-y-6">
           {/* Main Policy */}
-          <div className="p-4 bg-[#1de4bf]/10 border border-[#1de4bf]/30 rounded-lg">
+          <div className="p-4 bg-[#1de4bf]/10 border border-[#1de4bf]/20 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle className="h-5 w-5 text-[#1de4bf]" />
               <h3 className="font-semibold text-[#1de4bf]">
@@ -48,7 +62,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
 
             <div className="grid gap-3">
               <div className="flex items-start gap-3 p-3 bg-[#2E2E32] rounded-lg">
-                <Clock className="h-5 w-5 text-orange-400 mt-0.5 flex-shrink-0" />
+                <Clock className="h-5 w-5 text-[#1de4bf] mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-white">15-Day Window</h4>
                   <p className="text-sm text-gray-400">
@@ -59,7 +73,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-[#2E2E32] rounded-lg">
-                <DollarSign className="h-5 w-5 text-green-400 mt-0.5 flex-shrink-0" />
+                <DollarSign className="h-5 w-5 text-[#1de4bf] mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-white">Full Refund</h4>
                   <p className="text-sm text-gray-400">
@@ -69,7 +83,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-[#2E2E32] rounded-lg">
-                <AlertCircle className="h-5 w-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="h-5 w-5 text-[#1de4bf] mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-white">
                     Immediate Access Removal
@@ -82,7 +96,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-[#2E2E32] rounded-lg">
-                <Info className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                <Info className="h-5 w-5 text-[#1de4bf] mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="font-medium text-white">
                     Original Payment Method
@@ -130,10 +144,10 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Processing Time */}
-          <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+          <div className="p-4 bg-[#1de4bf]/5 border border-[#1de4bf]/20 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="h-5 w-5 text-blue-400" />
-              <h4 className="font-semibold text-blue-400">Processing Time</h4>
+              <Clock className="h-5 w-5 text-[#1de4bf]" />
+              <h4 className="font-semibold text-[#1de4bf]">Processing Time</h4>
             </div>
             <p className="text-sm text-gray-300">
               Refunds are processed immediately. You should see the refund in
@@ -143,7 +157,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Contact Info */}
-          <div className="p-4 bg-gray-500/10 border border-gray-500/30 rounded-lg">
+          <div className="p-4 bg-[#2E2E32] border border-[#2E2E32] rounded-lg">
             <h4 className="font-semibold text-white mb-2">Need Help?</h4>
             <p className="text-sm text-gray-300">
               If you have any questions about our refund policy or need
@@ -155,7 +169,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
         <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-[#1de4bf] text-black rounded-lg hover:bg-[#1de4bf]/90 transition-colors font-medium"
+            className="px-6 py-2 bg-[#1de4bf] text-black rounded-lg hover:bg-[#0bf3a2] transition-colors font-medium"
           >
             Got it
           </button>
@@ -166,4 +180,3 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
 };
 
 export default RefundPolicyModal;
-
