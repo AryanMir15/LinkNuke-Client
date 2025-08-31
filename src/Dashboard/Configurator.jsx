@@ -89,11 +89,8 @@ const Configurator = () => {
   });
 
   useEffect(() => {
-    // Only fetch subscription status if user has a paid plan
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (user.plan && user.plan !== "free") {
-      fetchSubscriptionStatus();
-    }
+    // Always fetch subscription status to get accurate data
+    fetchSubscriptionStatus();
 
     // Always fetch usage stats for limit checking
     fetchUsageStats();
@@ -121,6 +118,7 @@ const Configurator = () => {
           },
         }
       );
+      // Subscription fetched successfully
       setSubscription(response.data.subscription);
     } catch (error) {
       console.error("Error fetching subscription:", error);
@@ -163,6 +161,8 @@ const Configurator = () => {
   const isLimitReached =
     (!subscription?.plan || subscription?.plan === "free") &&
     usageStats.monthlyTotal >= 5;
+
+  // Debug logs removed to reduce console spam
 
   return (
     <section className="w-full px-4 sm:px-6 py-8 sm:py-16 bg-[#1F1F23]">

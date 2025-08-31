@@ -58,7 +58,12 @@ export default function Dashboard() {
 
         if (linksThisMonth >= 5) {
           setShowFreePlanLimit(true);
+        } else {
+          setShowFreePlanLimit(false);
         }
+      } else {
+        // User is on a paid plan - hide the free plan limit banner
+        setShowFreePlanLimit(false);
       }
     } catch (error) {
       console.error("🔍 Dashboard: Error fetching subscription:", error);
@@ -138,19 +143,9 @@ export default function Dashboard() {
           });
         }
 
-        // Check user plan and fetch subscription if needed
+        // Always fetch subscription status to get accurate data
         if (isMounted) {
-          const user = JSON.parse(localStorage.getItem("user") || "{}");
-          console.log("🔍 Dashboard: User plan:", user.plan);
-
-          if (user.plan && user.plan !== "free") {
-            console.log("🔍 Dashboard: Fetching subscription for paid user");
-            await fetchSubscriptionStatus();
-          } else {
-            console.log("🔍 Dashboard: Free user - setting loading to false");
-            // For free users, set loading to false immediately
-            setLoading(false);
-          }
+          await fetchSubscriptionStatus();
         }
       } catch (err) {
         if (isMounted && err.name !== "AbortError") {
@@ -383,8 +378,19 @@ export default function Dashboard() {
                 Quick Stats
               </h3>
               <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-400">Total Links Created</span>
+                    <div className="w-4 h-4 bg-gray-600 rounded-full flex items-center justify-center">
+                      <span className="text-xs text-white">i</span>
+                    </div>
+                  </div>
+                  <span className="font-semibold text-white">
+                    {subscription?.usage?.totalLinksCreated || 0}
+                  </span>
+                </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Total Links</span>
+                  <span className="text-gray-400">Active Links</span>
                   <span className="font-semibold text-white">
                     {Array.isArray(links) ? links.length : 0}
                   </span>
@@ -399,7 +405,7 @@ export default function Dashboard() {
                   subscription?.plan === "free" ||
                   subscription?.status === "refunded") && (
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Links This Month</span>
+                    <span className="text-gray-400">Monthly Limit</span>
                     <span className="font-semibold text-white">
                       {usageStats.monthlyTotal}/5
                     </span>
