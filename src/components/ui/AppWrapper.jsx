@@ -90,14 +90,7 @@ function AppWrapper() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/preview/:linkId"
-            element={
-              <LinksProvider>
-                <PreviewPage />
-              </LinksProvider>
-            }
-          />
+          <Route path="/preview/:linkId" element={<PreviewPage />} />
           <Route
             path="/feedback"
             element={
