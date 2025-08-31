@@ -26,6 +26,7 @@ export default function Dashboard() {
 
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
+      console.log("🔍 Dashboard: Starting subscription fetch");
       const token = localStorage.getItem("token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
@@ -36,6 +37,7 @@ export default function Dashboard() {
         }
       );
 
+      console.log("🔍 Dashboard: Subscription fetch successful");
       setSubscription(response.data.subscription);
 
       // Check if user is on free plan or refunded and has reached limit
@@ -59,8 +61,9 @@ export default function Dashboard() {
         }
       }
     } catch (error) {
-      console.error("Error fetching subscription:", error);
+      console.error("🔍 Dashboard: Error fetching subscription:", error);
     } finally {
+      console.log("🔍 Dashboard: Setting loading to false");
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,18 +131,24 @@ export default function Dashboard() {
 
         initialDataFetched.current = true;
 
-        // Only fetch links if we don't have any yet
+        // Fetch links in background (don't wait for it)
         if (!links || links.length === 0) {
-          await fetchLinks();
+          fetchLinks().catch((err) => {
+            console.error("Failed to fetch links:", err);
+          });
         }
 
-        // Only fetch subscription status if user has a paid plan
+        // Check user plan and fetch subscription if needed
         if (isMounted) {
           const user = JSON.parse(localStorage.getItem("user") || "{}");
+          console.log("🔍 Dashboard: User plan:", user.plan);
+
           if (user.plan && user.plan !== "free") {
+            console.log("🔍 Dashboard: Fetching subscription for paid user");
             await fetchSubscriptionStatus();
           } else {
-            // For free users, set loading to false here
+            console.log("🔍 Dashboard: Free user - setting loading to false");
+            // For free users, set loading to false immediately
             setLoading(false);
           }
         }
@@ -152,9 +161,19 @@ export default function Dashboard() {
     };
 
     fetchData();
+
+    // Fallback timeout to ensure loading never gets stuck
+    const timeoutId = setTimeout(() => {
+      if (isMounted) {
+        console.log("Dashboard loading timeout - forcing loading to false");
+        setLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
     return () => {
       isMounted = false;
       controller.abort();
+      clearTimeout(timeoutId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array - run only once on mount
