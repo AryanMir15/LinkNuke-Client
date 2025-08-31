@@ -313,11 +313,19 @@ export default function SubscriptionManager() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    try {
+      const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) return "N/A";
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch (error) {
+      console.error("Date formatting error:", error);
+      return "N/A";
+    }
   };
 
   if (loading) {
@@ -432,16 +440,26 @@ export default function SubscriptionManager() {
         <div>
           <h4 className="font-medium text-gray-400 mb-2">Started</h4>
           <p className="text-sm text-gray-300">
-            {formatDate(subscription.startDate)}
+            {subscription.status === "refunded"
+              ? formatDate(
+                  subscription.firstPaymentDate || subscription.startDate
+                )
+              : formatDate(subscription.startDate)}
           </p>
         </div>
 
         <div>
           <h4 className="font-medium text-gray-400 mb-2">
-            {subscription.plan === "lifetime" ? "Valid Until" : "Next Billing"}
+            {subscription.status === "refunded"
+              ? "Refunded On"
+              : subscription.plan === "lifetime"
+              ? "Valid Until"
+              : "Next Billing"}
           </h4>
           <p className="text-sm text-gray-300">
-            {formatDate(subscription.endDate)}
+            {subscription.status === "refunded"
+              ? formatDate(subscription.refundedAt || subscription.endDate)
+              : formatDate(subscription.endDate)}
           </p>
         </div>
 
@@ -586,7 +604,15 @@ export default function SubscriptionManager() {
       )}
 
       {subscription.status === "refunded" && (
-        <div className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+        <div className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg relative">
+          <button
+            onClick={() =>
+              setSubscription((prev) => ({ ...prev, status: "hidden" }))
+            }
+            className="absolute top-2 right-2 text-orange-400 hover:text-orange-300 transition-colors"
+          >
+            <XCircle className="h-4 w-4" />
+          </button>
           <div className="flex items-center gap-2 mb-2">
             <RefreshCw className="h-5 w-5 text-orange-400" />
             <h4 className="font-medium text-orange-400">Refund Processed</h4>
