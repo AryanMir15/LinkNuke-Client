@@ -299,15 +299,15 @@ export default function SubscriptionManager() {
   const getStatusIcon = (status) => {
     switch (status) {
       case "active":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-emerald-500" />;
       case "cancelled":
-        return <XCircle className="h-5 w-5 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-red-500" />;
       case "refunded":
-        return <RefreshCw className="h-5 w-5 text-orange-500" />;
+        return <RefreshCw className="h-4 w-4 text-amber-500" />;
       case "paused":
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />;
       default:
-        return <AlertCircle className="h-5 w-5 text-gray-500" />;
+        return <AlertCircle className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -331,37 +331,37 @@ export default function SubscriptionManager() {
   if (loading) {
     return (
       <div className="p-6 animate-pulse">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="h-6 w-6 bg-[#2E2E32] rounded-full"></div>
-            <div className="h-6 bg-[#2E2E32] rounded w-32"></div>
+            <div className="h-5 w-5 bg-gray-700 rounded-full"></div>
+            <div className="h-5 bg-gray-700 rounded w-32"></div>
           </div>
-          <div className="h-5 w-5 bg-[#2E2E32] rounded-full"></div>
+          <div className="h-4 w-4 bg-gray-700 rounded-full"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {[...Array(4)].map((_, i) => (
             <div key={i}>
-              <div className="h-4 bg-[#2E2E32] rounded w-16 mb-2"></div>
-              <div className="h-6 bg-[#2E2E32] rounded w-32"></div>
+              <div className="h-3 bg-gray-700 rounded w-12 mb-2"></div>
+              <div className="h-5 bg-gray-700 rounded w-24"></div>
             </div>
           ))}
         </div>
 
-        <div className="mt-6 p-4 bg-[#2E2E32] rounded-lg">
-          <div className="h-5 bg-[#2E2E32] rounded w-24 mb-4"></div>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="mt-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
+          <div className="h-4 bg-gray-700 rounded w-20 mb-6"></div>
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <div className="h-4 bg-[#2E2E32] rounded w-20 mb-2"></div>
-              <div className="h-4 bg-[#2E2E32] rounded w-full mb-2"></div>
-              <div className="h-1 bg-[#2E2E32] rounded-full">
-                <div className="h-full bg-[#2E2E32] rounded-full w-1/3"></div>
+              <div className="h-3 bg-gray-700 rounded w-16 mb-2"></div>
+              <div className="h-4 bg-gray-700 rounded w-full mb-2"></div>
+              <div className="h-1 bg-gray-700 rounded-full">
+                <div className="h-full bg-gray-700 rounded-full w-1/3"></div>
               </div>
             </div>
             <div>
-              <div className="h-4 bg-[#2E2E32] rounded w-24 mb-2"></div>
-              <div className="h-4 bg-[#2E2E32] rounded w-full mb-2"></div>
-              <div className="h-4 bg-[#2E2E32] rounded w-48"></div>
+              <div className="h-3 bg-gray-700 rounded w-20 mb-2"></div>
+              <div className="h-4 bg-gray-700 rounded w-full mb-2"></div>
+              <div className="h-4 bg-gray-700 rounded w-32"></div>
             </div>
           </div>
         </div>
@@ -373,11 +373,11 @@ export default function SubscriptionManager() {
     return (
       <div className="p-6">
         <div className="text-center text-red-400">
-          <AlertCircle className="h-8 w-8 mx-auto mb-2" />
-          <p className="mb-4">{error}</p>
+          <AlertCircle className="h-8 w-8 mx-auto mb-3" />
+          <p className="mb-4 text-sm">{error}</p>
           <button
             onClick={fetchSubscriptionStatus}
-            className="px-4 py-2 bg-red-500/20 border border-red-500/40 rounded-lg hover:bg-red-500/30 transition-colors"
+            className="px-4 py-2 bg-red-500/10 border border-red-500/30 rounded-lg hover:bg-red-500/20 transition-colors text-sm"
           >
             Retry Loading
           </button>
@@ -391,16 +391,16 @@ export default function SubscriptionManager() {
       <div className="p-6">
         <div className="text-center">
           <CreditCard className="h-12 w-12 mx-auto mb-4 text-gray-500" />
-          <h3 className="text-lg font-semibold mb-2 text-white">
+          <h3 className="text-base font-medium mb-2 text-white">
             No Active Subscription
           </h3>
-          <p className="text-gray-400 mb-4">
+          <p className="text-gray-400 mb-6 text-sm">
             You're currently on the free plan. Upgrade to unlock premium
             features.
           </p>
           <button
             onClick={() => navigate("/pricing")}
-            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+            className="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium"
           >
             View Plans
             <ArrowRight size={16} className="ml-2" />
@@ -412,33 +412,39 @@ export default function SubscriptionManager() {
 
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <CreditCard className="h-6 w-6 text-[#1de4bf]" />
-          <h3 className="text-lg font-semibold text-white">
+          <CreditCard className="h-5 w-5 text-emerald-500" />
+          <h3 className="text-base font-medium text-white">
             Subscription Details
           </h3>
         </div>
         {getStatusIcon(subscription.status)}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div>
-          <h4 className="font-medium text-gray-400 mb-2">Plan</h4>
-          <p className="text-lg font-semibold text-white capitalize">
+          <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+            Plan
+          </h4>
+          <p className="text-base font-medium text-white capitalize">
             {subscription.plan} Plan
           </p>
         </div>
 
         <div>
-          <h4 className="font-medium text-gray-400 mb-2">Status</h4>
-          <p className="text-lg font-semibold text-white capitalize">
+          <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+            Status
+          </h4>
+          <p className="text-base font-medium text-white capitalize">
             {subscription.status}
           </p>
         </div>
 
         <div>
-          <h4 className="font-medium text-gray-400 mb-2">Started</h4>
+          <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+            Started
+          </h4>
           <p className="text-sm text-gray-300">
             {subscription.status === "refunded"
               ? formatDate(
@@ -449,7 +455,7 @@ export default function SubscriptionManager() {
         </div>
 
         <div>
-          <h4 className="font-medium text-gray-400 mb-2">
+          <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
             {subscription.status === "refunded"
               ? "Refunded On"
               : subscription.plan === "lifetime"
@@ -465,13 +471,15 @@ export default function SubscriptionManager() {
 
         {subscription.refundStatus && subscription.refundStatus !== "none" && (
           <div>
-            <h4 className="font-medium text-gray-400 mb-2">Refund Status</h4>
+            <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+              Refund Status
+            </h4>
             <p className="text-sm text-gray-300 capitalize flex items-center gap-2">
               {subscription.refundStatus === "completed" && (
-                <DollarSign className="h-4 w-4 text-green-400" />
+                <DollarSign className="h-4 w-4 text-emerald-400" />
               )}
               {subscription.refundStatus === "requested" && (
-                <RefreshCw className="h-4 w-4 text-yellow-400 animate-spin" />
+                <RefreshCw className="h-4 w-4 text-amber-400 animate-spin" />
               )}
               {subscription.refundStatus === "failed" && (
                 <XCircle className="h-4 w-4 text-red-400" />
@@ -483,8 +491,10 @@ export default function SubscriptionManager() {
 
         {isRefundEligible() && subscription.refundStatus === "none" && (
           <div>
-            <h4 className="font-medium text-gray-400 mb-2">Refund Window</h4>
-            <p className="text-sm text-orange-300 flex items-center gap-2">
+            <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+              Refund Window
+            </h4>
+            <p className="text-sm text-amber-300 flex items-center gap-2">
               <Clock className="h-4 w-4" />
               {getRefundDaysRemaining()} days remaining
             </p>
@@ -492,35 +502,41 @@ export default function SubscriptionManager() {
         )}
       </div>
 
-      <div className="mt-6 p-4 bg-[#2E2E32] rounded-lg">
-        <h4 className="font-medium mb-3 text-white">Usage & Billing</h4>
-        <div className="grid grid-cols-2 gap-4">
+      <div className="mb-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
+        <h4 className="text-xs font-medium mb-4 text-white uppercase tracking-wide">
+          Usage & Billing
+        </h4>
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <p className="text-sm text-gray-400">Links used</p>
-            <p className="font-semibold text-white">
+            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">
+              Links used
+            </p>
+            <p className="font-medium text-white mb-2">
               {usage?.links?.current ?? 0} /{" "}
               {usage?.links?.limit ?? "Unlimited"}
               {usage?.links?.percent && (
-                <span className="text-[#1de4bf] ml-2">
+                <span className="text-emerald-400 ml-2 text-sm">
                   ({usage.links.percent}%)
                 </span>
               )}
             </p>
             {usage?.links?.limit && (
-              <div className="mt-2 h-1 bg-gray-700 rounded-full">
+              <div className="h-1 bg-gray-700 rounded-full">
                 <div
-                  className="h-full bg-[#1de4bf] rounded-full transition-all duration-500"
+                  className="h-full bg-emerald-500 rounded-full transition-all duration-500"
                   style={{ width: `${usage.links.percent}%` }}
                 />
               </div>
             )}
           </div>
           <div>
-            <p className="text-sm text-gray-400">Billing period</p>
-            <p className="font-semibold text-white">
+            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">
+              Billing period
+            </p>
+            <p className="font-medium text-white mb-1">
               {billingPeriod?.remaining_days ?? "N/A"} days remaining
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-400">
               {formatDate(billingPeriod?.start)} -{" "}
               {formatDate(billingPeriod?.end)}
             </p>
@@ -531,20 +547,20 @@ export default function SubscriptionManager() {
       {(subscription.status === "active" ||
         subscription.status === "cancelled") &&
         subscription.plan !== "lifetime" && (
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             {isRefundEligible() &&
               (subscription.refundStatus === "none" ||
                 subscription.refundStatus === "failed") && (
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={() => setShowRefundModal(true)}
-                    className="px-4 py-2 text-orange-400 border border-orange-400 rounded-lg hover:bg-orange-400/10 transition-colors flex items-center gap-2"
+                    className="px-4 py-2 text-amber-400 border border-amber-400/30 rounded-lg hover:bg-amber-400/10 transition-colors flex items-center gap-2 text-sm"
                   >
                     <RefreshCw className="h-4 w-4" />
                     {subscription.refundStatus === "failed"
                       ? "Retry Refund"
                       : "Request Refund"}
-                    <span className="text-xs bg-orange-400/20 px-2 py-1 rounded">
+                    <span className="text-xs bg-amber-400/20 px-2 py-1 rounded">
                       {getRefundDaysRemaining()}d left
                     </span>
                   </button>
@@ -558,21 +574,21 @@ export default function SubscriptionManager() {
               )}
 
             {!isRefundEligible() && subscription.refundStatus === "none" && (
-              <div className="px-4 py-2 text-gray-500 border border-gray-600 rounded-lg flex items-center gap-2">
+              <div className="px-4 py-2 text-gray-500 border border-gray-600/50 rounded-lg flex items-center gap-2 text-sm">
                 <Clock className="h-4 w-4" />
                 Refund Window Expired
               </div>
             )}
 
             {subscription.refundStatus === "requested" && (
-              <div className="px-4 py-2 text-yellow-400 border border-yellow-400 rounded-lg flex items-center gap-2">
+              <div className="px-4 py-2 text-amber-400 border border-amber-400/30 rounded-lg flex items-center gap-2 text-sm">
                 <RefreshCw className="h-4 w-4 animate-spin" />
                 Refund Processing...
               </div>
             )}
 
             {subscription.refundStatus === "failed" && (
-              <div className="px-4 py-2 text-red-400 border border-red-400 rounded-lg flex items-center gap-2">
+              <div className="px-4 py-2 text-red-400 border border-red-400/30 rounded-lg flex items-center gap-2 text-sm">
                 <XCircle className="h-4 w-4" />
                 Refund Failed - Click "Retry Refund" to try again
               </div>
@@ -581,13 +597,13 @@ export default function SubscriptionManager() {
             <button
               onClick={handleCancelSubscription}
               disabled={cancelling}
-              className="px-4 py-2 text-red-400 border border-red-400 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50 text-sm"
             >
               {cancelling ? "Cancelling..." : "Cancel Subscription"}
             </button>
             <button
               onClick={() => navigate("/pricing")}
-              className="px-4 py-2 text-[#1de4bf] border border-[#1de4bf] rounded-lg hover:bg-[#1de4bf]/10 transition-colors"
+              className="px-4 py-2 text-emerald-400 border border-emerald-400/30 rounded-lg hover:bg-emerald-400/10 transition-colors text-sm"
             >
               Change Plan
             </button>
@@ -595,8 +611,8 @@ export default function SubscriptionManager() {
         )}
 
       {subscription.status === "cancelled" && (
-        <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-          <p className="text-sm text-yellow-400">
+        <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+          <p className="text-sm text-amber-400">
             Your subscription has been cancelled. You'll have access to premium
             features until {formatDate(subscription.endDate)}.
           </p>
@@ -604,20 +620,20 @@ export default function SubscriptionManager() {
       )}
 
       {subscription.status === "refunded" && (
-        <div className="mt-6 p-4 bg-orange-500/10 border border-orange-500/30 rounded-lg relative">
+        <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg relative">
           <button
             onClick={() =>
               setSubscription((prev) => ({ ...prev, status: "hidden" }))
             }
-            className="absolute top-2 right-2 text-orange-400 hover:text-orange-300 transition-colors"
+            className="absolute top-2 right-2 text-amber-400 hover:text-amber-300 transition-colors"
           >
             <XCircle className="h-4 w-4" />
           </button>
           <div className="flex items-center gap-2 mb-2">
-            <RefreshCw className="h-5 w-5 text-orange-400" />
-            <h4 className="font-medium text-orange-400">Refund Processed</h4>
+            <RefreshCw className="h-5 w-5 text-amber-400" />
+            <h4 className="font-medium text-amber-400">Refund Processed</h4>
           </div>
-          <p className="text-sm text-orange-300">
+          <p className="text-sm text-amber-300">
             Your subscription has been refunded and your access has been removed
             immediately.
             {subscription.refundedAt && (
@@ -635,19 +651,19 @@ export default function SubscriptionManager() {
       {/* Refund Modal */}
       {showRefundModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1a1a1a] border border-gray-700 rounded-lg p-6 max-w-md w-full">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-md w-full">
             <div className="flex items-center gap-3 mb-4">
-              <RefreshCw className="h-6 w-6 text-orange-400" />
-              <h3 className="text-lg font-semibold text-white">
+              <RefreshCw className="h-5 w-5 text-amber-400" />
+              <h3 className="text-base font-medium text-white">
                 Request Refund
               </h3>
             </div>
 
-            <div className="mb-4 p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+            <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-orange-400" />
-                  <span className="text-sm font-medium text-orange-400">
+                  <Clock className="h-4 w-4 text-amber-400" />
+                  <span className="text-xs font-medium text-amber-400 uppercase tracking-wide">
                     15-Day Refund Policy
                   </span>
                 </div>
@@ -656,12 +672,12 @@ export default function SubscriptionManager() {
                     setShowRefundModal(false);
                     setShowRefundPolicyModal(true);
                   }}
-                  className="text-xs text-orange-300 hover:text-orange-200 underline"
+                  className="text-xs text-amber-300 hover:text-amber-200 underline"
                 >
                   View Details
                 </button>
               </div>
-              <p className="text-xs text-orange-300">
+              <p className="text-xs text-amber-300">
                 You have {getRefundDaysRemaining()} days remaining to request a
                 refund. Refunds are processed immediately and your access will
                 be removed.
@@ -669,14 +685,14 @@ export default function SubscriptionManager() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-xs font-medium text-gray-300 mb-2 uppercase tracking-wide">
                 Reason for refund (optional)
               </label>
               <textarea
                 value={refundReason}
                 onChange={(e) => setRefundReason(e.target.value)}
                 placeholder="Help us improve by sharing your feedback..."
-                className="w-full p-3 bg-[#2E2E32] border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-[#1de4bf] focus:outline-none resize-none"
+                className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-emerald-500 focus:outline-none resize-none text-sm"
                 rows={3}
               />
             </div>
@@ -687,14 +703,14 @@ export default function SubscriptionManager() {
                   setShowRefundModal(false);
                   setRefundReason("");
                 }}
-                className="flex-1 px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-700/50 transition-colors"
+                className="flex-1 px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors text-sm"
               >
                 Cancel
               </button>
               <button
                 onClick={handleRequestRefund}
                 disabled={refunding}
-                className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {refunding ? "Processing..." : "Request Refund"}
               </button>
