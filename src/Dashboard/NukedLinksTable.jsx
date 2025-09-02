@@ -224,7 +224,12 @@ const NukedLinksTable = () => {
                             <Copy size={16} />
                           </button>
                           <button
-                            onClick={() => window.open(preview, "_blank")}
+                            onClick={() =>
+                              window.open(
+                                `${preview}?preview=creator`,
+                                "_blank"
+                              )
+                            }
                             className="hover:text-[#0bf3a2] text-gray-400 transition"
                           >
                             <Eye size={16} />

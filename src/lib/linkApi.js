@@ -96,11 +96,17 @@ export async function getLink(id) {
   return handleResponse(res);
 }
 
-export async function trackLink(id) {
+export async function trackLink(id, isCreatorPreview = false) {
   console.log("🔍 trackLink: Attempting to track link ID:", id);
-  console.log("🔍 trackLink: URL:", `${PUBLIC_LINKS_URL}/track/${id}`);
+  console.log("🔍 trackLink: Is creator preview:", isCreatorPreview);
 
-  const res = await fetchWithRetry(`${PUBLIC_LINKS_URL}/track/${id}`, {
+  const url = isCreatorPreview
+    ? `${PUBLIC_LINKS_URL}/track/${id}?preview=creator`
+    : `${PUBLIC_LINKS_URL}/track/${id}`;
+
+  console.log("🔍 trackLink: URL:", url);
+
+  const res = await fetchWithRetry(url, {
     method: "POST",
   });
 

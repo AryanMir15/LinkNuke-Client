@@ -63,7 +63,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
             </h3>
 
             <div className="grid gap-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-800/20 border border-gray-700/20 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                 <Clock className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="text-base font-medium text-white mb-1">
@@ -76,7 +76,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-800/20 border border-gray-700/20 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                 <DollarSign className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="text-base font-medium text-white mb-1">
@@ -88,7 +88,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-800/20 border border-gray-700/20 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                 <AlertCircle className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="text-base font-medium text-white mb-1">
@@ -101,7 +101,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-800/20 border border-gray-700/20 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                 <Info className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <h4 className="text-base font-medium text-white mb-1">
@@ -165,7 +165,7 @@ const RefundPolicyModal = ({ isOpen, onClose }) => {
           </div>
 
           {/* Contact Info */}
-          <div className="p-4 bg-gray-800/20 border border-gray-700/20 rounded-lg">
+          <div className="p-4 bg-gray-800/50 border border-gray-700/50 rounded-lg">
             <h4 className="text-base font-medium text-white mb-2">
               Need Help?
             </h4>

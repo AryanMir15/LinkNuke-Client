@@ -111,7 +111,16 @@ const PreviewPage = () => {
         // Track link view - but don't fail the preview if tracking fails
         if (data?._id) {
           try {
-            await trackLink(data._id);
+            // Check if this is a creator preview by looking at URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const isCreatorPreview = urlParams.get("preview") === "creator";
+
+            console.log(
+              "🔍🔍🔍 PREVIEW: Is creator preview:",
+              isCreatorPreview
+            );
+
+            await trackLink(data._id, isCreatorPreview);
           } catch (trackError) {
             console.log(
               "🔍🔍🔍 PREVIEW: Track link failed (non-critical):",

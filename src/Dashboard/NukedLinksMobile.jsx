@@ -328,7 +328,7 @@ const NukedLinksMobile = () => {
                         Copy
                       </motion.button>
                       <motion.a
-                        href={preview}
+                        href={`${preview}?preview=creator`}
                         target="_blank"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

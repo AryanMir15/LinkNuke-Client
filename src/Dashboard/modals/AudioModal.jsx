@@ -279,7 +279,7 @@ const AudioModal = ({ closeModal }) => {
               </div>
               <div className="flex flex-col sm:flex-row justify-center gap-3 mb-4">
                 <a
-                  href={previewUrl}
+                  href={`${previewUrl}?preview=creator`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black px-4 py-2 rounded-lg text-sm font-semibold shadow-md transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
