@@ -3,19 +3,20 @@ import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { trackLink } from "../lib/linkApi";
 import { X } from "lucide-react";
+import BouncingLoader from "../components/ui/BouncingLoader";
 
 const PreviewPage = () => {
   const { linkId } = useParams();
   const [link, setLink] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
   const overlayRef = useRef(null);
 
   // Anti-screenshot/inspect/print measures
   useEffect(() => {
-    // Disable right-click - RE-ENABLED AFTER DEBUGGING
+    // Disable right-click
     const handleContextMenu = (e) => e.preventDefault();
     document.addEventListener("contextmenu", handleContextMenu);
     // Block print
@@ -166,22 +167,7 @@ const PreviewPage = () => {
         }}
       >
         <Toaster position="top-center" />
-        <div className="relative bg-gray-900 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] p-0 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
-          <div className="aspect-square w-full flex items-center justify-center relative">
-            {/* Modern pulsing dots loader */}
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
-              <div
-                className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                style={{ animationDelay: "0.2s" }}
-              ></div>
-              <div
-                className="w-3 h-3 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
-                style={{ animationDelay: "0.4s" }}
-              ></div>
-            </div>
-          </div>
-        </div>
+        <BouncingLoader />
       </div>
     );
   }
