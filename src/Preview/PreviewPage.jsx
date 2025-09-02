@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { trackLink } from "../lib/linkApi";
@@ -14,9 +14,9 @@ const PreviewPage = () => {
 
   // Anti-screenshot/inspect/print measures
   useEffect(() => {
-    // Disable right-click
-    const handleContextMenu = (e) => e.preventDefault();
-    document.addEventListener("contextmenu", handleContextMenu);
+    // Disable right-click - TEMPORARILY DISABLED FOR DEBUGGING
+    // const handleContextMenu = (e) => e.preventDefault();
+    // document.addEventListener("contextmenu", handleContextMenu);
     // Block print
     const style = document.createElement("style");
     style.innerHTML = `@media print { body * { display: none !important; } }`;
@@ -57,7 +57,7 @@ const PreviewPage = () => {
       document.body.appendChild(watermark);
     }
     return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
+      // document.removeEventListener("contextmenu", handleContextMenu);
       window.removeEventListener("keydown", blockKeys);
       document.head.removeChild(style);
       const wm = document.getElementById("secure-watermark");
@@ -119,6 +119,9 @@ const PreviewPage = () => {
               "🔍🔍🔍 PREVIEW: Is creator preview:",
               isCreatorPreview
             );
+            console.log("🔍🔍🔍 PREVIEW: Link data:", data);
+            console.log("🔍🔍🔍 PREVIEW: Using _id for tracking:", data._id);
+            console.log("🔍🔍🔍 PREVIEW: Link linkId:", data.linkId);
 
             await trackLink(data._id, isCreatorPreview);
           } catch (trackError) {
@@ -128,6 +131,10 @@ const PreviewPage = () => {
             );
             // Don't throw - preview should still work even if tracking fails
           }
+        } else {
+          console.log(
+            "🔍🔍🔍 PREVIEW: No _id found in link data, cannot track"
+          );
         }
       } catch (error) {
         console.error("🔍🔍🔍 PREVIEW: Network error:", error);
