@@ -11,10 +11,12 @@ import {
   RefreshCw,
   Clock,
   DollarSign,
+  FileText,
 } from "lucide-react";
 
 import ErrorBoundary from "../components/ui/ErrorBoundary";
 import RefundPolicyModal from "../components/ui/RefundPolicyModal";
+import RefundModal from "../components/ui/RefundModal";
 
 export default function SubscriptionManager() {
   const navigate = useNavigate();
@@ -412,14 +414,20 @@ export default function SubscriptionManager() {
 
   return (
     <div className="p-6">
+      {/* Subscription Details Section */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <CreditCard className="h-5 w-5 text-emerald-500" />
+          <FileText className="h-5 w-5 text-gray-300" />
           <h3 className="text-base font-medium text-white">
             Subscription Details
           </h3>
         </div>
-        {getStatusIcon(subscription.status)}
+        <button
+          onClick={() => navigate("/pricing")}
+          className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+        >
+          Change Plan
+        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -427,8 +435,9 @@ export default function SubscriptionManager() {
           <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
             Plan
           </h4>
-          <p className="text-base font-medium text-white capitalize">
+          <p className="text-base font-medium text-white capitalize flex items-center gap-2">
             {subscription.plan} Plan
+            <CheckCircle className="h-4 w-4 text-green-500" />
           </p>
         </div>
 
@@ -452,6 +461,15 @@ export default function SubscriptionManager() {
                 )
               : formatDate(subscription.startDate)}
           </p>
+          {isRefundEligible() && subscription.refundStatus === "none" && (
+            <button
+              onClick={() => setShowRefundModal(true)}
+              className="text-sm text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-2 mt-1 underline"
+            >
+              <Clock className="h-3 w-3" />
+              {getRefundDaysRemaining()} days remaining
+            </button>
+          )}
         </div>
 
         <div>
@@ -468,72 +486,35 @@ export default function SubscriptionManager() {
               : formatDate(subscription.endDate)}
           </p>
         </div>
-
-        {subscription.refundStatus && subscription.refundStatus !== "none" && (
-          <div>
-            <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
-              Refund Status
-            </h4>
-            <p className="text-sm text-gray-300 capitalize flex items-center gap-2">
-              {subscription.refundStatus === "completed" && (
-                <DollarSign className="h-4 w-4 text-emerald-400" />
-              )}
-              {subscription.refundStatus === "requested" && (
-                <RefreshCw className="h-4 w-4 text-amber-400 animate-spin" />
-              )}
-              {subscription.refundStatus === "failed" && (
-                <XCircle className="h-4 w-4 text-red-400" />
-              )}
-              {subscription.refundStatus}
-            </p>
-          </div>
-        )}
-
-        {isRefundEligible() && subscription.refundStatus === "none" && (
-          <div>
-            <h4 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
-              Refund Window
-            </h4>
-            <p className="text-sm text-amber-300 flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              {getRefundDaysRemaining()} days remaining
-            </p>
-          </div>
-        )}
       </div>
 
-      <div className="mb-8 p-6 bg-gray-800/50 rounded-xl border border-gray-700/50">
-        <h4 className="text-xs font-medium mb-4 text-white uppercase tracking-wide">
+      {/* Divider */}
+      <div className="border-t border-gray-700 mb-8"></div>
+
+      {/* Usage & Billing Section */}
+      <div className="mb-8">
+        <h4 className="text-base font-medium text-white mb-6">
           Usage & Billing
         </h4>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">
-              Links used
-            </p>
-            <p className="font-medium text-white mb-2">
-              {usage?.links?.current ?? 0} /{" "}
-              {usage?.links?.limit ?? "Unlimited"}
-              {usage?.links?.percent && (
-                <span className="text-emerald-400 ml-2 text-sm">
-                  ({usage.links.percent}%)
-                </span>
-              )}
+            <p className="text-sm text-gray-300 mb-2">
+              Links used: {usage?.links?.current ?? 0}/
+              {usage?.links?.limit ?? "Unlimited"} ({usage?.links?.percent ?? 0}
+              %)
             </p>
             {usage?.links?.limit && (
-              <div className="h-1 bg-gray-700 rounded-full">
+              <div className="h-2 bg-gray-700 rounded-full">
                 <div
-                  className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                  className="h-full bg-gray-400 rounded-full transition-all duration-500"
                   style={{ width: `${usage.links.percent}%` }}
                 />
               </div>
             )}
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wide">
-              Billing period
-            </p>
-            <p className="font-medium text-white mb-1">
+            <p className="text-sm text-gray-300 mb-1">Billing period</p>
+            <p className="text-sm text-white mb-1">
               {billingPeriod?.remaining_days ?? "N/A"} days remaining
             </p>
             <p className="text-xs text-gray-400">
@@ -544,72 +525,18 @@ export default function SubscriptionManager() {
         </div>
       </div>
 
-      {(subscription.status === "active" ||
-        subscription.status === "cancelled") &&
-        subscription.plan !== "lifetime" && (
-          <div className="flex flex-wrap gap-3">
-            {isRefundEligible() &&
-              (subscription.refundStatus === "none" ||
-                subscription.refundStatus === "failed") && (
-                <div className="flex flex-col gap-2">
-                  <button
-                    onClick={() => setShowRefundModal(true)}
-                    className="px-4 py-2 text-amber-400 border border-amber-400/30 rounded-lg hover:bg-amber-400/10 transition-colors flex items-center gap-2 text-sm"
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    {subscription.refundStatus === "failed"
-                      ? "Retry Refund"
-                      : "Request Refund"}
-                    <span className="text-xs bg-amber-400/20 px-2 py-1 rounded">
-                      {getRefundDaysRemaining()}d left
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => setShowRefundPolicyModal(true)}
-                    className="text-xs text-gray-400 hover:text-gray-300 transition-colors underline"
-                  >
-                    View Refund Policy
-                  </button>
-                </div>
-              )}
+      {/* Action Buttons */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleCancelSubscription}
+          disabled={cancelling}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 text-sm font-medium"
+        >
+          {cancelling ? "Cancelling..." : "Cancel Subscription"}
+        </button>
+      </div>
 
-            {!isRefundEligible() && subscription.refundStatus === "none" && (
-              <div className="px-4 py-2 text-gray-500 border border-gray-600/50 rounded-lg flex items-center gap-2 text-sm">
-                <Clock className="h-4 w-4" />
-                Refund Window Expired
-              </div>
-            )}
-
-            {subscription.refundStatus === "requested" && (
-              <div className="px-4 py-2 text-amber-400 border border-amber-400/30 rounded-lg flex items-center gap-2 text-sm">
-                <RefreshCw className="h-4 w-4 animate-spin" />
-                Refund Processing...
-              </div>
-            )}
-
-            {subscription.refundStatus === "failed" && (
-              <div className="px-4 py-2 text-red-400 border border-red-400/30 rounded-lg flex items-center gap-2 text-sm">
-                <XCircle className="h-4 w-4" />
-                Refund Failed - Click "Retry Refund" to try again
-              </div>
-            )}
-
-            <button
-              onClick={handleCancelSubscription}
-              disabled={cancelling}
-              className="px-4 py-2 text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50 text-sm"
-            >
-              {cancelling ? "Cancelling..." : "Cancel Subscription"}
-            </button>
-            <button
-              onClick={() => navigate("/pricing")}
-              className="px-4 py-2 text-emerald-400 border border-emerald-400/30 rounded-lg hover:bg-emerald-400/10 transition-colors text-sm"
-            >
-              Change Plan
-            </button>
-          </div>
-        )}
-
+      {/* Status Messages */}
       {subscription.status === "cancelled" && (
         <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
           <p className="text-sm text-amber-400">
@@ -649,75 +576,18 @@ export default function SubscriptionManager() {
       )}
 
       {/* Refund Modal */}
-      {showRefundModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-xl p-6 max-w-md w-full">
-            <div className="flex items-center gap-3 mb-4">
-              <RefreshCw className="h-5 w-5 text-amber-400" />
-              <h3 className="text-base font-medium text-white">
-                Request Refund
-              </h3>
-            </div>
-
-            <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-amber-400" />
-                  <span className="text-xs font-medium text-amber-400 uppercase tracking-wide">
-                    15-Day Refund Policy
-                  </span>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowRefundModal(false);
-                    setShowRefundPolicyModal(true);
-                  }}
-                  className="text-xs text-amber-300 hover:text-amber-200 underline"
-                >
-                  View Details
-                </button>
-              </div>
-              <p className="text-xs text-amber-300">
-                You have {getRefundDaysRemaining()} days remaining to request a
-                refund. Refunds are processed immediately and your access will
-                be removed.
-              </p>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-300 mb-2 uppercase tracking-wide">
-                Reason for refund (optional)
-              </label>
-              <textarea
-                value={refundReason}
-                onChange={(e) => setRefundReason(e.target.value)}
-                placeholder="Help us improve by sharing your feedback..."
-                className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-emerald-500 focus:outline-none resize-none text-sm"
-                rows={3}
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setShowRefundModal(false);
-                  setRefundReason("");
-                }}
-                className="flex-1 px-4 py-2 text-gray-400 border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleRequestRefund}
-                disabled={refunding}
-                className="flex-1 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              >
-                {refunding ? "Processing..." : "Request Refund"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <RefundModal
+        isOpen={showRefundModal}
+        onClose={() => {
+          setShowRefundModal(false);
+          setRefundReason("");
+        }}
+        onRequestRefund={handleRequestRefund}
+        refundDaysRemaining={getRefundDaysRemaining()}
+        refundReason={refundReason}
+        setRefundReason={setRefundReason}
+        refunding={refunding}
+      />
 
       {/* Refund Policy Modal */}
       <RefundPolicyModal
