@@ -7,7 +7,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import Switch from "../../components/ui/Switch";
 import InfoModal from "../../components/ui/InfoModal";
 import * as Popover from "@radix-ui/react-popover";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import SuccessModal from "../../components/ui/SuccessModal";
 
 const initialState = {
   title: "",
@@ -232,13 +233,22 @@ const VideoModal = ({ closeModal }) => {
     const linkId = successLink.split("/").pop();
     const previewUrl = `/preview/${linkId}`;
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F1F23]/40 p-4">
-        <div
-          className={`w-full max-w-md mx-auto rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 transition-all duration-300 relative overflow-hidden ${
-            window.innerWidth < 768
-              ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
-              : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          }`}
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        <motion.div
+          className="w-full max-w-md mx-auto rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 relative overflow-hidden bg-[#1F1F23] border border-gray-700/50 backdrop-blur-xl"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{
+            duration: 0.3,
+            ease: [0.4, 0, 0.2, 1],
+          }}
         >
           {/* Cyan gradient circles - only on desktop */}
           {window.innerWidth >= 768 && (
@@ -310,8 +320,8 @@ const VideoModal = ({ closeModal }) => {
               </p>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     );
   }
 

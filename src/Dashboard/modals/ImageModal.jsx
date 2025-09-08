@@ -6,7 +6,8 @@ import dayjs from "dayjs";
 import * as Popover from "@radix-ui/react-popover";
 import Switch from "../../components/ui/Switch";
 import InfoModal from "../../components/ui/InfoModal";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import SuccessModal from "../../components/ui/SuccessModal";
 
 const initialState = {
   title: "",
@@ -237,107 +238,14 @@ const ImageModal = ({ closeModal }) => {
 
   // Success Modal
   if (successLink) {
-    // Build the preview URL for the frontend
-    let linkId = null;
-    let previewUrl = null;
-
-    try {
-      // Try to extract linkId from the URL
-      if (successLink.includes("/")) {
-        linkId = successLink.split("/").pop();
-      } else {
-        // If it's just an ID, use it directly
-        linkId = successLink;
-      }
-      previewUrl = `/preview/${linkId}`;
-    } catch (error) {
-      console.error("Error extracting linkId:", error);
-      // Fallback: use the full successLink as the preview URL
-      previewUrl = successLink;
-    }
-
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1F1F23]/40 p-4">
-        <div
-          className={`w-full max-w-md mx-auto rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 transition-all duration-300 relative overflow-hidden ${
-            window.innerWidth < 768
-              ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
-              : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
-          }`}
-        >
-          {/* Cyan gradient circles - only on desktop */}
-          {window.innerWidth >= 768 && (
-            <>
-              <div className="absolute -top-12 -left-12 w-[120px] h-[120px] bg-gradient-to-tr from-[#00ffff]/20 to-transparent rounded-full blur-[400px] z-0" />
-              <div className="absolute bottom-0 -right-10 w-[140px] h-[140px] bg-gradient-to-br from-[#00ffff]/15 to-transparent rounded-full blur-[400px] z-0" />
-            </>
-          )}
-          <div className="relative z-10">
-            <button
-              className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors duration-200"
-              onClick={() => {
-                setSuccessLink(null);
-                // Do not close the modal after link creation
-              }}
-              aria-label="Close"
-            >
-              <X />
-            </button>
-            <div className="text-center">
-              <h2 className="text-2xl sm:text-3xl font-extrabold mb-3 text-white">
-                Link Created!
-              </h2>
-              <p className="mb-6 text-gray-300/80 text-sm sm:text-base">
-                Your image link is ready to share:
-              </p>
-              <div className="flex items-center justify-center gap-2 bg-[#232326] border border-gray-700 rounded-lg px-4 py-3 mb-6">
-                <span
-                  className="truncate text-[#00ffff] font-mono text-sm"
-                  style={{ maxWidth: 200 }}
-                >
-                  {successLink}
-                </span>
-                <button
-                  onClick={handleCopy}
-                  className="text-gray-400 hover:text-[#00ffff] p-1 transition-colors duration-200"
-                  title="Copy link"
-                  aria-label="Copy link"
-                >
-                  <Copy size={18} />
-                </button>
-              </div>
-              <div className="flex flex-col sm:flex-row justify-center gap-3 mb-4">
-                <a
-                  href={`${previewUrl}?preview=creator`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black px-4 py-2 rounded-lg text-sm font-semibold shadow-md transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
-                >
-                  Preview Link
-                </a>
-                <div className="flex justify-center gap-2">
-                  {shareOptions.map((opt) => (
-                    <a
-                      key={opt.name}
-                      href={opt.getShareUrl(successLink)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-[#232326] border border-gray-700 hover:border-[#00ffff] hover:bg-[#00ffff]/10 rounded-lg p-2 transition-all duration-200 text-gray-400 hover:text-[#00ffff]"
-                      title={`Share via ${opt.name}`}
-                      aria-label={`Share via ${opt.name}`}
-                    >
-                      {opt.icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
-              <p className="text-xs text-gray-400/80">
-                Share instantly to your favorite platform
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SuccessModal
+        isOpen={!!successLink}
+        onClose={() => setSuccessLink(null)}
+        linkUrl={successLink}
+        linkType="image"
+        onCopy={handleCopy}
+      />
     );
   }
 

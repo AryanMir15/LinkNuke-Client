@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {
@@ -71,13 +71,7 @@ const NukedLinksMobile = () => {
 
   const handleCopy = (url) => {
     navigator.clipboard.writeText(url);
-    toast.success("Link copied!", {
-      style: {
-        background: "#2A2A2E",
-        color: "#fff",
-        border: "1px solid #1de4bf",
-      },
-    });
+    toast.success("Link copied!");
   };
 
   const confirmDelete = async () => {
@@ -85,22 +79,10 @@ const NukedLinksMobile = () => {
       setIsDeleting(true);
       try {
         await remove(deletingId);
-        toast.success("Link deleted!", {
-          style: {
-            background: "#2A2A2E",
-            color: "#fff",
-            border: "1px solid #ef4444",
-          },
-        });
+        toast.success("Link deleted!");
       } catch (error) {
         console.error("Delete failed:", error);
-        toast.error("Failed to delete link", {
-          style: {
-            background: "#2A2A2E",
-            color: "#fff",
-            border: "1px solid #ef4444",
-          },
-        });
+        toast.error("Failed to delete link");
       } finally {
         setIsDeleting(false);
         setDeletingId(null);

@@ -49,7 +49,7 @@ export default function Footer() {
                 <Github className="w-5 h-5 text-gray-300 group-hover:text-[#1de4bf] transition-colors" />
               </a>
               <a
-                href="mailto:Support@WhyNotShip.me"
+                href="mailto:support@whynotship.me"
                 aria-label="Email"
                 className="w-12 h-12 bg-gray-800/50 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-[#1de4bf]/20 hover:border-[#1de4bf]/30 border border-gray-700/50 transition-all duration-300 group"
               >
@@ -131,7 +131,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:linknuke.noreply@gmail.com"
+                  href="mailto:support@whynotship.me"
                   className="text-gray-300 hover:text-[#0bf3a2] transition-colors duration-300 flex items-center gap-2 group"
                 >
                   <span className="w-1 h-1 bg-[#0bf3a2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
