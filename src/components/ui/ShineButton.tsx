@@ -34,7 +34,7 @@ export const ShineButton: React.FC<ShineButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`group relative text-white font-medium rounded-md min-w-[120px] min-h-[44px] transition-all duration-700 ease-in-out border-none cursor-pointer shadow-[0px_0px_20px_rgba(16,185,129,0.35),0px_5px_5px_-1px_rgba(16,185,129,0.25),inset_4px_4px_8px_rgba(167,243,208,0.35),inset_-4px_-4px_8px_rgba(14,116,144,0.35)] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500 hover:bg-[length:280%_auto] active:scale-95 ${className}`}
+      className={`group relative text-white font-medium rounded-md min-w-[120px] min-h-[44px] overflow-hidden transition-all duration-700 ease-in-out border-none cursor-pointer shadow-[0px_0px_20px_rgba(16,185,129,0.35),0px_5px_5px_-1px_rgba(16,185,129,0.25),inset_4px_4px_8px_rgba(167,243,208,0.35),inset_-4px_-4px_8px_rgba(14,116,144,0.35)] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500 hover:bg-[length:280%_auto] active:scale-95 ${className}`}
       style={{
         backgroundImage,
         backgroundSize: '280% auto',
@@ -53,7 +53,7 @@ export const ShineButton: React.FC<ShineButtonProps> = ({
     >
       {label}
       <div
-        className="pointer-events-none absolute top-0 left-[-75%] z-20 h-full w-[200%] skew-x-[-20deg] bg-white/35 opacity-0 group-hover:opacity-100 animate-shine"
+        className="pointer-events-none absolute top-0 left-[-45%] z-20 h-full w-[140%] skew-x-[-18deg] bg-transparent opacity-0 transition-[opacity,background-color] duration-200 group-hover:bg-white/20 group-hover:opacity-100 group-hover:animate-shine will-change-transform"
       />
     </button>
   )
