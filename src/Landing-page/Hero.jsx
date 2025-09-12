@@ -31,7 +31,7 @@ const Hero = () => {
                       </span>
                     </h1>
 
-                    <p className="text-lg sm:text-xl text-gray-300 leading-relaxed w-[28rem] font-normal">
+                    <p className="text-lg sm:text-xl text-gray-300 leading-relaxed w-full max-w-[28rem] sm:max-w-[32rem] break-words font-normal">
                       Share sensitive files and links that automatically delete
                       themselves after being viewed. Complete privacy, zero
                       traces left behind.
@@ -49,17 +49,20 @@ const Hero = () => {
                       </Link>
                     ) : (
                       <>
-                        <Link to="/register" className="inline-flex">
+                        <Link
+                          to="/register"
+                          className="inline-flex w-full sm:w-auto"
+                        >
                           <ShineButton
                             size="lg"
                             label="Start Sharing Securely"
-                            className="px-8 py-4 rounded-full"
+                            className="px-8 py-4 rounded-full w-full sm:w-auto"
                             bgColor="linear-gradient(325deg, hsl(160 84% 39%) 0%, hsl(174 84% 40%) 55%, hsl(160 84% 39%) 90%)"
                           />
                         </Link>
                         <Link
                           to="/login"
-                          className="group relative bg-transparent text-white border-2 border-white/30 font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center justify-center"
+                          className="group relative bg-transparent text-white border-2 border-white/30 font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl inline-flex items-center justify-center min-h-[44px] w-full sm:w-auto"
                         >
                           Sign In
                         </Link>

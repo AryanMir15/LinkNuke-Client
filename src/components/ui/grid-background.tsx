@@ -108,6 +108,16 @@ function GridBackground({
     [count, beamColors, speed, cols, rows],
   );
 
+  // Responsively reduce animation density on small screens
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener?.('change', update);
+    return () => mq.removeEventListener?.('change', update);
+  }, []);
+
   const gridStyle = {
     '--border-style': borderStyle,
   } as React.CSSProperties;
@@ -148,7 +158,7 @@ function GridBackground({
       </div>
 
       {/* Animated Beams */}
-      {animatedBeams.map((beam) => {
+      {(isMobile ? animatedBeams.slice(0, 3) : animatedBeams).map((beam) => {
         // Calculate exact grid line positions as percentages
         const horizontalPosition = (beam.gridLine / rows) * 100;
         const verticalPosition = (beam.gridLine / cols) * 100;
@@ -217,7 +227,8 @@ function GridBackground({
         const opacity = line.opacity ?? 0.45;
         const insetStart = line.insetStart ?? '8%';
         const insetEnd = line.insetEnd ?? '8%';
-        const particlesPerLine = Math.min(Math.max(accentLines.particlesPerLine ?? 4, 0), 6);
+        const particlesPerLineBase = Math.min(Math.max(accentLines.particlesPerLine ?? 4, 0), 6);
+        const particlesPerLine = isMobile ? Math.min(particlesPerLineBase, 3) : particlesPerLineBase;
         const particleClass = accentLines.particleClass ?? 'bg-emerald-300';
         const baseParticleSize = accentLines.particleSizePx ?? 6;
         const baseParticleSpeed = accentLines.particleSpeedSec ?? 5;
