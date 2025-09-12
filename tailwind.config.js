@@ -7,6 +7,12 @@ export default {
   theme: {
     extend: {
       keyframes: {
+        shine: {
+          "0%": { transform: "translateX(-60%) skewX(-20deg)", opacity: "0" },
+          "20%": { opacity: "0.6" },
+          "60%": { opacity: "0.6" },
+          "100%": { transform: "translateX(120%) skewX(-20deg)", opacity: "0" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -33,6 +39,7 @@ export default {
         },
       },
       animation: {
+        shine: "shine 1.2s ease-in-out",
         "fade-up": "fade-up 0.6s ease-out both",
         "fade-up-once": "fade-up-once 0.8s ease-out forwards",
         "fade-in-down": "fade-in-down 0.3s ease-out both",
@@ -40,6 +47,10 @@ export default {
         "pulse-slow": "pulse 6s ease-in-out infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        "grid-white":
+          "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.1)'%3e%3cpath d='m0 .5h32m-32 32v-32'/%3e%3c/svg%3e\")",
       },
       colors: {
         black: "#000000",

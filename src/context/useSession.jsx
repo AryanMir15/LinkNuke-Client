@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -23,13 +24,19 @@ export function SessionProvider({ children }) {
     const verifySession = async () => {
       const currentPath = window.location.pathname;
 
-      // Don't verify session on auth pages to prevent redirect loops
-      if (
+      // Only verify session on protected route prefixes. All other pages are public.
+      const isProtectedRoute =
+        currentPath.startsWith("/dashboard") ||
+        currentPath.startsWith("/feedback");
+
+      // Always skip verification on explicit auth pages to avoid loops
+      const isAuthPage =
         currentPath === "/login" ||
         currentPath === "/register" ||
         currentPath === "/verify-pin" ||
-        currentPath === "/forgot-password"
-      ) {
+        currentPath === "/forgot-password";
+
+      if (!isProtectedRoute || isAuthPage) {
         setLoading(false);
         return;
       }
@@ -83,13 +90,8 @@ export function SessionProvider({ children }) {
         localStorage.removeItem("user");
         setUser(null);
 
-        // Redirect to login if not already on an auth page
-        if (
-          currentPath !== "/login" &&
-          currentPath !== "/register" &&
-          currentPath !== "/verify-pin" &&
-          currentPath !== "/forgot-password"
-        ) {
+        // Redirect to login only when on protected routes
+        if (isProtectedRoute) {
           console.log("🔍🔍🔍 JWT SESSION: Redirecting to login");
           window.location.href = "/login";
           return;
