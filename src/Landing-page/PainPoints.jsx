@@ -109,10 +109,24 @@ function PainPoints() {
 
   return (
     <section
-      className="w-full bg-black py-24 sm:py-32 px-4 sm:px-6 lg:px-8"
+      className="relative w-full bg-black py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
       id="pain-points"
     >
-      <div className="max-w-6xl mx-auto">
+      {/* Subtle Background Pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(29, 228, 191, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(29, 228, 191, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Subtle Radial Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20" />
+      <div className="relative max-w-6xl mx-auto z-10">
         {/* Header */}
         <div
           className={`text-center mb-16 sm:mb-20 transition-all duration-700 ${
@@ -171,15 +185,26 @@ function PainPoints() {
                 : "opacity-0 -translate-x-8"
             }`}
           >
-            <div className="bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-8 lg:p-10">
-              <div className="flex items-center gap-3 mb-8">
+            <div className="relative bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
+              {/* Subtle Grid Pattern Overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl opacity-[0.03]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "20px 20px",
+                }}
+              />
+              <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
                   <AlertTriangle className="h-5 w-5 text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-white">The Problems</h3>
               </div>
 
-              <div className="space-y-5">
+              <div className="relative space-y-5">
                 {painPoints.map((point, index) => (
                   <div
                     key={index}
@@ -206,15 +231,26 @@ function PainPoints() {
                 : "opacity-0 translate-x-8"
             }`}
           >
-            <div className="bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-8 lg:p-10">
-              <div className="flex items-center gap-3 mb-8">
+            <div className="relative bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
+              {/* Subtle Grid Pattern Overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl opacity-[0.03]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "20px 20px",
+                }}
+              />
+              <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
                   <Check className="h-5 w-5 text-green-400" />
                 </div>
                 <h3 className="text-xl font-bold text-white">The Solutions</h3>
               </div>
 
-              <div className="space-y-5">
+              <div className="relative space-y-5">
                 {solutions.map((solution, index) => (
                   <div
                     key={index}
@@ -244,15 +280,26 @@ function PainPoints() {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              <div className="bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-6">
+              <div className="relative bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                {/* Subtle Grid Pattern Overlay */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-[0.03]"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: "20px 20px",
+                  }}
+                />
+                <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
                     <AlertTriangle className="h-5 w-5 text-red-400" />
                   </div>
                   <h3 className="text-xl font-bold text-white">The Problems</h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="relative space-y-4">
                   {painPoints.map((point, index) => (
                     <div
                       key={index}
@@ -279,8 +326,19 @@ function PainPoints() {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              <div className="bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-6">
+              <div className="relative bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-6 backdrop-blur-sm">
+                {/* Subtle Grid Pattern Overlay */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-[0.03]"
+                  style={{
+                    backgroundImage: `
+                      linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
+                    `,
+                    backgroundSize: "20px 20px",
+                  }}
+                />
+                <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
                     <Check className="h-5 w-5 text-green-400" />
                   </div>
@@ -289,7 +347,7 @@ function PainPoints() {
                   </h3>
                 </div>
 
-                <div className="space-y-4">
+                <div className="relative space-y-4">
                   {solutions.map((solution, index) => (
                     <div
                       key={index}
