@@ -109,7 +109,7 @@ function PainPoints() {
 
   return (
     <section
-      className="relative w-full bg-black py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative w-full bg-black py-24 sm:py-40 px-4 sm:px-6 lg:px-8 overflow-hidden"
       id="pain-points"
     >
       {/* Subtle Background Pattern */}
@@ -120,7 +120,7 @@ function PainPoints() {
             linear-gradient(rgba(29, 228, 191, 0.1) 1px, transparent 1px),
             linear-gradient(90deg, rgba(29, 228, 191, 0.1) 1px, transparent 1px)
           `,
-          backgroundSize: "60px 60px",
+          backgroundSize: `${60}px ${60}px`,
         }}
       />
 
@@ -194,7 +194,7 @@ function PainPoints() {
                     linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px)
                   `,
-                  backgroundSize: "20px 20px",
+                  backgroundSize: `${20}px ${20}px`,
                 }}
               />
               <div className="relative flex items-center gap-3 mb-8">
@@ -240,7 +240,7 @@ function PainPoints() {
                     linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
                     linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
                   `,
-                  backgroundSize: "20px 20px",
+                  backgroundSize: `${20}px ${20}px`,
                 }}
               />
               <div className="relative flex items-center gap-3 mb-8">
@@ -289,7 +289,7 @@ function PainPoints() {
                       linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px)
                     `,
-                    backgroundSize: "20px 20px",
+                    backgroundSize: `${20}px ${20}px`,
                   }}
                 />
                 <div className="relative flex items-center gap-3 mb-6">
@@ -335,7 +335,7 @@ function PainPoints() {
                       linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)
                     `,
-                    backgroundSize: "20px 20px",
+                    backgroundSize: `${20}px ${20}px`,
                   }}
                 />
                 <div className="relative flex items-center gap-3 mb-6">
