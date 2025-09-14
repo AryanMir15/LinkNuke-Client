@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useSession } from "../context/useSession.jsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Sparkles } from "lucide-react";
@@ -64,7 +65,11 @@ function classNames(...classes) {
 
 export default function PricingSection() {
   const [isVisible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingStates, setLoadingStates] = useState({
+    Free: false,
+    Pro: false,
+    Lifetime: false,
+  });
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const { user } = useSession();
@@ -81,16 +86,23 @@ export default function PricingSection() {
 
   const handleUpgradeClick = async (tier) => {
     try {
-      setLoading(true);
+      setLoadingStates((prev) => ({ ...prev, [tier.name]: true }));
       setError(null);
 
       // Check if user is logged in by checking localStorage
       const storedUser = localStorage.getItem("user");
       const token = localStorage.getItem("token");
       if (!storedUser || !token) {
-        // Redirect to pricing page for better flow
-        window.location.href = `/pricing?trial=${tier.name.toLowerCase()}`;
-        return;
+        // Redirect to register for Free tier, pricing for others
+        if (tier.name === "Free") {
+          window.location.href = "/register";
+          setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
+          return;
+        } else {
+          window.location.href = `/pricing?trial=${tier.name.toLowerCase()}`;
+          setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
+          return;
+        }
       }
 
       const response = await axios.post(
@@ -122,7 +134,7 @@ export default function PricingSection() {
         tier: tier.name,
       });
     } finally {
-      setLoading(false);
+      setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
     }
   };
 
@@ -145,7 +157,7 @@ export default function PricingSection() {
   return (
     <section
       id="pricing"
-      className="relative isolate bg-black px-6 py-20 sm:py-24 lg:px-8 text-white overflow-hidden"
+      className="relative isolate bg-black px-6 py-32 sm:py-40 lg:px-8 text-white overflow-hidden"
     >
       {/* Subtle Background Pattern - Mobile friendly */}
       <div className="absolute inset-0 bg-black" />
@@ -202,14 +214,16 @@ export default function PricingSection() {
             key={tier.name}
             className={classNames(
               "relative rounded-2xl p-8 sm:p-10 flex flex-col transition-all duration-300",
-              tier.name !== "Free" && "hover:scale-[1.02]",
+              tier.name === "Pro" && "hover:scale-[1.05]",
+              tier.name === "Lifetime" && "hover:scale-[1.02]",
+              tier.name === "Free" && "hover:scale-[1.02]",
               tier.featured && "lg:scale-105"
             )}
             style={{
               // Card styling based on your provided design
               background:
                 tier.name === "Pro"
-                  ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                  ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.18), #0c0d0d)"
                   : tier.name === "Lifetime"
                   ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                   : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
@@ -218,17 +232,30 @@ export default function PricingSection() {
               padding: "1px",
             }}
           >
-            {/* Animated dot - Only on Pro card and desktop */}
+            {/* Animated dots - Only on Pro card and desktop */}
             {tier.featured && !isMobile && (
-              <div
-                className="absolute w-1 h-1 bg-white rounded-full z-20"
-                style={{
-                  right: "10%",
-                  top: "10%",
-                  boxShadow: "0 0 10px #ffffff",
-                  animation: "moveDot 6s linear infinite",
-                }}
-              />
+              <>
+                {/* Dot 1 - Top-left, clockwise */}
+                <div
+                  className="absolute w-1 h-1 bg-white rounded-full z-20"
+                  style={{
+                    left: "15%",
+                    top: "15%",
+                    boxShadow: "0 0 10px #ffffff",
+                    animation: "moveDot 6s linear infinite",
+                  }}
+                />
+                {/* Dot 2 - Top-right, counter-clockwise */}
+                <div
+                  className="absolute w-1 h-1 bg-white rounded-full z-20"
+                  style={{
+                    right: "15%",
+                    top: "15%",
+                    boxShadow: "0 0 10px #ffffff",
+                    animation: "moveDotReverse 6s linear infinite",
+                  }}
+                />
+              </>
             )}
 
             {/* Card content */}
@@ -240,7 +267,7 @@ export default function PricingSection() {
               style={{
                 background:
                   tier.name === "Pro"
-                    ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                    ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.18), #0c0d0d)"
                     : tier.name === "Lifetime"
                     ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                     : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
@@ -360,50 +387,94 @@ export default function PricingSection() {
                   ))}
                 </ul>
 
-                <div
-                  className={classNames(
-                    "button-wrapper relative overflow-hidden",
-                    tier.featured && "shadow-lg shadow-[#1de4bf]/20"
-                  )}
-                  style={{
-                    width: "100%",
-                    height: "45px",
-                    borderRadius: "0.45em",
-                    fontFamily: "Arial",
-                    transition: "background 0.3s",
-                    background: tier.featured
-                      ? "linear-gradient(135deg, #047857, #065f46)"
-                      : "#222",
-                    position: "relative",
-                    textAlign: "center",
-                  }}
-                  onClick={() => handleUpgradeClick(tier)}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                    <div className="text-wrapper absolute inset-0 flex items-center justify-center text-white font-semibold transition-all duration-500">
-                      {loading
-                        ? "Processing..."
-                        : tier.name === "Lifetime"
-                        ? "Get Lifetime Access"
-                        : tier.name === "Free"
-                        ? "Register"
-                        : "Get Pro Plan"}
-                    </div>
-                    {tier.name !== "Free" && (
-                      <div className="icon-wrapper absolute inset-0 flex items-center justify-center text-white opacity-0 transition-all duration-500 transform translate-y-full">
-                        <svg
-                          viewBox="0 0 16 16"
-                          fill="currentColor"
-                          height={20}
-                          width={20}
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
-                        </svg>
+                <>
+                  {tier.name === "Free" ? (
+                    <Link
+                      to="/register"
+                      className={classNames(
+                        "button-wrapper relative overflow-hidden transition-transform duration-300 block",
+                        "hover:scale-105"
+                      )}
+                      style={{
+                        width: "100%",
+                        height: "45px",
+                        borderRadius: "0.45em",
+                        fontFamily: "Arial",
+                        transition: "background 0.3s, transform 0.3s",
+                        background: "#222",
+                        position: "relative",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-white font-semibold">Register</div>
                       </div>
-                    )}
-                  </div>
-                </div>
+                    </Link>
+                  ) : (
+                    <div
+                      className={classNames(
+                        "button-wrapper relative overflow-hidden transition-transform duration-300",
+                        tier.featured &&
+                          "shadow-lg shadow-[#1de4bf]/20 hover:scale-105",
+                        loadingStates[tier.name] && "processing"
+                      )}
+                      style={{
+                        width: "100%",
+                        height: "45px",
+                        borderRadius: "0.45em",
+                        fontFamily: "Arial",
+                        transition: "background 0.3s, transform 0.3s",
+                        background: tier.featured
+                          ? "linear-gradient(135deg, #0891b2, #10b981)"
+                          : "#222",
+                        position: "relative",
+                        textAlign: "center",
+                      }}
+                      onClick={() => handleUpgradeClick(tier)}
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                        <div className="text-wrapper absolute inset-0 flex items-center justify-center text-white font-semibold transition-all duration-500">
+                          {loadingStates[tier.name]
+                            ? "Processing..."
+                            : tier.name === "Lifetime"
+                            ? "Get Lifetime Access"
+                            : "Get Pro Plan"}
+                        </div>
+                        <div className="icon-wrapper absolute inset-0 flex items-center justify-center text-white opacity-0 transition-all duration-500 transform translate-y-full">
+                          <svg
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            height={20}
+                            width={20}
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                          </svg>
+                        </div>
+                      </div>
+                      {/* Shine effect - Only on Pro card and desktop */}
+                      {tier.featured && !isMobile && (
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background: "transparent",
+                            zIndex: 1,
+                          }}
+                        >
+                          <div
+                            className="shine-effect absolute top-0 left-0 w-0 h-full opacity-0"
+                            style={{
+                              background:
+                                "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                              transform: "skewX(-20deg)",
+                              transition: "all 0.3s ease",
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
               </div>
             </div>
           </div>
@@ -416,20 +487,40 @@ export default function PricingSection() {
           @keyframes moveDot {
             0%,
             100% {
-              top: 10%;
-              right: 10%;
+              top: 15%;
+              left: 15%;
             }
             25% {
-              top: 10%;
-              right: calc(100% - 35px);
+              top: 15%;
+              left: calc(100% - 15%);
             }
             50% {
-              top: calc(100% - 30px);
-              right: calc(100% - 35px);
+              top: calc(100% - 15%);
+              left: calc(100% - 15%);
             }
             75% {
-              top: calc(100% - 30px);
-              right: 10%;
+              top: calc(100% - 15%);
+              left: 15%;
+            }
+          }
+
+          @keyframes moveDotReverse {
+            0%,
+            100% {
+              top: 15%;
+              right: 15%;
+            }
+            25% {
+              top: calc(100% - 15%);
+              right: 15%;
+            }
+            50% {
+              top: calc(100% - 15%);
+              right: calc(100% - 15%);
+            }
+            75% {
+              top: 15%;
+              right: calc(100% - 15%);
             }
           }
 
@@ -441,6 +532,48 @@ export default function PricingSection() {
           .button-wrapper:hover .icon-wrapper {
             opacity: 1;
             transform: translateY(0);
+          }
+
+          /* Reverse animation when processing */
+          .button-wrapper.processing .text-wrapper {
+            transform: translateY(0);
+            opacity: 1;
+          }
+
+          .button-wrapper.processing .icon-wrapper {
+            opacity: 0;
+            transform: translateY(100%);
+          }
+
+          .button-wrapper.processing:hover .text-wrapper {
+            transform: translateY(0);
+            opacity: 1;
+          }
+
+          .button-wrapper.processing:hover .icon-wrapper {
+            opacity: 0;
+            transform: translateY(100%);
+          }
+
+          .button-wrapper:hover .shine-effect {
+            animation: shine 0.5s ease-out;
+          }
+
+          @keyframes shine {
+            0% {
+              left: 0%;
+              width: 0%;
+              opacity: 0;
+            }
+            50% {
+              width: 100%;
+              opacity: 1;
+            }
+            100% {
+              left: 100%;
+              width: 0%;
+              opacity: 0;
+            }
           }
 
           .text-wrapper {
