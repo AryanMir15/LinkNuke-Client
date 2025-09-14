@@ -34,13 +34,13 @@ export default function LinkNukedModal() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, duration: 0.4, ease: "backOut" }}
           >
-            <div className="w-18 h-18 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-full flex items-center justify-center shadow-xl shadow-red-500/30 relative">
+            <div className="w-24 h-24 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-full flex items-center justify-center shadow-xl shadow-red-500/30 relative">
               <motion.div
                 initial={{ scale: 0, rotate: -180 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: 0.4, duration: 0.6, ease: "backOut" }}
               >
-                <Trash2 className="w-9 h-9 text-white" />
+                <Trash2 className="w-10 h-10 text-white" />
               </motion.div>
               {/* Explosion effect */}
               <motion.div

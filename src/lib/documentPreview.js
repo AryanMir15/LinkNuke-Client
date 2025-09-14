@@ -44,9 +44,23 @@ export function generateDocumentPreviewUrl(documentUrl, options = {}) {
     `fl_immutable_cache`, // Cache the transformation
   ].join(",");
 
-  // Construct the preview URL
-  const baseUrl = documentUrl.split("/").slice(0, -1).join("/");
-  const previewUrl = `${baseUrl}/${transformations}/${publicId}.${format}`;
+  // Construct the preview URL using proper Cloudinary format
+  // Format: https://res.cloudinary.com/cloud_name/image/upload/transformations/public_id.format
+  const urlParts = documentUrl.split("/");
+  const cloudNameIndex =
+    urlParts.findIndex((part) => part === "res.cloudinary.com") + 1;
+  const cloudName = urlParts[cloudNameIndex];
+  const resourceType = urlParts[cloudNameIndex + 1]; // Should be "image" for documents
+
+  const previewUrl = `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/${transformations}/${publicId}.${format}`;
+
+  console.log("🔍 Document Preview URL Generation:");
+  console.log("  Original URL:", documentUrl);
+  console.log("  Public ID:", publicId);
+  console.log("  Cloud Name:", cloudName);
+  console.log("  Resource Type:", resourceType);
+  console.log("  Transformations:", transformations);
+  console.log("  Preview URL:", previewUrl);
 
   return previewUrl;
 }
