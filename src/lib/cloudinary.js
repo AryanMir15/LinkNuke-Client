@@ -17,7 +17,9 @@ export async function uploadToCloudinary(file) {
   } else if (file.type.startsWith("audio/")) {
     formData.append("resource_type", "video"); // Cloudinary uses video for audio
   } else {
-    formData.append("resource_type", "raw"); // For documents
+    // For documents, use 'image' resource type to enable document conversion features
+    // This allows Cloudinary to generate image previews of documents
+    formData.append("resource_type", "image");
   }
 
   try {
