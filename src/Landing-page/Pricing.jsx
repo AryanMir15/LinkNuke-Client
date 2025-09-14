@@ -24,12 +24,12 @@ const tiers = [
 
   {
     name: "Pro",
-    price: "$19",
+    price: "$9",
     description: "For power users and growing businesses.",
     features: [
       "500 secure links/month",
       "10 GB storage",
-      "All file formats (Image, Video, Text, Audio, Doc)",
+      "Image, Video, Text, Audio, Doc",
       "Up to 10 files per link",
       "500 MB max file size",
       "Advanced customization",
@@ -40,12 +40,12 @@ const tiers = [
   },
   {
     name: "Lifetime",
-    price: "$59",
+    price: "$49",
     description: "One-time payment, lifetime access.",
     features: [
       "Unlimited secure links",
       "Unlimited storage",
-      "All file formats",
+      "Image, Video, Text, Audio, Doc",
       "Unlimited files per link",
       "Unlimited file size",
       "Advanced customization",
@@ -66,7 +66,18 @@ export default function PricingSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const { user } = useSession();
+
+  // Check if mobile for performance optimization
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleUpgradeClick = async (tier) => {
     try {
@@ -134,17 +145,32 @@ export default function PricingSection() {
   return (
     <section
       id="pricing"
-      className="relative isolate bg-black px-6 py-20 sm:py-24 lg:px-8 text-white"
+      className="relative isolate bg-black px-6 py-20 sm:py-24 lg:px-8 text-white overflow-hidden"
     >
-      {/* Glowing Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#1de4bf]/10 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#0bf3a2]/10 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-[#1de4bf]/5 to-[#0bf3a2]/5 rounded-full blur-3xl"></div>
-      </div>
+      {/* Subtle Background Pattern - Mobile friendly */}
+      <div className="absolute inset-0 bg-black" />
+      <div
+        className="absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(29, 228, 191, 0.2) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(29, 228, 191, 0.2) 1px, transparent 1px)
+          `,
+          backgroundSize: "40px 40px",
+        }}
+      />
+      <div
+        className="absolute inset-0 bg-white dark:bg-black"
+        style={{
+          maskImage:
+            "radial-gradient(ellipse at center, transparent 40%, black)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, transparent 40%, black)",
+        }}
+      />
 
       {/* Header */}
-      <div className="relative mx-auto max-w-4xl text-center">
+      <div className="relative mx-auto max-w-4xl text-center z-10">
         <div
           className={`transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
@@ -167,78 +193,265 @@ export default function PricingSection() {
 
       {/* Cards */}
       <div
-        className={`mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-3 transition-all duration-700 delay-200 ${
+        className={`mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-3 transition-all duration-700 delay-200 z-10 relative ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         }`}
       >
-        {tiers.map((tier) => (
+        {tiers.map((tier, index) => (
           <div
             key={tier.name}
             className={classNames(
-              "relative rounded-3xl p-8 sm:p-10 flex flex-col ring-1 ring-white/10 backdrop-blur-md bg-white/5 transition-all duration-300",
-              "hover:scale-[1.03] hover:ring-[#1de4bf]/40 hover:shadow-lg hover:shadow-[#1de4bf]/20",
-              tier.featured &&
-                "border border-transparent bg-gradient-to-br from-[#1de4bf]/20 via-black/40 to-[#0bf3a2]/20 shadow-xl shadow-[#1de4bf]/10"
+              "relative rounded-2xl p-8 sm:p-10 flex flex-col transition-all duration-300",
+              tier.name !== "Free" && "hover:scale-[1.02]",
+              tier.featured && "lg:scale-105"
             )}
+            style={{
+              // Card styling based on your provided design
+              background:
+                tier.name === "Pro"
+                  ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                  : tier.name === "Lifetime"
+                  ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                  : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
+              border: "1px solid #202222",
+              borderRadius: "10px",
+              padding: "1px",
+            }}
           >
-            {tier.featured && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[#1de4bf]/20 border border-[#1de4bf]/30 text-[#1de4bf] text-xs font-bold tracking-wide shadow-sm">
-                Most Popular
-              </div>
+            {/* Animated dot - Only on Pro card and desktop */}
+            {tier.featured && !isMobile && (
+              <div
+                className="absolute w-1 h-1 bg-white rounded-full z-20"
+                style={{
+                  right: "10%",
+                  top: "10%",
+                  boxShadow: "0 0 10px #ffffff",
+                  animation: "moveDot 6s linear infinite",
+                }}
+              />
             )}
-            <h3 id={tier.name} className="text-lg font-semibold mb-4">
-              {tier.name}
-            </h3>
-            <div className="flex flex-col items-center mb-6">
-              {tier.featured && (
-                <span className="text-gray-400 text-lg line-through mb-1">
-                  $199
-                </span>
+
+            {/* Card content */}
+            <div
+              className={classNames(
+                "w-full h-full rounded-lg flex flex-col items-center relative",
+                tier.name === "Free" ? "justify-start pt-8" : "justify-center"
               )}
-              <div className="flex items-baseline gap-x-2">
-                <span className="text-5xl font-bold">{tier.price}</span>
-                <span className="text-gray-300 text-sm">
-                  {tier.name === "Lifetime" ? "one-time" : "/month"}
-                </span>
-              </div>
+              style={{
+                background:
+                  tier.name === "Pro"
+                    ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                    : tier.name === "Lifetime"
+                    ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                    : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
+                border: "solid 1px #202222",
+                minHeight: "500px",
+                width: "calc(100% + 6px)",
+                margin: "0 -3px",
+              }}
+            >
+              {/* Border lines - Behind content */}
+              <div
+                className="absolute w-full h-px bg-gradient-to-r from-gray-500/30 to-gray-800/30"
+                style={{ top: "15%", zIndex: 1 }}
+              />
+              <div
+                className="absolute w-full h-px bg-gray-800/30"
+                style={{ bottom: "15%", zIndex: 1 }}
+              />
+              <div
+                className="absolute w-px h-full bg-gradient-to-b from-gray-500/30 to-gray-800/30"
+                style={{ left: "15%", zIndex: 1 }}
+              />
+              <div
+                className="absolute w-px h-full bg-gray-800/30"
+                style={{ right: "15%", zIndex: 1 }}
+              />
+
+              {/* Featured badge */}
               {tier.featured && (
-                <div className="mt-2 flex items-center gap-2">
-                  <span className="bg-[#1de4bf]/20 text-[#1de4bf] px-2 py-0.5 rounded-full text-xs font-bold">
-                    90% OFF
-                  </span>
-                  <span className="text-gray-400 text-xs">Limited Time</span>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-[#1de4bf]/20 border border-[#1de4bf]/30 text-[#1de4bf] text-sm font-bold tracking-wide shadow-lg z-30">
+                  Most Popular
                 </div>
               )}
+
+              {/* Content */}
+              <div className="text-center space-y-8 p-8 relative z-10">
+                <div className="space-y-3">
+                  <h3
+                    className={classNames(
+                      "font-bold text-white",
+                      tier.featured ? "text-3xl" : "text-2xl"
+                    )}
+                  >
+                    {tier.name}
+                  </h3>
+
+                  <div className="space-y-3">
+                    <div className="flex items-baseline justify-center gap-3">
+                      <div
+                        className={classNames(
+                          "font-bold",
+                          tier.featured ? "text-5xl" : "text-4xl"
+                        )}
+                        style={{
+                          background:
+                            "linear-gradient(45deg, #000000 4%, #fff, #000)",
+                          backgroundClip: "text",
+                          color: "transparent",
+                        }}
+                      >
+                        {tier.price}
+                      </div>
+                      {tier.name === "Pro" && (
+                        <span className="text-gray-400 text-lg">$19</span>
+                      )}
+                      {tier.name === "Lifetime" && (
+                        <span className="text-gray-400 text-lg">$99</span>
+                      )}
+                    </div>
+                    <span className="text-gray-300 text-base">
+                      {tier.name === "Lifetime" ? "one-time" : "/month"}
+                    </span>
+                    {tier.featured && (
+                      <div className="mt-3 flex items-center justify-center gap-3">
+                        <span className="bg-[#1de4bf]/20 text-[#1de4bf] px-3 py-1 rounded-full text-sm font-bold">
+                          53% OFF
+                        </span>
+                        <span className="text-gray-400 text-sm">
+                          Limited Time
+                        </span>
+                      </div>
+                    )}
+                    {tier.name === "Lifetime" && (
+                      <div className="mt-3 flex items-center justify-center gap-3">
+                        <span className="bg-[#1de4bf]/20 text-[#1de4bf] px-3 py-1 rounded-full text-sm font-bold">
+                          51% OFF
+                        </span>
+                        <span className="text-gray-400 text-sm">
+                          Limited Time
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-gray-300 text-base leading-relaxed max-w-xs mx-auto">
+                  {tier.description}
+                </p>
+
+                <ul className="text-gray-300 space-y-4 text-left max-w-sm mx-auto">
+                  {tier.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-x-3">
+                      <CheckIcon
+                        className={classNames(
+                          "text-[#1de4bf] flex-none mt-0.5",
+                          tier.featured ? "h-5 w-5" : "h-4 w-4"
+                        )}
+                      />
+                      <span
+                        className={classNames(
+                          tier.featured ? "text-sm" : "text-xs"
+                        )}
+                      >
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div
+                  className={classNames(
+                    "button-wrapper relative overflow-hidden",
+                    tier.featured && "shadow-lg shadow-[#1de4bf]/20"
+                  )}
+                  style={{
+                    width: "100%",
+                    height: "45px",
+                    borderRadius: "0.45em",
+                    fontFamily: "Arial",
+                    transition: "background 0.3s",
+                    background: tier.featured
+                      ? "linear-gradient(135deg, #047857, #065f46)"
+                      : "#222",
+                    position: "relative",
+                    textAlign: "center",
+                  }}
+                  onClick={() => handleUpgradeClick(tier)}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                    <div className="text-wrapper absolute inset-0 flex items-center justify-center text-white font-semibold transition-all duration-500">
+                      {loading
+                        ? "Processing..."
+                        : tier.name === "Lifetime"
+                        ? "Get Lifetime Access"
+                        : tier.name === "Free"
+                        ? "Register"
+                        : "Get Pro Plan"}
+                    </div>
+                    {tier.name !== "Free" && (
+                      <div className="icon-wrapper absolute inset-0 flex items-center justify-center text-white opacity-0 transition-all duration-500 transform translate-y-full">
+                        <svg
+                          viewBox="0 0 16 16"
+                          fill="currentColor"
+                          height={20}
+                          width={20}
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-            <p className="text-gray-300 text-sm mb-6">{tier.description}</p>
-            <ul className="text-sm text-gray-300 space-y-3 mb-8">
-              {tier.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-x-3">
-                  <CheckIcon className="h-5 w-5 text-[#1de4bf] flex-none" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={() => handleUpgradeClick(tier)}
-              className={classNames(
-                "mt-auto w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-300",
-                tier.featured
-                  ? "bg-[#1de4bf] text-gray-900 hover:scale-105"
-                  : "bg-gray-700 text-white hover:scale-105"
-              )}
-            >
-              {loading
-                ? "Processing..."
-                : tier.name === "Lifetime"
-                ? "Get Lifetime Access"
-                : tier.name === "Starter"
-                ? "Get Started"
-                : "Get Pro Plan"}
-            </button>
           </div>
         ))}
       </div>
+
+      {/* CSS for animations - Only load on desktop */}
+      {!isMobile && (
+        <style jsx>{`
+          @keyframes moveDot {
+            0%,
+            100% {
+              top: 10%;
+              right: 10%;
+            }
+            25% {
+              top: 10%;
+              right: calc(100% - 35px);
+            }
+            50% {
+              top: calc(100% - 30px);
+              right: calc(100% - 35px);
+            }
+            75% {
+              top: calc(100% - 30px);
+              right: 10%;
+            }
+          }
+
+          .button-wrapper:hover .text-wrapper {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+
+          .button-wrapper:hover .icon-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .text-wrapper {
+            transition: all 0.5s ease;
+          }
+
+          .icon-wrapper {
+            transition: all 0.5s ease;
+          }
+        `}</style>
+      )}
     </section>
   );
 }
