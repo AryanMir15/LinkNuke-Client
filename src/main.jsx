@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             style: {
               background: "#1F1F23",
               color: "#fff",
-              border: "1px solid #374151",
+              border: "none",
               borderRadius: "12px",
               boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
               backdropFilter: "blur(10px)",
@@ -33,9 +33,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               style: {
                 background: "#1F1F23",
                 color: "#fff",
-                border: "1px solid #00ff9d",
+                border: "none",
                 borderRadius: "12px",
-                boxShadow: "0 10px 25px rgba(0, 255, 157, 0.2)",
+                boxShadow: "0 10px 25px rgba(0, 255, 157, 0.1)",
               },
             },
             error: {
@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               style: {
                 background: "#1F1F23",
                 color: "#fff",
-                border: "1px solid #ef4444",
+                border: "none",
                 borderRadius: "12px",
                 boxShadow: "0 10px 25px rgba(239, 68, 68, 0.2)",
               },
@@ -59,7 +59,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               style: {
                 background: "#1F1F23",
                 color: "#fff",
-                border: "1px solid #00ffff",
+                border: "none",
                 borderRadius: "12px",
                 boxShadow: "0 10px 25px rgba(0, 255, 255, 0.2)",
               },

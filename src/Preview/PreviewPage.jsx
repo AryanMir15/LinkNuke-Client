@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { trackLink } from "../lib/linkApi";
 import { X } from "lucide-react";
 import BouncingLoader from "../components/ui/BouncingLoader";
+import LinkNukedModal from "../components/ui/LinkNukedModal";
 import {
   generateDocumentPreviewUrl,
   generateMultiPagePreview,
@@ -225,71 +226,42 @@ const PreviewPage = () => {
     );
   }
 
+  // Show Link Nuked Modal
+  if (error === "This link has been nuked by LinkNuke") {
+    return (
+      <>
+        <Toaster position="top-center" />
+        <LinkNukedModal />
+      </>
+    );
+  }
+
   if (error || !link) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <Toaster position="top-center" />
         <div className="text-center max-w-md mx-auto px-4">
-          {error === "This link has been nuked by LinkNuke" ? (
-            // Special styling for nuked links
-            <div className="space-y-6">
-              <div className="w-24 h-24 mx-auto bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-12 h-12 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </div>
-              <div className="space-y-3">
-                <h1 className="text-3xl font-bold text-red-400">Link Nuked</h1>
-                <p className="text-gray-300 text-lg">
-                  This link has been automatically destroyed by LinkNuke
-                </p>
-                <p className="text-gray-500 text-sm">
-                  The link reached its view limit and has been permanently
-                  removed
-                </p>
-              </div>
-              <div className="pt-4">
-                <div className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
-                  <span className="text-gray-400 text-sm">Powered by </span>
-                  <span className="ml-1 text-[#1de4bf] font-semibold">
-                    LinkNuke
-                  </span>
-                </div>
-              </div>
+          {/* Regular error styling */}
+          <div className="space-y-4">
+            <div className="w-16 h-16 mx-auto bg-red-500 rounded-full flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </div>
-          ) : (
-            // Regular error styling
-            <div className="space-y-4">
-              <div className="w-16 h-16 mx-auto bg-red-500 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-              <div className="text-red-400 text-xl font-semibold">
-                {error || "File not found."}
-              </div>
+            <div className="text-red-400 text-xl font-semibold">
+              {error || "File not found."}
             </div>
-          )}
+          </div>
         </div>
       </div>
     );
