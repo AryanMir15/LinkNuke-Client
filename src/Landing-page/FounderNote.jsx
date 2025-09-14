@@ -146,16 +146,45 @@ export default function FounderDashboardNote() {
         >
           <Link
             to="/feedback"
-            className="inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(29,228,191,0.4)] hover:scale-105"
+            className="group relative inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(29,228,191,0.4)] hover:scale-105 shine-button overflow-hidden"
           >
-            Share Your Feedback
-            <Heart className="w-4 h-4 ml-2" />
+            <span className="relative z-10">Share Your Feedback</span>
+            <Heart className="w-4 h-4 ml-2 relative z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0bf3a2] to-[#1de4bf] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </Link>
           <p className="text-gray-400 text-sm mt-4">
             Your input shapes the future of LinkNuke
           </p>
         </div>
       </div>
+
+      {/* CSS for shine effect */}
+      <style jsx>{`
+        .shine-button {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .shine-button::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+          );
+          transition: left 0.5s ease;
+        }
+
+        .shine-button:hover::before {
+          left: 100%;
+        }
+      `}</style>
     </section>
   );
 }
