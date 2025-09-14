@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { HashLink } from "react-router-hash-link";
 import { Link } from "react-router-dom";
 import {
   NavigationMenu,
@@ -22,6 +21,17 @@ export default function Navbar() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const isLoggedIn =
     typeof window !== "undefined" && localStorage.getItem("token");
+
+  const scrollToSection = (href) => {
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+    setShowMobile(false); // Close mobile menu
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,22 +78,21 @@ export default function Navbar() {
               <NavigationMenuList className="flex gap-6 text-sm">
                 {navLinks.map(({ label, href }) => (
                   <NavigationMenuItem key={label}>
-                    <HashLink
-                      smooth
-                      to={`/${href}`}
-                      className="text-gray-300 hover:text-[#1de4bf] transition"
+                    <button
+                      onClick={() => scrollToSection(href)}
+                      className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer"
                     >
                       {label}
-                    </HashLink>
+                    </button>
                   </NavigationMenuItem>
                 ))}
                 <NavigationMenuItem>
-                  <Link
-                    to="/pricing"
-                    className="text-gray-300 hover:text-[#1de4bf] transition"
+                  <button
+                    onClick={() => scrollToSection("#pricing")}
+                    className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer"
                   >
                     Pricing
-                  </Link>
+                  </button>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -155,23 +164,20 @@ export default function Navbar() {
       {showMobile && (
         <div className="md:hidden flex flex-col items-center gap-4 py-4 backdrop-blur-md bg-black/90 border-b border-gray-800">
           {navLinks.map(({ label, href }) => (
-            <HashLink
+            <button
               key={label}
-              smooth
-              to={`/${href}`}
-              className="text-gray-300 hover:text-[#1de4bf] transition text-base"
-              onClick={() => setShowMobile(false)}
+              onClick={() => scrollToSection(href)}
+              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
             >
               {label}
-            </HashLink>
+            </button>
           ))}
-          <Link
-            to="/pricing"
-            className="text-gray-300 hover:text-[#1de4bf] transition text-base"
-            onClick={() => setShowMobile(false)}
+          <button
+            onClick={() => scrollToSection("#pricing")}
+            className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
           >
             Pricing
-          </Link>
+          </button>
         </div>
       )}
     </header>
