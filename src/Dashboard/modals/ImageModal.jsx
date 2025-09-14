@@ -317,7 +317,7 @@ const ImageModal = ({ closeModal }) => {
                 value={form.title}
                 onChange={handleChange}
                 className="border border-gray-700 rounded px-3 py-2 bg-[#232326] text-gray-200 placeholder:text-gray-500 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
-                disabled={loading || uploading}
+                disabled={loading}
                 required
               />
               {errors.title && (
@@ -334,7 +334,7 @@ const ImageModal = ({ closeModal }) => {
                     ref={viewsBtnRef}
                     type="button"
                     className="relative w-full cursor-pointer rounded border border-gray-700 bg-[#232326] py-2 pl-3 pr-10 text-left text-gray-200 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
-                    disabled={loading || uploading}
+                    disabled={loading}
                   >
                     <span className="block truncate">{maxViewsObj.label}</span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -383,7 +383,7 @@ const ImageModal = ({ closeModal }) => {
                   onChange={handleChange}
                   className="mt-2 border border-gray-700 rounded px-3 py-2 bg-[#232326] text-gray-200 placeholder:text-gray-500 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
                   placeholder="Enter custom max views"
-                  disabled={loading || uploading}
+                  disabled={loading}
                   required
                 />
               )}
@@ -401,7 +401,7 @@ const ImageModal = ({ closeModal }) => {
                     ref={expiryBtnRef}
                     type="button"
                     className="relative w-full cursor-pointer rounded border border-gray-700 bg-[#232326] py-2 pl-3 pr-10 text-left text-gray-200 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
-                    disabled={loading || uploading}
+                    disabled={loading}
                   >
                     <span className="block truncate">{expiryObj.label}</span>
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -448,7 +448,7 @@ const ImageModal = ({ closeModal }) => {
                   value={form.expiresAt}
                   onChange={handleChange}
                   className="mt-2 border border-gray-700 rounded px-3 py-2 bg-[#232326] text-gray-200 placeholder:text-gray-500 focus:border-[#00ffff] focus:ring-2 focus:ring-[#00ffff]/20"
-                  disabled={loading || uploading}
+                  disabled={loading}
                   required
                 />
               )}
@@ -459,10 +459,18 @@ const ImageModal = ({ closeModal }) => {
           </div>
           <div className="flex-1 flex flex-col gap-4">
             <div
-              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center cursor-pointer transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed border-gray-700 rounded-md`}
-              onClick={() => inputRef.current?.click()}
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
+              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed border-gray-700 rounded-md ${
+                loading || uploading
+                  ? "cursor-not-allowed opacity-50"
+                  : "cursor-pointer"
+              }`}
+              onClick={() =>
+                !loading && !uploading && inputRef.current?.click()
+              }
+              onDrop={loading || uploading ? undefined : handleDrop}
+              onDragOver={
+                loading || uploading ? undefined : (e) => e.preventDefault()
+              }
             >
               <p className="text-sm">
                 Choose a file or drop it here (optional)
@@ -504,21 +512,21 @@ const ImageModal = ({ closeModal }) => {
             )}
             <button
               type="submit"
-              className={`w-full 
-              ${
-                loading || uploading
-                  ? "bg-gray-500 text-gray-300 cursor-not-allowed"
-                  : "bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
-              }
-              px-3 py-2 rounded text-sm font-semibold shadow-md
-              transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left`}
+              className="w-full relative bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black px-3 py-2 rounded text-sm font-semibold shadow-md transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d] disabled:pointer-events-none"
               disabled={loading || uploading}
             >
-              {uploading
-                ? "Uploading..."
-                : loading
-                ? "Creating..."
-                : "Create Link"}
+              {/* Darker overlay when disabled */}
+              {(loading || uploading) && (
+                <div className="absolute inset-0 bg-black/40 rounded flex items-center justify-center">
+                  <span className="text-white font-semibold">
+                    {uploading ? "Uploading..." : "Creating..."}
+                  </span>
+                </div>
+              )}
+              {/* Button text - hidden when disabled */}
+              <span className={loading || uploading ? "invisible" : ""}>
+                Create Link
+              </span>
             </button>
           </div>
         </form>

@@ -398,17 +398,17 @@ const TextModal = ({ closeModal }) => {
             </label>
             <button
               type="submit"
-              className={`w-full 
-              ${
-                loading
-                  ? "bg-gray-500 text-gray-300 cursor-not-allowed"
-                  : "bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
-              }
-              px-3 py-2 rounded text-sm font-semibold shadow-md
-              transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left`}
+              className="w-full relative bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black px-3 py-2 rounded text-sm font-semibold shadow-md transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d] disabled:pointer-events-none"
               disabled={loading}
             >
-              {loading ? "Creating..." : "Create Link"}
+              {/* Darker overlay when disabled */}
+              {loading && (
+                <div className="absolute inset-0 bg-black/40 rounded flex items-center justify-center">
+                  <span className="text-white font-semibold">Creating...</span>
+                </div>
+              )}
+              {/* Button text - hidden when disabled */}
+              <span className={loading ? "invisible" : ""}>Create Link</span>
             </button>
           </div>
         </form>
