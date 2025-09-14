@@ -1,51 +1,96 @@
-import React from "react";
-import { Heart, Shield, Zap, Lock, Users, Globe } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function FounderDashboardNote() {
-  return (
-    <section className="relative bg-black px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-      {/* Simplified Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#1de4bf]/10 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-[#0bf3a2]/10 rounded-full blur-2xl"></div>
-      </div>
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
 
-      <div className="relative mx-auto max-w-4xl">
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative px-4 py-24 sm:px-6 sm:py-32 lg:px-8 overflow-hidden"
+    >
+      {/* Background */}
+      <div className="absolute inset-0 bg-black" />
+      <div
+        className="absolute inset-0 opacity-[0.15]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(29, 228, 191, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(29, 228, 191, 0.3) 1px, transparent 1px)
+          `,
+          backgroundSize: "40px 40px",
+        }}
+      />
+      <div
+        className="absolute inset-0 bg-white dark:bg-black"
+        style={{
+          maskImage:
+            "radial-gradient(ellipse at center, transparent 40%, black)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, transparent 40%, black)",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-sm font-medium mb-4">
-            <Heart className="h-4 w-4 mr-2" />
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium mb-6">
+            <Heart className="h-3 w-3 mr-2" />
             From the Founder
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             Why I Built LinkNuke
           </h2>
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto px-4">
-            A personal journey from frustration to innovation in digital privacy
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+            A personal journey from frustration to innovation in digital
+            privacy.
           </p>
         </div>
 
-        {/* Founder Profile & Story */}
-        <div className="bg-gray-900/60 rounded-2xl p-6 sm:p-8 border border-gray-800 mb-8 sm:mb-12">
-          <div className="flex flex-col sm:flex-row items-start gap-6">
-            {/* Founder Image */}
-            <div className="flex-shrink-0 mx-auto sm:mx-0">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden border-2 border-[#1de4bf]/30">
-                <img
-                  src="/profile.jpeg"
-                  alt="Founder"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+        {/* Founder Story */}
+        <div
+          className={`mb-20 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Image */}
+            <div className="relative order-2 lg:order-1">
+              <img
+                src="/profile.jpeg"
+                alt="Founder"
+                className="w-64 h-64 mx-auto rounded-2xl shadow-2xl object-cover"
+              />
             </div>
 
-            {/* Founder Message */}
-            <div className="flex-1 text-center sm:text-left">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+            {/* Text Content */}
+            <div className="space-y-6 order-1 lg:order-2">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
+                Personal Mission
+              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white">
                 Hi, I'm the founder of LinkNuke
               </h3>
-              <div className="space-y-3 text-gray-300 text-sm sm:text-base leading-relaxed">
+              <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
                 <p>
                   I created LinkNuke because I was tired of seeing my personal
                   information scattered across the internet. Every time I shared
@@ -69,58 +114,22 @@ export default function FounderDashboardNote() {
           </div>
         </div>
 
-        {/* Core Values Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <div className="bg-gray-900/40 rounded-xl p-4 sm:p-6 border border-gray-800">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#1de4bf]/20 rounded-lg flex items-center justify-center mb-3">
-              <Lock className="w-5 h-5 sm:w-6 sm:h-6 text-[#1de4bf]" />
-            </div>
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-2">
-              Zero Tracking
-            </h4>
-            <p className="text-gray-300 text-xs sm:text-sm">
-              We don't collect, store, or analyze your data. Your privacy is
-              non-negotiable.
-            </p>
-          </div>
-
-          <div className="bg-gray-900/40 rounded-xl p-4 sm:p-6 border border-gray-800">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0bf3a2]/20 rounded-lg flex items-center justify-center mb-3">
-              <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-[#0bf3a2]" />
-            </div>
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-2">
-              Instant Security
-            </h4>
-            <p className="text-gray-300 text-xs sm:text-sm">
-              Links self-destruct automatically. No traces left behind, ever.
-            </p>
-          </div>
-
-          <div className="bg-gray-900/40 rounded-xl p-4 sm:p-6 border border-gray-800 sm:col-span-2 lg:col-span-1">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#1de4bf]/20 rounded-lg flex items-center justify-center mb-3">
-              <Users className="w-5 h-5 sm:w-6 sm:h-6 text-[#1de4bf]" />
-            </div>
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-2">
-              Built for You
-            </h4>
-            <p className="text-gray-300 text-xs sm:text-sm">
-              Every feature is designed based on real privacy needs, not profit
-              motives.
-            </p>
-          </div>
-        </div>
-
-        {/* Vision Statement */}
-        <div className="bg-[#1de4bf]/5 rounded-2xl p-6 sm:p-8 border border-[#1de4bf]/20">
-          <div className="flex flex-col sm:flex-row items-start gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#1de4bf] to-[#0bf3a2] rounded-lg flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
-              <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-black" />
-            </div>
-            <div className="text-center sm:text-left">
-              <h3 className="text-lg sm:text-xl font-bold text-white mb-3">
+        {/* Vision */}
+        <div
+          className={`transition-all duration-700 delay-300 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="space-y-8">
+            {/* Text Content */}
+            <div className="text-center space-y-6">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
+                Future Vision
+              </div>
+              <h3 className="text-3xl sm:text-4xl font-bold text-white">
                 My Vision for the Future
               </h3>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
                 I believe everyone deserves to share information without fear.
                 LinkNuke is just the beginning. I'm committed to building tools
                 that make privacy the default, not the exception.
@@ -129,20 +138,22 @@ export default function FounderDashboardNote() {
           </div>
         </div>
 
-        {/* Call to Action */}
-        <div className="mt-8 sm:mt-12 text-center">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center">
-            <Link
-              to="/feedback"
-              className="inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black rounded-lg sm:rounded-xl font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              Share Your Feedback
-              <Heart className="w-4 h-4 ml-2" />
-            </Link>
-            <p className="text-gray-400 text-xs sm:text-sm">
-              Your input shapes the future of LinkNuke
-            </p>
-          </div>
+        {/* CTA */}
+        <div
+          className={`mt-16 text-center transition-all duration-700 delay-500 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <Link
+            to="/feedback"
+            className="inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(29,228,191,0.4)] hover:scale-105"
+          >
+            Share Your Feedback
+            <Heart className="w-4 h-4 ml-2" />
+          </Link>
+          <p className="text-gray-400 text-sm mt-4">
+            Your input shapes the future of LinkNuke
+          </p>
         </div>
       </div>
     </section>

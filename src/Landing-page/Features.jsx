@@ -78,8 +78,17 @@ const Features = () => {
           }`}
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Image */}
+            <div className="relative order-2 lg:order-1">
+              <img
+                src="/extra-secure-feature.png"
+                alt="Extra Secure Features"
+                className="w-full rounded-2xl shadow-2xl"
+              />
+            </div>
+
             {/* Text Content */}
-            <div className="space-y-6">
+            <div className="space-y-6 order-1 lg:order-2">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Military-Grade Security
               </div>
@@ -92,15 +101,6 @@ const Features = () => {
                 additional encryption layers and enhanced access controls that
                 ensure your files are protected at the highest level.
               </p>
-            </div>
-
-            {/* Image */}
-            <div className="relative">
-              <img
-                src="/extra-secure-feature.png"
-                alt="Extra Secure Features"
-                className="w-full rounded-2xl shadow-2xl"
-              />
             </div>
           </div>
         </div>
