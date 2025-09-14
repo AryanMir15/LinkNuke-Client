@@ -52,6 +52,7 @@ const VideoModal = ({ closeModal }) => {
   const expiryBtnRef = useRef(null);
   const [viewsWidth, setViewsWidth] = useState(undefined);
   const [expiryWidth, setExpiryWidth] = useState(undefined);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [viewsOpen, setViewsOpen] = useState(false);
   const [expiryOpen, setExpiryOpen] = useState(false);
 
@@ -79,11 +80,30 @@ const VideoModal = ({ closeModal }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
     const droppedFiles = Array.from(e.dataTransfer.files).filter(
       (file) =>
         file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/")
     );
     setFiles((prev) => [...prev, ...droppedFiles]);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
   };
 
   const handleFileSelect = (e) => {
@@ -419,21 +439,25 @@ const VideoModal = ({ closeModal }) => {
           </div>
           <div className="flex-1 flex flex-col gap-2 items-center">
             <div
-              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed border-gray-700 rounded-md ${
+              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed rounded-md ${
                 loading || uploading
-                  ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer"
+                  ? "cursor-not-allowed opacity-50 border-gray-700"
+                  : isDragOver
+                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                  : "cursor-pointer border-gray-700"
               }`}
               onClick={() =>
                 !loading && !uploading && inputRef.current?.click()
               }
               onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={
-                loading || uploading ? undefined : (e) => e.preventDefault()
-              }
+              onDragOver={loading || uploading ? undefined : handleDragOver}
+              onDragEnter={loading || uploading ? undefined : handleDragEnter}
+              onDragLeave={loading || uploading ? undefined : handleDragLeave}
             >
               <p className="text-sm">
-                Choose a file or drop it here (optional)
+                {isDragOver
+                  ? "Drop your video here!"
+                  : "Choose a file or drop it here (optional)"}
               </p>
               <input
                 ref={inputRef}
