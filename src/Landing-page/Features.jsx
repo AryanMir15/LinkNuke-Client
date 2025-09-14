@@ -90,16 +90,17 @@ const Features = () => {
             {/* Text Content */}
             <div className="space-y-6 order-1 lg:order-2">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
-                Military-Grade Security
+                Advanced Protection
               </div>
               <h3 className="text-3xl sm:text-4xl font-bold text-white">
                 Extra Secure Features
               </h3>
               <p className="text-gray-300 text-lg leading-relaxed">
-                Advanced security options that go beyond basic file sharing.
-                Enable extra secure mode for military-grade protection with
-                additional encryption layers and enhanced access controls that
-                ensure your files are protected at the highest level.
+                When enabled, your content becomes view-only with multiple
+                layers of protection. Right-click is disabled, developer tools
+                are blocked, screenshots are prevented, and print functions are
+                disabled. No downloads, no copying, no inspection - just secure
+                viewing that keeps your sensitive data protected.
               </p>
             </div>
           </div>
