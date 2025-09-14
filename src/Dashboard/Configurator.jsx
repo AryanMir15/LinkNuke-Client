@@ -8,7 +8,7 @@ import DocumentsModal from "./modals/DocumentsModal";
 import {
   Image,
   Video,
-  FileText,
+  Type,
   FileAudio,
   FileText as DocumentIcon,
   Lock,
@@ -47,7 +47,7 @@ const formats = [
   {
     label: "Text",
     icon: (
-      <FileText
+      <Type
         size={36}
         className="text-[#22c55e] drop-shadow-sm"
         strokeWidth={1.5}
