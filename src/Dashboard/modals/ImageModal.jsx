@@ -505,15 +505,20 @@ const ImageModal = ({ closeModal }) => {
             <button
               type="submit"
               className={`w-full 
-              ${loading || uploading 
-                ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]'
+              ${
+                loading || uploading
+                  ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#00ff9d] via-[#00ffc3] to-[#00fff7] text-black hover:from-[#00ff66] hover:via-[#00ffad] hover:to-[#00fff7] hover:brightness-125 hover:saturate-150 hover:shadow-[0_0_12px_#00ff9d]"
               }
               px-3 py-2 rounded text-sm font-semibold shadow-md
               transition-all duration-500 ease-in-out bg-[length:200%_200%] bg-left`}
               disabled={loading || uploading}
             >
-              {uploading ? "Uploading..." : loading ? "Creating..." : "Create Link"}
+              {uploading
+                ? "Uploading..."
+                : loading
+                ? "Creating..."
+                : "Create Link"}
             </button>
           </div>
         </form>
