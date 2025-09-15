@@ -11,7 +11,7 @@ import DarkModeToggle from "../components/ui/DarkModeToggle";
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "Features", href: "#features" },
-  { label: "Use Cases", href: "#usecases" },
+  { label: "Preview", href: "#preview" },
   { label: "FAQs", href: "#faqs" },
 ];
 
