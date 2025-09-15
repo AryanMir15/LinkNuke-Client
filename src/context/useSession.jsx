@@ -15,9 +15,7 @@ export function SessionProvider({ children }) {
       localStorage.removeItem("user");
       setUser(null);
       window.location.href = "/login";
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -46,17 +44,12 @@ export function SessionProvider({ children }) {
         const token = localStorage.getItem("token");
         const userData = localStorage.getItem("user");
 
-        console.log("🔍🔍🔍 JWT SESSION: Starting session verification");
-        console.log("🔍🔍🔍 JWT SESSION: Token exists:", !!token);
-        console.log("🔍🔍🔍 JWT SESSION: User data exists:", !!userData);
-
         if (!token || !userData) {
           throw new Error("No token or user data");
         }
 
         // Parse user data from localStorage
         const parsedUser = JSON.parse(userData);
-        console.log("🔍🔍🔍 JWT SESSION: Parsed user:", parsedUser);
 
         // Verify token with server by making a test API call
         const response = await fetch(
@@ -70,21 +63,13 @@ export function SessionProvider({ children }) {
           }
         );
 
-        console.log(
-          "🔍🔍🔍 JWT SESSION: Verification response status:",
-          response.status
-        );
-
         if (!response.ok) {
           throw new Error(`Verification failed: ${response.status}`);
         }
 
         // Token is valid, set user
         setUser(parsedUser);
-        console.log("🔍🔍🔍 JWT SESSION: Session verified successfully");
       } catch (error) {
-        console.error("🔍🔍🔍 JWT SESSION: Verification failed:", error);
-
         // Clear invalid token/data
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -92,7 +77,6 @@ export function SessionProvider({ children }) {
 
         // Redirect to login only when on protected routes
         if (isProtectedRoute) {
-          console.log("🔍🔍🔍 JWT SESSION: Redirecting to login");
           window.location.href = "/login";
           return;
         }

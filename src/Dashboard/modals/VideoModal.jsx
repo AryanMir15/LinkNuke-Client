@@ -199,7 +199,6 @@ const VideoModal = ({ closeModal }) => {
       if (linkUrl) {
         setSuccessLink(linkUrl);
       } else {
-        console.error("No valid URL found in response:", newLink);
         setErrors({
           submit: "Link created but URL is missing. Please try again.",
         });

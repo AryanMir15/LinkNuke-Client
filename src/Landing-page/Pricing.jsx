@@ -127,7 +127,6 @@ export default function PricingSection() {
 
       window.location.href = response.data.checkoutUrl;
     } catch (err) {
-      console.error("Payment init failed:", err);
       setError("Failed to initiate payment. Please try again.");
       posthog.capture("payment_error", {
         error: err.message,

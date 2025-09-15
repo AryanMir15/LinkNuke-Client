@@ -17,7 +17,6 @@ if (import.meta.env.VITE_POSTHOG_KEY && import.meta.env.PROD) {
       retry_delay: 1000,
     });
   } catch (error) {
-    console.warn(
       "PostHog initialization failed (likely blocked by ad blocker):",
       error
     );
@@ -33,7 +32,6 @@ const safePostHog = {
       }
     } catch (error) {
       // Silently fail if PostHog is blocked
-      console.debug("PostHog capture failed:", error);
     }
   },
   identify: (...args) => {
@@ -42,7 +40,6 @@ const safePostHog = {
         posthog.identify(...args);
       }
     } catch (error) {
-      console.debug("PostHog identify failed:", error);
     }
   },
   set: (...args) => {
@@ -51,7 +48,6 @@ const safePostHog = {
         posthog.set(...args);
       }
     } catch (error) {
-      console.debug("PostHog set failed:", error);
     }
   },
 };

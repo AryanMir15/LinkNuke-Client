@@ -97,45 +97,25 @@ export async function getLink(id) {
 }
 
 export async function trackLink(id, isCreatorPreview = false) {
-  console.log("🔍 trackLink: Attempting to track link ID:", id);
-  console.log("🔍 trackLink: Is creator preview:", isCreatorPreview);
-
   const url = isCreatorPreview
     ? `${PUBLIC_LINKS_URL}/track/${id}?preview=creator`
     : `${PUBLIC_LINKS_URL}/track/${id}`;
-
-  console.log("🔍 trackLink: URL:", url);
-  console.log("🔍 trackLink: PUBLIC_LINKS_URL:", PUBLIC_LINKS_URL);
-  console.log("🔍 trackLink: Full URL:", url);
 
   try {
     const res = await fetchWithRetry(url, {
       method: "POST",
     });
 
-    console.log("🔍 trackLink: Response status:", res.status);
-    console.log(
-      "🔍 trackLink: Response headers:",
-      Object.fromEntries(res.headers.entries())
-    );
-
     // Don't use handleResponse for tracking - it redirects on 401
     // Tracking should be non-critical and not affect preview
     if (!res.ok) {
-      console.log(
-        "🔍 trackLink: Track link failed (non-critical):",
-        res.status
-      );
       const errorText = await res.text();
-      console.log("🔍 trackLink: Error response body:", errorText);
       return null; // Fail silently
     }
 
     const result = await res.json().catch(() => null);
-    console.log("🔍 trackLink: Tracking successful:", result);
     return result;
   } catch (error) {
-    console.log("🔍 trackLink: Exception during tracking:", error);
     return null; // Fail silently
   }
 }

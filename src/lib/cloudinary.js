@@ -30,17 +30,14 @@ export async function uploadToCloudinary(file) {
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error("Cloudinary upload error:", errorText);
       throw new Error(
         `Failed to upload file to Cloudinary: ${res.status} ${res.statusText}`
       );
     }
 
     const result = await res.json();
-    console.log("Cloudinary upload success:", result);
     return result;
   } catch (error) {
-    console.error("Cloudinary upload failed:", error);
     throw error;
   }
 }

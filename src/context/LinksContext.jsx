@@ -138,8 +138,6 @@ export function LinksProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      console.log("🔍🔍🔍 FRONTEND: Attempting to delete link:", id);
-      console.log(
         "🔍🔍🔍 FRONTEND: Current token:",
         localStorage.getItem("token") ? "EXISTS" : "MISSING"
       );
@@ -148,7 +146,6 @@ export function LinksProvider({ children }) {
       setLinks((prev) => prev.filter((l) => l._id !== id));
       toast("Link deleted", { icon: "🗑️" });
     } catch (err) {
-      console.error("🔍🔍🔍 FRONTEND: Delete failed:", err);
       setError(err.message);
       toast.error(err.message || "Failed to delete link");
       throw err;

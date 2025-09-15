@@ -31,9 +31,7 @@ const EmailVerificationBanner = () => {
         setIsVerified(true);
         setIsVisible(false);
       }
-    } catch (error) {
-      console.error("Error checking email verification status:", error);
-    }
+    } catch (error) {}
   };
 
   const handleResendVerification = async () => {
@@ -57,7 +55,6 @@ const EmailVerificationBanner = () => {
         toast.error(data.error || "Failed to send verification email");
       }
     } catch (error) {
-      console.error("Error resending verification:", error);
       toast.error("Failed to send verification email");
     } finally {
       setIsLoading(false);

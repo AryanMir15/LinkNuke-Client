@@ -102,9 +102,7 @@ const Configurator = () => {
       if (data && typeof data === "object") {
         setUsageStats(data);
       }
-    } catch (error) {
-      console.error("Error fetching usage stats:", error);
-    }
+    } catch (error) {}
   };
 
   const fetchSubscriptionStatus = async () => {
@@ -120,9 +118,7 @@ const Configurator = () => {
       );
       // Subscription fetched successfully
       setSubscription(response.data.subscription);
-    } catch (error) {
-      console.error("Error fetching subscription:", error);
-    }
+    } catch (error) {}
   };
 
   const closeModal = () => setActiveType(null);

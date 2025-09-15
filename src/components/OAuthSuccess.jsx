@@ -40,12 +40,9 @@ export default function OAuthSuccess() {
           if (data.user) {
             // Store user data in localStorage
             localStorage.setItem("user", JSON.stringify(data.user));
-            console.log("✅ OAuth: User data stored successfully");
           }
         }
-      } catch (error) {
-        console.error("Error fetching user data after OAuth:", error);
-      }
+      } catch (error) {}
     };
 
     // Fetch user data and then redirect

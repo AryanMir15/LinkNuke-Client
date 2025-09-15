@@ -158,12 +158,9 @@ const DocumentsModal = ({ closeModal }) => {
     if (files.length > 0) {
       setUploading(true);
       try {
-        console.log("Uploading document to Cloudinary...");
         const uploadRes = await uploadToCloudinary(files[0]);
         documentUrl = uploadRes.secure_url;
-        console.log("Document uploaded successfully:", documentUrl);
       } catch (error) {
-        console.error("Document upload failed:", error);
         setErrors({ file: "Failed to upload document. Try again." });
         setUploading(false);
         return;
@@ -197,11 +194,8 @@ const DocumentsModal = ({ closeModal }) => {
       extraSecure,
     };
 
-    console.log("Creating document link with data:", linkData);
-
     try {
       const newLink = await create(linkData);
-      console.log("Document link created successfully:", newLink);
       setForm(initialState);
       setFiles([]);
 
@@ -218,13 +212,11 @@ const DocumentsModal = ({ closeModal }) => {
       if (linkUrl) {
         setSuccessLink(linkUrl);
       } else {
-        console.error("No valid URL found in response:", newLink);
         setErrors({
           submit: "Link created but URL is missing. Please try again.",
         });
       }
     } catch (error) {
-      console.error("Document link creation failed:", error);
       setErrors({ submit: "Failed to create link. Try again." });
     }
   };

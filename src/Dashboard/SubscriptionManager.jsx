@@ -49,10 +49,8 @@ export default function SubscriptionManager() {
       if (response.data.user) {
         // Update localStorage with fresh user data
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log("✅ SubscriptionManager: User session refreshed");
       }
     } catch (error) {
-      console.error("Error refreshing user session:", error);
       // Fallback: update localStorage with subscription data
       if (subscriptionData) {
         const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
@@ -62,9 +60,6 @@ export default function SubscriptionManager() {
           plan: subscriptionData.plan,
         };
         localStorage.setItem("user", JSON.stringify(updatedUser));
-        console.log(
-          "✅ SubscriptionManager: User session updated with subscription data"
-        );
       }
     }
   }, []);
@@ -74,11 +69,9 @@ export default function SubscriptionManager() {
       setLoading(true);
       setError(null);
 
-      console.log("🔄 SubscriptionManager: Fetching subscription status...");
       const token = localStorage.getItem("token");
 
       if (!token) {
-        console.error("❌ No token found in localStorage");
         setError("Authentication required");
         return;
       }
@@ -92,10 +85,6 @@ export default function SubscriptionManager() {
         }
       );
 
-      console.log(
-        "✅ SubscriptionManager: Subscription response:",
-        response.data
-      );
       setSubscription(response.data.subscription);
       setUsage(response.data.usage);
       setBillingPeriod(response.data.billing_period);
@@ -105,19 +94,6 @@ export default function SubscriptionManager() {
         refreshUserSession(response.data.subscription);
       }
     } catch (err) {
-      console.error(
-        "❌ SubscriptionManager: Error fetching subscription:",
-        err
-      );
-      console.error(
-        "❌ SubscriptionManager: Error response:",
-        err.response?.data
-      );
-      console.error(
-        "❌ SubscriptionManager: Error status:",
-        err.response?.status
-      );
-
       let errorMessage = "Failed to load subscription status";
 
       if (err.response?.status === 401) {
@@ -177,8 +153,6 @@ export default function SubscriptionManager() {
         );
       }
     } catch (err) {
-      console.error("Error cancelling subscription:", err);
-
       // Provide more specific error messages
       let errorMessage = "Failed to cancel subscription. Please try again.";
 
@@ -233,8 +207,6 @@ export default function SubscriptionManager() {
         `Refund processed successfully! You've been refunded $${response.data.refundAmount} and your access has been removed immediately.`
       );
     } catch (err) {
-      console.error("Error requesting refund:", err);
-
       let errorMessage = "Failed to process refund request. Please try again.";
 
       if (err.response?.status === 400) {
@@ -325,7 +297,6 @@ export default function SubscriptionManager() {
         day: "numeric",
       });
     } catch (error) {
-      console.error("Date formatting error:", error);
       return "N/A";
     }
   };

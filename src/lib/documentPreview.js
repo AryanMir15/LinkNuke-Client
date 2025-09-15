@@ -24,10 +24,6 @@ export function generateDocumentPreviewUrl(documentUrl, options = {}) {
   const publicId = extractPublicIdFromUrl(documentUrl);
 
   if (!publicId) {
-    console.error(
-      "Could not extract public ID from document URL:",
-      documentUrl
-    );
     return documentUrl; // Fallback to original URL
   }
 
@@ -53,14 +49,6 @@ export function generateDocumentPreviewUrl(documentUrl, options = {}) {
   const resourceType = urlParts[cloudNameIndex + 1]; // Should be "image" for documents
 
   const previewUrl = `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/${transformations}/${publicId}.${format}`;
-
-  console.log("🔍 Document Preview URL Generation:");
-  console.log("  Original URL:", documentUrl);
-  console.log("  Public ID:", publicId);
-  console.log("  Cloud Name:", cloudName);
-  console.log("  Resource Type:", resourceType);
-  console.log("  Transformations:", transformations);
-  console.log("  Preview URL:", previewUrl);
 
   return previewUrl;
 }
@@ -117,7 +105,6 @@ function extractPublicIdFromUrl(url) {
 
     return null;
   } catch (error) {
-    console.error("Error extracting public ID:", error);
     return null;
   }
 }

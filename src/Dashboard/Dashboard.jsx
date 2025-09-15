@@ -26,7 +26,6 @@ export default function Dashboard() {
 
   const fetchSubscriptionStatus = useCallback(async () => {
     try {
-      console.log("🔍 Dashboard: Starting subscription fetch");
       const token = localStorage.getItem("token");
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
@@ -37,7 +36,6 @@ export default function Dashboard() {
         }
       );
 
-      console.log("🔍 Dashboard: Subscription fetch successful");
       setSubscription(response.data.subscription);
 
       // Check if user is on free plan or refunded and has reached limit
@@ -66,9 +64,7 @@ export default function Dashboard() {
         setShowFreePlanLimit(false);
       }
     } catch (error) {
-      console.error("🔍 Dashboard: Error fetching subscription:", error);
     } finally {
-      console.log("🔍 Dashboard: Setting loading to false");
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,10 +86,8 @@ export default function Dashboard() {
       if (response.data.user) {
         // Update localStorage with fresh user data
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log("✅ User session refreshed with updated subscription data");
       }
     } catch (error) {
-      console.error("Error refreshing user session:", error);
       // Fallback: try to get user data from subscription status
       try {
         const token = localStorage.getItem("token");
@@ -115,14 +109,8 @@ export default function Dashboard() {
             plan: subResponse.data.subscription.plan,
           };
           localStorage.setItem("user", JSON.stringify(updatedUser));
-          console.log("✅ User session updated with subscription data");
         }
-      } catch (subError) {
-        console.error(
-          "Error updating user session with subscription data:",
-          subError
-        );
-      }
+      } catch (subError) {}
     }
   }, []);
 
@@ -138,9 +126,7 @@ export default function Dashboard() {
 
         // Fetch links in background (don't wait for it)
         if (!links || links.length === 0) {
-          fetchLinks().catch((err) => {
-            console.error("Failed to fetch links:", err);
-          });
+          fetchLinks().catch((err) => {});
         }
 
         // Always fetch subscription status to get accurate data
@@ -160,7 +146,6 @@ export default function Dashboard() {
     // Fallback timeout to ensure loading never gets stuck
     const timeoutId = setTimeout(() => {
       if (isMounted) {
-        console.log("Dashboard loading timeout - forcing loading to false");
         setLoading(false);
       }
     }, 10000); // 10 second timeout
@@ -180,11 +165,6 @@ export default function Dashboard() {
     // Only process if there's a payment parameter and we haven't processed it yet
     if (paymentStatus && !paymentProcessed.current) {
       paymentProcessed.current = true;
-
-      console.log(
-        "Payment URL Params:",
-        Object.fromEntries(searchParams.entries())
-      );
 
       if (paymentStatus === "success") {
         toast.success("Payment successful! Welcome to LinkNuke Pro!");
@@ -218,7 +198,6 @@ export default function Dashboard() {
           setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
         }
       } catch (error) {
-        console.error("Failed to fetch usage stats:", error);
         toast.error("Failed to load usage statistics");
         setUsageStats({ monthlyTotal: 0, allTimeTotal: 0 });
       }

@@ -180,12 +180,9 @@ const ImageModal = ({ closeModal }) => {
     if (files.length > 0) {
       setUploading(true);
       try {
-        console.log("Uploading image to Cloudinary...");
         const uploadRes = await uploadToCloudinary(files[0]);
         imageUrl = uploadRes.secure_url;
-        console.log("Image uploaded successfully:", imageUrl);
       } catch (error) {
-        console.error("Image upload failed:", error);
         setErrors({ file: "Failed to upload image. Try again." });
         setUploading(false);
         return;
@@ -220,11 +217,8 @@ const ImageModal = ({ closeModal }) => {
       extraSecure,
     };
 
-    console.log("Creating link with data:", linkData);
-
     try {
       const newLink = await create(linkData);
-      console.log("Link created successfully:", newLink);
       setForm(initialState);
       setFiles([]);
 
@@ -241,13 +235,11 @@ const ImageModal = ({ closeModal }) => {
       if (linkUrl) {
         setSuccessLink(linkUrl);
       } else {
-        console.error("No valid URL found in response:", newLink);
         setErrors({
           submit: "Link created but URL is missing. Please try again.",
         });
       }
     } catch (error) {
-      console.error("Link creation failed:", error);
       setErrors({ submit: "Failed to create link. Try again." });
     }
   };

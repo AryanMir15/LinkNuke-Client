@@ -56,7 +56,6 @@ const NukedLinksTable = () => {
       try {
         await remove(deletingId);
       } catch (error) {
-        console.error("Delete failed:", error);
       } finally {
         setIsDeleting(false);
         setDeletingId(null);
@@ -159,9 +158,6 @@ const NukedLinksTable = () => {
                     link.url ||
                     `${window.location.origin}/preview/${link.linkId}`;
 
-                  console.log("🔍 Table - Link URL:", link.url);
-                  console.log("🔍 Table - LinkId:", link.linkId);
-                  console.log("🔍 Table - Final preview URL:", preview);
                   const expired = isLinkExpired(link);
                   return (
                     <motion.tr

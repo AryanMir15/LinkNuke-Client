@@ -72,12 +72,6 @@ const PreviewPage = () => {
       setLoading(true);
       setError(null);
       try {
-        console.log("🔍🔍🔍 PREVIEW: Fetching public link:", linkId);
-        console.log(
-          "🔍🔍🔍 PREVIEW: API URL:",
-          import.meta.env.VITE_API_URL + `/public/links/${linkId}`
-        );
-
         const res = await fetch(
           import.meta.env.VITE_API_URL + `/public/links/${linkId}`,
           {
@@ -90,11 +84,7 @@ const PreviewPage = () => {
           }
         );
 
-        console.log("🔍🔍🔍 PREVIEW: Response status:", res.status);
-        console.log("🔍🔍🔍 PREVIEW: Response ok:", res.ok);
-
         if (!res.ok) {
-          console.log("🔍🔍🔍 PREVIEW: Response not ok, status:", res.status);
           if (res.status === 404) {
             setError("File not found or expired.");
           } else if (res.status === 410) {
@@ -107,7 +97,6 @@ const PreviewPage = () => {
         }
 
         const data = await res.json();
-        console.log("🔍🔍🔍 PREVIEW: Fetched link data:", data);
 
         // Check if link is already expired/nuked before setting it
         if (data.status === "Expired") {
@@ -125,29 +114,13 @@ const PreviewPage = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const isCreatorPreview = urlParams.get("preview") === "creator";
 
-            console.log(
-              "🔍🔍🔍 PREVIEW: Is creator preview:",
-              isCreatorPreview
-            );
-            console.log("🔍🔍🔍 PREVIEW: Link data:", data);
-            console.log("🔍🔍🔍 PREVIEW: Using _id for tracking:", data._id);
-            console.log("🔍🔍🔍 PREVIEW: Link linkId:", data.linkId);
-
             await trackLink(data._id, isCreatorPreview);
           } catch (trackError) {
-            console.log(
-              "🔍🔍🔍 PREVIEW: Track link failed (non-critical):",
-              trackError
-            );
             // Don't throw - preview should still work even if tracking fails
           }
         } else {
-          console.log(
-            "🔍🔍🔍 PREVIEW: No _id found in link data, cannot track"
-          );
         }
       } catch (error) {
-        console.error("🔍🔍🔍 PREVIEW: Network error:", error);
         setError("Network error. Try again later.");
       } finally {
         setLoading(false);

@@ -111,7 +111,6 @@ export default function Register() {
             `Started ${trialPlan} trial! You have 3 days to explore.`
           );
         } catch (trialError) {
-          console.error("Trial start error:", trialError);
           // Don't fail registration if trial start fails
         }
       }
