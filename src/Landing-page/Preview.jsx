@@ -61,15 +61,15 @@ const Preview = () => {
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             See LinkNuke in
-            <span className="bg-gradient-to-r from-[#e4e4e7] to-[#a1a1aa] text-transparent bg-clip-text">
+            <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
               {" "}
               Action
             </span>
           </h2>
 
           <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto">
-            Watch how easy it is to create secure, self-destructing links that
-            protect your sensitive content.
+            Hover over the video to see how easy it is to create secure,
+            self-destructing links that protect your sensitive content.
           </p>
         </div>
 
@@ -80,11 +80,25 @@ const Preview = () => {
           }`}
         >
           <div className="relative max-w-6xl mx-auto">
-            {/* Bigger 16:9 Video Placeholder */}
-            <div className="relative w-full aspect-video bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-sm rounded-2xl border border-gray-400/20 overflow-hidden shadow-2xl">
-              {/* Faint Grid Overlay */}
+            {/* Video Container - Built to fit video dimensions */}
+            <div className="relative w-full rounded-2xl border border-gray-400/20 overflow-hidden shadow-2xl">
+              {/* Demo Video - Container adapts to video size */}
+              <video
+                className="w-full h-auto rounded-2xl"
+                muted
+                loop
+                playsInline
+                onMouseEnter={(e) => e.target.play()}
+                onMouseLeave={(e) => e.target.pause()}
+                poster="/demo-video-poster.jpg"
+              >
+                <source src="/Demo-Video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Faint Grid Overlay - positioned over video */}
               <div
-                className="absolute inset-0 opacity-10"
+                className="absolute inset-0 opacity-10 pointer-events-none"
                 style={{
                   backgroundImage: `
                     linear-gradient(rgba(228,228,231,0.1) 1px, transparent 1px),
@@ -93,28 +107,6 @@ const Preview = () => {
                   backgroundSize: "30px 30px",
                 }}
               />
-
-              {/* Hollow Center Content */}
-              <div className="relative flex items-center justify-center h-full">
-                <div className="text-center">
-                  {/* Play Button */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-gray-200 to-gray-400 flex items-center justify-center text-black mb-4 mx-auto shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer">
-                    <Play
-                      className="w-6 h-6 sm:w-8 sm:h-8 ml-1"
-                      fill="currentColor"
-                    />
-                  </div>
-
-                  {/* Placeholder Text */}
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                    Demo Video Coming Soon
-                  </h3>
-                  <p className="text-gray-400 text-sm max-w-md mx-auto">
-                    Experience the power of LinkNuke through our interactive
-                    demonstration
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

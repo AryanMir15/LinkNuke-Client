@@ -12,7 +12,7 @@ const Hero = () => {
       id="home"
     >
       <GridBackground
-        className="bg-gradient-to-br from-black via-slate-900 to-black"
+        className="bg-gradient-to-br from-black via-gray-900 to-black"
         gridSize="4:4"
         beams={{ count: 8, speed: 5 }}
       >
