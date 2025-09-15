@@ -81,10 +81,26 @@ const AudioModal = ({ closeModal }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
       file.type.startsWith("audio/")
     );
     setFiles((prev) => [...prev, ...droppedFiles]);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleFileSelect = (e) => {
@@ -215,6 +231,10 @@ const AudioModal = ({ closeModal }) => {
           ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
           : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       }`}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       {/* Cyan gradient circles - only on desktop */}
       {window.innerWidth >= 768 && (
@@ -428,9 +448,9 @@ const AudioModal = ({ closeModal }) => {
                 !loading && !uploading && inputRef.current?.click()
               }
               onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={
-                loading || uploading ? undefined : (e) => e.preventDefault()
-              }
+              onDragOver={loading || uploading ? undefined : handleDragOver}
+              onDragEnter={loading || uploading ? undefined : handleDragEnter}
+              onDragLeave={loading || uploading ? undefined : handleDragLeave}
             >
               <p className="text-sm">
                 Choose a file or drop it here (optional)

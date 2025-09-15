@@ -4,13 +4,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { trackLink } from "../lib/linkApi";
 import { X } from "lucide-react";
 import BouncingLoader from "../components/ui/BouncingLoader";
-import LinkNukedModal from "../components/ui/LinkNukedModal";
-import {
-  generateDocumentPreviewUrl,
-  generateMultiPagePreview,
-  supportsDocumentPreview,
-  getDocumentTypeIcon,
-} from "../lib/documentPreview";
 
 const PreviewPage = () => {
   const { linkId } = useParams();
@@ -19,10 +12,6 @@ const PreviewPage = () => {
   const [error, setError] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
-  const [documentPreviews, setDocumentPreviews] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [documentLoading, setDocumentLoading] = useState(true);
-  const [documentError, setDocumentError] = useState(false);
   const overlayRef = useRef(null);
 
   // Anti-screenshot/inspect/print measures
@@ -167,49 +156,6 @@ const PreviewPage = () => {
     fetchLink();
   }, [linkId]);
 
-  // Generate document previews when document link is loaded
-  useEffect(() => {
-    if (link && link.documentUrl) {
-      const filename = link.documentUrl.split("/").pop();
-      const fileExtension = filename.split(".").pop()?.toLowerCase();
-
-      // Determine MIME type from file extension
-      const mimeTypeMap = {
-        pdf: "application/pdf",
-        doc: "application/msword",
-        docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        xls: "application/vnd.ms-excel",
-        xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        ppt: "application/vnd.ms-powerpoint",
-        pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        txt: "text/plain",
-        rtf: "text/rtf",
-      };
-
-      const mimeType = mimeTypeMap[fileExtension] || "application/pdf";
-
-      if (supportsDocumentPreview(mimeType)) {
-        setDocumentLoading(true);
-        setDocumentError(false);
-
-        // Generate multi-page preview (up to 3 pages)
-        const previews = generateMultiPagePreview(link.documentUrl, 3, {
-          width: 800,
-          height: 600,
-          format: "jpg",
-          quality: "auto",
-        });
-
-        setDocumentPreviews(previews);
-        setCurrentPage(1);
-        setDocumentLoading(false);
-      } else {
-        setDocumentError(true);
-        setDocumentLoading(false);
-      }
-    }
-  }, [link]);
-
   // Show the same loader style during initial loading
   if (loading) {
     return (
@@ -226,42 +172,71 @@ const PreviewPage = () => {
     );
   }
 
-  // Show Link Nuked Modal
-  if (error === "This link has been nuked by LinkNuke") {
-    return (
-      <>
-        <Toaster position="top-center" />
-        <LinkNukedModal />
-      </>
-    );
-  }
-
   if (error || !link) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <Toaster position="top-center" />
         <div className="text-center max-w-md mx-auto px-4">
-          {/* Regular error styling */}
-          <div className="space-y-4">
-            <div className="w-16 h-16 mx-auto bg-red-500 rounded-full flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+          {error === "This link has been nuked by LinkNuke" ? (
+            // Special styling for nuked links
+            <div className="space-y-6">
+              <div className="w-24 h-24 mx-auto bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-12 h-12 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  />
+                </svg>
+              </div>
+              <div className="space-y-3">
+                <h1 className="text-3xl font-bold text-red-400">Link Nuked</h1>
+                <p className="text-gray-300 text-lg">
+                  This link has been automatically destroyed by LinkNuke
+                </p>
+                <p className="text-gray-500 text-sm">
+                  The link reached its view limit and has been permanently
+                  removed
+                </p>
+              </div>
+              <div className="pt-4">
+                <div className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
+                  <span className="text-gray-400 text-sm">Powered by </span>
+                  <span className="ml-1 text-[#1de4bf] font-semibold">
+                    LinkNuke
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="text-red-400 text-xl font-semibold">
-              {error || "File not found."}
+          ) : (
+            // Regular error styling
+            <div className="space-y-4">
+              <div className="w-16 h-16 mx-auto bg-red-500 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+              <div className="text-red-400 text-xl font-semibold">
+                {error || "File not found."}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );
@@ -317,7 +292,25 @@ const PreviewPage = () => {
           {/* Loading State - only for images */}
           {imageLoading && link.imageUrl && (
             <div className="absolute inset-0 flex items-center justify-center z-10">
-              <BouncingLoader />
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-8 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"></div>
+                <div
+                  className="w-2 h-12 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.1s" }}
+                ></div>
+                <div
+                  className="w-2 h-6 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="w-2 h-10 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.3s" }}
+                ></div>
+                <div
+                  className="w-2 h-4 bg-gradient-to-t from-[#1de4bf] to-[#0bf3a2] rounded-full animate-pulse"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
+              </div>
             </div>
           )}
 
@@ -572,20 +565,7 @@ const PreviewPage = () => {
   // Show document preview if present
   if (link.documentUrl) {
     const filename = link.documentUrl.split("/").pop();
-    const fileExtension = filename.split(".").pop()?.toLowerCase();
-    const mimeTypeMap = {
-      pdf: "application/pdf",
-      doc: "application/msword",
-      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      xls: "application/vnd.ms-excel",
-      xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      ppt: "application/vnd.ms-powerpoint",
-      pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      txt: "text/plain",
-      rtf: "text/rtf",
-    };
-    const mimeType = mimeTypeMap[fileExtension] || "application/pdf";
-    const documentType = getDocumentTypeIcon(mimeType);
+    const isPDF = filename.toLowerCase().endsWith(".pdf");
 
     return (
       <div
@@ -596,8 +576,7 @@ const PreviewPage = () => {
         }}
       >
         <Toaster position="top-center" />
-        <div className="relative bg-gray-900 rounded-2xl shadow-2xl p-0 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
-          {/* Anti-screenshot overlay */}
+        <div className="relative bg-gray-900 rounded-2xl shadow-2xl p-0 max-w-lg w-full flex flex-col items-center justify-center border border-gray-700 overflow-hidden">
           {link.extraSecure && (
             <div
               className="pointer-events-none select-none absolute inset-0 z-20"
@@ -607,8 +586,6 @@ const PreviewPage = () => {
               }}
             />
           )}
-
-          {/* Download button */}
           {!link.extraSecure && (
             <a
               href={link.documentUrl}
@@ -635,135 +612,113 @@ const PreviewPage = () => {
               </svg>
             </a>
           )}
-
-          {/* Document type indicator */}
-          <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
-            <span className="text-2xl">{documentType.icon}</span>
-            <span className="text-xs text-gray-300 bg-gray-800/60 px-2 py-1 rounded">
-              {documentType.name}
-            </span>
-          </div>
-
-          {/* Loading State */}
-          {documentLoading && (
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <BouncingLoader />
-            </div>
-          )}
-
-          {/* Error State */}
-          {documentError && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/80 backdrop-blur-sm z-10">
-              <div className="flex flex-col items-center gap-4 text-center">
-                <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
+          {link.extraSecure ? (
+            <img
+              src={link.documentUrl}
+              alt="Secure Document Preview"
+              className="max-w-full max-h-[80vh] w-auto h-auto object-contain select-none pointer-events-none"
+              draggable={false}
+              style={{ userSelect: "none" }}
+              onContextMenu={(e) => e.preventDefault()}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 z-10">
+              {isPDF ? (
+                <div className="flex flex-col items-center gap-4">
                   <svg
-                    className="w-6 h-6 text-red-400"
+                    width="48"
+                    height="48"
                     fill="none"
-                    stroke="currentColor"
                     viewBox="0 0 24 24"
+                    className="text-red-500"
                   >
                     <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      stroke="currentColor"
+                      strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
+                    />
+                    <polyline
+                      points="14,2 14,8 20,8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <line
+                      x1="16"
+                      y1="13"
+                      x2="8"
+                      y2="13"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <line
+                      x1="16"
+                      y1="17"
+                      x2="8"
+                      y2="17"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <polyline
+                      points="10,9 9,9 8,9"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
+                  <span className="text-white font-semibold text-lg text-center">
+                    {filename}
+                  </span>
+                  <p className="text-gray-400 text-sm text-center max-w-xs">
+                    Click the download button above to view this PDF document
+                  </p>
+                  <a
+                    href={link.documentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 px-6 py-3 bg-[#00ffff] text-black rounded-lg font-semibold hover:bg-[#00ffff]/80 transition-colors"
+                  >
+                    Open PDF
+                  </a>
                 </div>
-                <p className="text-red-400 text-sm font-medium">
-                  Preview not available for this document type
-                </p>
-                <a
-                  href={link.documentUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-[#00ffff] text-black rounded-lg text-sm font-medium hover:bg-[#00ffff]/80 transition-colors"
-                >
-                  Download to View
-                </a>
-              </div>
+              ) : (
+                <>
+                  <svg
+                    width="48"
+                    height="48"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    className="mb-4 text-[#00ffff]"
+                  >
+                    <rect width="24" height="24" rx="4" fill="#002b2b" />
+                    <path
+                      d="M7 7h10v10H7V7z"
+                      stroke="#00ffff"
+                      strokeWidth="2"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9 9h6v6H9V9z"
+                      stroke="#00ffff"
+                      strokeWidth="2"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="text-white font-semibold text-lg select-none pointer-events-none break-all">
+                    {filename}
+                  </span>
+                </>
+              )}
             </div>
           )}
-
-          {/* Document Preview */}
-          {!documentLoading &&
-            !documentError &&
-            documentPreviews.length > 0 && (
-              <>
-                <img
-                  src={documentPreviews[currentPage - 1]?.url}
-                  alt={`Document Preview - Page ${currentPage}`}
-                  className={`max-w-full max-h-[80vh] w-auto h-auto object-contain transition-opacity duration-300 ${
-                    link.extraSecure ? "select-none pointer-events-none" : ""
-                  }`}
-                  draggable={!link.extraSecure}
-                  style={{ userSelect: link.extraSecure ? "none" : "auto" }}
-                  onContextMenu={
-                    link.extraSecure ? (e) => e.preventDefault() : undefined
-                  }
-                  onError={() => {
-                    setDocumentError(true);
-                  }}
-                />
-
-                {/* Page Navigation */}
-                {documentPreviews.length > 1 && !link.extraSecure && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="flex items-center gap-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-3 py-2">
-                      <button
-                        onClick={() =>
-                          setCurrentPage(Math.max(1, currentPage - 1))
-                        }
-                        disabled={currentPage === 1}
-                        className="p-1 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 19l-7-7 7-7"
-                          />
-                        </svg>
-                      </button>
-                      <span className="text-sm text-gray-300 px-2">
-                        {currentPage} / {documentPreviews.length}
-                      </span>
-                      <button
-                        onClick={() =>
-                          setCurrentPage(
-                            Math.min(documentPreviews.length, currentPage + 1)
-                          )
-                        }
-                        disabled={currentPage === documentPreviews.length}
-                        className="p-1 text-gray-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
         </div>
       </div>
     );

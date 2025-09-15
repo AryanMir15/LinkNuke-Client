@@ -278,6 +278,10 @@ const ImageModal = ({ closeModal }) => {
           ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
           : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       }`}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
     >
       {/* Cyan gradient circles - only on desktop */}
       {window.innerWidth >= 768 && (
