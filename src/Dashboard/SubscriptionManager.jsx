@@ -397,7 +397,19 @@ export default function SubscriptionManager() {
           </h3>
         </div>
         <button
-          onClick={() => navigate("/pricing")}
+          onClick={() => {
+            navigate("/");
+            // Wait for navigation to complete, then scroll to pricing section
+            setTimeout(() => {
+              const pricingElement = document.getElementById("pricing");
+              if (pricingElement) {
+                pricingElement.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+            }, 100);
+          }}
           className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
         >
           Change Plan

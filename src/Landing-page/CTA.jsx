@@ -27,7 +27,7 @@ export default function FinalCTA() {
       </div>
 
       {/* CSS for shine effect */}
-      <style jsx>{`
+      <style jsx="true">{`
         .shine-button {
           position: relative;
           overflow: hidden;

@@ -92,7 +92,7 @@ const Hero = () => {
       </GridBackground>
 
       {/* CSS for mobile optimizations */}
-      <style jsx>{`
+      <style jsx="true">{`
         /* Reduce particles to 3 on mobile */
         @media (max-width: 768px) {
           [data-slot="grid-background"] [class*="animate-"] {

@@ -123,7 +123,7 @@ export default function LinkNukedModal() {
         </div>
 
         {/* CSS for shine effect */}
-        <style jsx>{`
+        <style jsx="true">{`
           .shine-button {
             position: relative;
             overflow: hidden;

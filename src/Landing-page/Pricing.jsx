@@ -482,7 +482,7 @@ export default function PricingSection() {
 
       {/* CSS for animations - Only load on desktop */}
       {!isMobile && (
-        <style jsx>{`
+        <style jsx="true">{`
           @keyframes moveDot {
             0%,
             100% {
