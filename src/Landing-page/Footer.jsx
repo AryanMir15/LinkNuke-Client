@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 export default function Footer() {
   return (
     <footer className="relative isolate bg-gradient-to-b from-black via-gray-950 to-black text-gray-300 pt-24 pb-12 px-6 lg:px-8">
-      {/* Background Effects */}
+      {/* Lightweight Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-[#1de4bf]/5 to-transparent rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-[#0bf3a2]/5 to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#1de4bf]/3 to-transparent rounded-full blur-2xl"></div>
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-[#0bf3a2]/3 to-transparent rounded-full blur-2xl"></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto">
@@ -18,9 +18,35 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-4 mb-6">
               <img src="/logo.svg" alt="LinkNuke Logo" className="w-12 h-12" />
-              <div>
+              <div className="relative">
                 <h3 className="font-bold text-2xl text-white">LinkNuke</h3>
-                <div className="w-20 h-1 bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] rounded-full mt-1"></div>
+                {/* Wavy SVG Line */}
+                <svg
+                  viewBox="0 0 120 8"
+                  className="absolute -bottom-1 left-0 w-24 h-2 z-0"
+                  style={{ transform: "rotate(-1deg)" }}
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient
+                      id="linknuke-footer-underline"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop offset="0%" stopColor="#1de4bf" />
+                      <stop offset="100%" stopColor="#0bf3a2" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M5 4 Q 30 1, 60 4 T 115 4"
+                    fill="none"
+                    stroke="url(#linknuke-footer-underline)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
             </div>
             <p className="text-gray-300 text-lg leading-relaxed max-w-md mb-8">
