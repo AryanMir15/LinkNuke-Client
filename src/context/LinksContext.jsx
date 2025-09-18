@@ -138,6 +138,7 @@ export function LinksProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
+      console.log(
         "🔍🔍🔍 FRONTEND: Current token:",
         localStorage.getItem("token") ? "EXISTS" : "MISSING"
       );

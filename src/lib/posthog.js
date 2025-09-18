@@ -17,6 +17,7 @@ if (import.meta.env.VITE_POSTHOG_KEY && import.meta.env.PROD) {
       retry_delay: 1000,
     });
   } catch (error) {
+    console.log(
       "PostHog initialization failed (likely blocked by ad blocker):",
       error
     );
@@ -39,16 +40,14 @@ const safePostHog = {
       if (posthog && typeof posthog.identify === "function") {
         posthog.identify(...args);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   },
   set: (...args) => {
     try {
       if (posthog && typeof posthog.set === "function") {
         posthog.set(...args);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   },
 };
 

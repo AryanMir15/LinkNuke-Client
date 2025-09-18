@@ -17,6 +17,7 @@ import {
 import ErrorBoundary from "../components/ui/ErrorBoundary";
 import RefundPolicyModal from "../components/ui/RefundPolicyModal";
 import RefundModal from "../components/ui/RefundModal";
+import RefundFailedModal from "../components/ui/RefundFailedModal";
 
 export default function SubscriptionManager() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function SubscriptionManager() {
   const [refunding, setRefunding] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [showRefundPolicyModal, setShowRefundPolicyModal] = useState(false);
+  const [showRefundFailedModal, setShowRefundFailedModal] = useState(false);
   const [refundReason, setRefundReason] = useState("");
 
   const [usage, setUsage] = useState(null);
@@ -235,7 +237,7 @@ export default function SubscriptionManager() {
           "Payment service is temporarily unavailable. Please try again in a few minutes.";
       }
 
-      alert(errorMessage);
+      setShowRefundFailedModal(true);
     } finally {
       setRefunding(false);
     }
@@ -564,6 +566,13 @@ export default function SubscriptionManager() {
       <RefundPolicyModal
         isOpen={showRefundPolicyModal}
         onClose={() => setShowRefundPolicyModal(false)}
+      />
+
+      {/* Refund Failed Modal */}
+      <RefundFailedModal
+        isOpen={showRefundFailedModal}
+        onClose={() => setShowRefundFailedModal(false)}
+        supportEmail="support@whynotship.me"
       />
     </div>
   );

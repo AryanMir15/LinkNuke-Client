@@ -9,12 +9,14 @@ import { useLinksContext } from "../context/useLinksContext";
 import { getUsageStats } from "../lib/linkApi";
 import { BarChart3, CreditCard } from "lucide-react";
 import PaymentSuccessModal from "../components/ui/PaymentSuccessModal";
+import WelcomeModal from "../components/ui/WelcomeModal";
 
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true); // Set to true for now
   const [usageStats, setUsageStats] = useState({
     monthlyTotal: 0,
     allTimeTotal: 0,
@@ -168,6 +170,8 @@ export default function Dashboard() {
 
       if (paymentStatus === "success") {
         toast.success("Payment successful! Welcome to LinkNuke Pro!");
+        // Show welcome modal for successful payment
+        setShowWelcomeModal(true);
         // Always refresh subscription status after payment success
         // This will update the UI to show the new Pro plan
         fetchSubscriptionStatus();
@@ -241,6 +245,13 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#1F1F23]">
       <Topbar />
+
+      {/* Welcome Modal */}
+      <WelcomeModal
+        isOpen={showWelcomeModal}
+        onClose={() => setShowWelcomeModal(false)}
+        planName={subscription?.plan || "Pro"}
+      />
 
       {/* Free Plan Limit Banner */}
       {showFreePlanLimit && (
