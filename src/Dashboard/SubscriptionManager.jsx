@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   CreditCard,
   Calendar,
@@ -146,11 +147,11 @@ export default function SubscriptionManager() {
 
       // Show appropriate message based on response
       if (response.data.localCancellation) {
-        alert(
+        toast.success(
           "Subscription cancelled! Due to network issues, the cancellation will be fully processed shortly. You'll receive a confirmation email from Paddle."
         );
       } else {
-        alert(
+        toast.success(
           "Subscription cancelled successfully! You'll receive a confirmation email from Paddle."
         );
       }
@@ -181,7 +182,7 @@ export default function SubscriptionManager() {
         errorMessage = "No active subscription found to cancel.";
       }
 
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setCancelling(false);
     }
@@ -205,7 +206,7 @@ export default function SubscriptionManager() {
       setShowRefundModal(false);
       setRefundReason("");
 
-      alert(
+      toast.success(
         `Refund processed successfully! You've been refunded $${response.data.refundAmount} and your access has been removed immediately.`
       );
     } catch (err) {

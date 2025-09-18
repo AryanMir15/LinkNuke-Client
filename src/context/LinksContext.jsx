@@ -138,11 +138,6 @@ export function LinksProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      console.log(
-        "🔍🔍🔍 FRONTEND: Current token:",
-        localStorage.getItem("token") ? "EXISTS" : "MISSING"
-      );
-
       await api.deleteLink(id);
       setLinks((prev) => prev.filter((l) => l._id !== id));
       toast("Link deleted", { icon: "🗑️" });

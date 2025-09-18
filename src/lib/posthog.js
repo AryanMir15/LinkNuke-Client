@@ -17,10 +17,7 @@ if (import.meta.env.VITE_POSTHOG_KEY && import.meta.env.PROD) {
       retry_delay: 1000,
     });
   } catch (error) {
-    console.log(
-      "PostHog initialization failed (likely blocked by ad blocker):",
-      error
-    );
+    // PostHog initialization failed (likely blocked by ad blocker)
   }
 }
 

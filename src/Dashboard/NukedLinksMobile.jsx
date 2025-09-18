@@ -81,7 +81,7 @@ const NukedLinksMobile = () => {
         await remove(deletingId);
         toast.success("Link deleted!");
       } catch (error) {
-        console.error("Delete failed:", error);
+        // Delete failed
         toast.error("Failed to delete link");
       } finally {
         setIsDeleting(false);
