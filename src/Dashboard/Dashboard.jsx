@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showFreePlanLimit, setShowFreePlanLimit] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true); // Set to true for now
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false); // Only show on payment success
   const [usageStats, setUsageStats] = useState({
     monthlyTotal: 0,
     allTimeTotal: 0,
