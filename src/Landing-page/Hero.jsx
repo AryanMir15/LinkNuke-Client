@@ -12,9 +12,19 @@ const Hero = () => {
       id="home"
     >
       <GridBackground
-        className="bg-gradient-to-br from-black via-gray-900 to-black"
+        className="bg-black"
         gridSize="4:4"
-        beams={{ count: 8, speed: 5 }}
+        colors={{
+          background: "bg-black",
+          borderColor: "border-gray-900/10",
+          borderSize: "1px",
+        }}
+        beams={{
+          count: 3,
+          speed: 8,
+          colors: ["bg-gray-600/20", "bg-gray-500/15", "bg-gray-400/10"],
+          shadow: "shadow-sm shadow-gray-500/10 rounded-full",
+        }}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
@@ -81,10 +91,10 @@ const Hero = () => {
             <img
               src="/dashboard.png"
               alt="LinkNuke Dashboard"
-              className="w-3xl max-w-md md:max-w-none rounded-xl shadow-xl ring-1 ring-white/10 sm:w-228 md:-ml-4 lg:-ml-0 lg:w-[120%] lg:-mr-16 xl:w-[135%] xl:-mr-28"
+              className="w-3xl max-w-md md:max-w-none rounded-xl shadow-lg ring-1 ring-white/5 sm:w-228 md:-ml-4 lg:-ml-0 lg:w-[120%] lg:-mr-16 xl:w-[135%] xl:-mr-28"
               style={{
-                filter: "drop-shadow(0 20px 40px rgba(29, 228, 191, 0.2))",
-                boxShadow: "0 60px 120px rgba(0, 0, 0, 0.6)",
+                filter: "drop-shadow(0 8px 16px rgba(29, 228, 191, 0.08))",
+                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
               }}
             />
           </div>
