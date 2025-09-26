@@ -90,17 +90,18 @@ const Features = () => {
             {/* Text Content */}
             <div className="space-y-6 order-1 lg:order-2">
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
-                Advanced Protection
+                Enhanced Privacy
               </div>
               <h3 className="text-3xl sm:text-4xl font-bold text-white">
                 Extra Secure Features
               </h3>
               <p className="text-gray-300 text-lg leading-relaxed">
-                When enabled, your content becomes view-only with multiple
-                layers of protection. Right-click is disabled, developer tools
-                are blocked, screenshots are prevented, and print functions are
-                disabled. No downloads, no copying, no inspection - just secure
-                viewing that keeps your sensitive data protected.
+                When enabled, we add basic browser-level protections to
+                discourage casual copying. Right-click is disabled, developer
+                tools are blocked, and print functions are disabled. While these
+                measures provide some protection against casual users, they can
+                be bypassed by determined individuals with technical knowledge
+                or someone with another phone or camera.
               </p>
             </div>
           </div>
