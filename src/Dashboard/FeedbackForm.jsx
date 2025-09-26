@@ -40,10 +40,10 @@ export default function FeedbackForm() {
         time: new Date().toLocaleString(),
       };
       await emailjs.send(
-        "service_7mjjak7",
-        "template_d0bhnyh",
+        "service_fczz522",
+        "template_ntn0mh3",
         payload,
-        "F076LppuUUzb-5-Ll"
+        "EShWf0EqJ2utBwst6"
       );
 
       // Track feedback submission
