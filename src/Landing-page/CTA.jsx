@@ -1,7 +1,15 @@
 "use client";
 import { ArrowRight } from "lucide-react";
+import { trackEvent } from "../lib/analytics";
 
 export default function FinalCTA() {
+  const handleCTAClick = () => {
+    trackEvent("final_cta_clicked", {
+      source: "landing_page_bottom",
+      timestamp: new Date().toISOString(),
+    });
+  };
+
   return (
     <section className="relative bg-black py-16 sm:py-24 px-6 text-white overflow-hidden rounded-2xl mt-12 mb-12">
       <div className="max-w-3xl mx-auto text-center relative z-10">
@@ -17,6 +25,7 @@ export default function FinalCTA() {
         <div className="flex justify-center">
           <a
             href="/register"
+            onClick={handleCTAClick}
             className="group relative bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:from-[#1de4bf]/90 hover:to-[#0bf3a2]/90 text-black font-semibold py-3 sm:py-4 px-6 sm:px-10 rounded-full text-base sm:text-lg shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-[1.03] active:scale-95 shine-button overflow-hidden"
           >
             <span className="relative z-10">Send a Self-Destructing Link</span>

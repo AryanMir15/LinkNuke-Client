@@ -7,6 +7,10 @@ import { DarkModeProvider } from "./context/DarkModeContext";
 import { SessionProvider } from "./context/useSession";
 import AppWrapper from "./components/ui/AppWrapper";
 import "./lib/posthog"; // Initialize PostHog
+import { initSessionTracking } from "./lib/analytics";
+
+// Initialize session tracking
+initSessionTracking();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -10,6 +10,7 @@ import { getUsageStats } from "../lib/linkApi";
 import { BarChart3, CreditCard } from "lucide-react";
 import PaymentSuccessModal from "../components/ui/PaymentSuccessModal";
 import WelcomeModal from "../components/ui/WelcomeModal";
+import { trackEvent, trackPageView } from "../lib/analytics";
 
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
@@ -126,6 +127,12 @@ export default function Dashboard() {
 
         initialDataFetched.current = true;
 
+        // Track dashboard visit
+        trackPageView("dashboard", {
+          isMobile: window.innerWidth < 768,
+          timestamp: new Date().toISOString(),
+        });
+
         // Fetch links in background (don't wait for it)
         if (!links || links.length === 0) {
           fetchLinks().catch((err) => {});
@@ -190,6 +197,12 @@ export default function Dashboard() {
 
   const handleUpgrade = () => {
     setActiveTab("billing");
+    // Track upgrade button click
+    trackEvent("upgrade_clicked", {
+      source: "dashboard_banner",
+      plan: subscription?.plan || "free",
+      timestamp: new Date().toISOString(),
+    });
   };
 
   useEffect(() => {

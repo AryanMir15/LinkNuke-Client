@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 import * as api from "../lib/linkApi";
 import toast from "react-hot-toast";
 import FeedbackModal from "../components/ui/FeedbackModal";
+import { trackEvent } from "../lib/analytics";
 
 const LinksContext = createContext();
 
@@ -105,6 +106,16 @@ export function LinksProvider({ children }) {
       setLinks((prev) => [newLink, ...prev]);
 
       toast.success("Link created!");
+
+      // Track link creation
+      trackEvent("link_created", {
+        format: link.format,
+        hasPassword: !!link.password,
+        hasExpiration: !!link.expiresAt,
+        maxViews: link.maxViews || null,
+        timestamp: new Date().toISOString(),
+      });
+
       return newLink;
     } catch (err) {
       setError(err.message);
@@ -141,6 +152,12 @@ export function LinksProvider({ children }) {
       await api.deleteLink(id);
       setLinks((prev) => prev.filter((l) => l._id !== id));
       toast("Link deleted", { icon: "🗑️" });
+
+      // Track link deletion
+      trackEvent("link_deleted", {
+        linkId: id,
+        timestamp: new Date().toISOString(),
+      });
     } catch (err) {
       setError(err.message);
       toast.error(err.message || "Failed to delete link");

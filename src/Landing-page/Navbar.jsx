@@ -7,6 +7,7 @@ import {
   NavigationMenuList,
 } from "../components/ui/navigation-menu";
 import DarkModeToggle from "../components/ui/DarkModeToggle";
+import { trackEvent } from "../lib/analytics";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -31,6 +32,13 @@ export default function Navbar() {
       });
     }
     setShowMobile(false); // Close mobile menu
+
+    // Track navigation clicks
+    trackEvent("navbar_clicked", {
+      section: href.replace("#", ""),
+      isMobile: window.innerWidth < 768,
+      timestamp: new Date().toISOString(),
+    });
   };
 
   useEffect(() => {

@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
 import ShineButton from "../components/ui/ShineButton";
 import { GridBackground } from "../components/ui/grid-background";
+import { trackEvent } from "../lib/analytics";
 
 const Hero = () => {
   const isLoggedIn =
     typeof window !== "undefined" && localStorage.getItem("token");
+
+  const handleCTAClick = (action) => {
+    trackEvent("hero_cta_clicked", {
+      action: action,
+      isLoggedIn: !!isLoggedIn,
+      timestamp: new Date().toISOString(),
+    });
+  };
 
   return (
     <section
@@ -52,6 +61,7 @@ const Hero = () => {
                     {isLoggedIn ? (
                       <Link
                         to="/dashboard"
+                        onClick={() => handleCTAClick("go_to_dashboard")}
                         className="group relative bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-[#1de4bf] focus:ring-offset-2 transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center justify-center shine-button"
                       >
                         <span className="relative z-10">Go to Dashboard</span>
@@ -61,6 +71,9 @@ const Hero = () => {
                       <>
                         <Link
                           to="/register"
+                          onClick={() =>
+                            handleCTAClick("start_sharing_securely")
+                          }
                           className="inline-flex w-full sm:w-auto"
                         >
                           <ShineButton
@@ -72,6 +85,7 @@ const Hero = () => {
                         </Link>
                         <Link
                           to="/login"
+                          onClick={() => handleCTAClick("sign_in")}
                           className="group relative bg-transparent text-white border-2 border-white/30 font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl inline-flex items-center justify-center min-h-[44px] w-full sm:w-auto"
                         >
                           Sign In
