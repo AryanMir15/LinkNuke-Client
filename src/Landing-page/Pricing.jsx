@@ -330,10 +330,14 @@ export default function PricingSection() {
                         {tier.price}
                       </div>
                       {tier.name === "Pro" && (
-                        <span className="text-gray-400 text-lg">$19</span>
+                        <span className="text-gray-400 text-lg line-through">
+                          $19
+                        </span>
                       )}
                       {tier.name === "Lifetime" && (
-                        <span className="text-gray-400 text-lg">$99</span>
+                        <span className="text-gray-400 text-lg line-through">
+                          $99
+                        </span>
                       )}
                     </div>
                     <span className="text-gray-300 text-base">
