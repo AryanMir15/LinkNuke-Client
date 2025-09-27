@@ -50,6 +50,8 @@ const validTypes = [
 
 const DocumentsModal = ({ closeModal }) => {
   const [files, setFiles] = useState([]);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const fileInputRef = useRef(null);
   const [form, setForm] = useState(initialState);
   const [maxViewsObj, setMaxViewsObj] = useState(maxViewsOptions[0]);
   const [expiryObj, setExpiryObj] = useState(expiryOptions[0]);
@@ -90,35 +92,94 @@ const DocumentsModal = ({ closeModal }) => {
     };
   }, [successLink]);
 
+  // Global drag prevention - prevent browser from opening files
+  useEffect(() => {
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    // Only prevent defaults on the document, not on our drop area
+    document.addEventListener("dragover", preventDefaults, false);
+    document.addEventListener("drop", preventDefaults, false);
+
+    return () => {
+      document.removeEventListener("dragover", preventDefaults, false);
+      document.removeEventListener("drop", preventDefaults, false);
+    };
+  }, []);
+
   const handleDrop = (e) => {
+    console.log("🔥 DOCUMENTS DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
-    const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
+    setIsDragActive(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    console.log("🔥 Dropped files:", droppedFiles);
+
+    // Filter for valid document types
+    const validFiles = droppedFiles.filter((file) =>
       validTypes.includes(file.type)
     );
-    setFiles((prev) => [...prev, ...droppedFiles]);
+
+    console.log("🔥 Valid document files:", validFiles);
+
+    if (validFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...validFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
   };
 
   const handleDragOver = (e) => {
+    console.log("🔥 DOCUMENTS DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
+    console.log("🔥 DOCUMENTS DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
+    setIsDragActive(true);
   };
 
   const handleDragLeave = (e) => {
+    console.log("🔥 DOCUMENTS DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
+    // Only set to false if we're leaving the drop area completely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragActive(false);
+    }
   };
 
   const handleFileSelect = (e) => {
-    const selectedFiles = Array.from(e.target.files).filter((file) =>
+    console.log("🔥 DOCUMENTS FILE INPUT CHANGE");
+    const selectedFiles = Array.from(e.target.files);
+    console.log("🔥 Selected files:", selectedFiles);
+
+    const validFiles = selectedFiles.filter((file) =>
       validTypes.includes(file.type)
     );
-    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    if (validFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...validFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
+  };
+
+  const handleClick = () => {
+    console.log("🔥 DOCUMENTS DROP AREA CLICKED");
+    if (!loading && !uploading && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const removeFile = (index) => {
@@ -457,24 +518,22 @@ const DocumentsModal = ({ closeModal }) => {
           </div>
           <div className="flex-1 flex flex-col gap-2 items-center">
             <div
-              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed border-gray-700 rounded-md ${
+              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed rounded-md ${
                 loading || uploading
-                  ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer"
+                  ? "cursor-not-allowed opacity-50 border-gray-700"
+                  : isDragActive
+                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                  : "cursor-pointer border-gray-700"
               }`}
-              onClick={() =>
-                !loading && !uploading && inputRef.current?.click()
-              }
-              onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={loading || uploading ? undefined : handleDragOver}
-              onDragEnter={loading || uploading ? undefined : handleDragEnter}
-              onDragLeave={loading || uploading ? undefined : handleDragLeave}
+              onClick={handleClick}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              style={{ minHeight: "280px", width: "100%", zIndex: 10 }}
             >
-              <p className="text-sm">
-                Choose a file or drop it here (optional)
-              </p>
               <input
-                ref={inputRef}
+                ref={fileInputRef}
                 type="file"
                 accept=".pdf,.doc,.docx,.txt,.rtf"
                 multiple
@@ -482,6 +541,11 @@ const DocumentsModal = ({ closeModal }) => {
                 onChange={handleFileSelect}
                 disabled={loading || uploading}
               />
+              <p className="text-sm">
+                {isDragActive
+                  ? "Drop your documents here!"
+                  : "Choose files or drop them here (optional)"}
+              </p>
             </div>
             {files.length > 0 && (
               <div className="rounded-lg p-4">

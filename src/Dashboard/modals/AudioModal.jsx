@@ -9,7 +9,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import Switch from "../../components/ui/Switch";
 import InfoModal from "../../components/ui/InfoModal";
 import * as Popover from "@radix-ui/react-popover";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion"; // Removed unused import
 import SuccessModal from "../../components/ui/SuccessModal";
 
 const initialState = {
@@ -39,6 +39,8 @@ const MAX_AUDIO_SIZE_BYTES = MAX_AUDIO_SIZE_MB * 1024 * 1024;
 
 const AudioModal = ({ closeModal }) => {
   const [files, setFiles] = useState([]);
+  const [isDragActive, setIsDragActive] = useState(false);
+  const fileInputRef = useRef(null);
   const [form, setForm] = useState(initialState);
   const [maxViewsObj, setMaxViewsObj] = useState(maxViewsOptions[0]);
   const [expiryObj, setExpiryObj] = useState(expiryOptions[0]);
@@ -47,7 +49,7 @@ const AudioModal = ({ closeModal }) => {
   const [uploading, setUploading] = useState(false);
   const [extraSecure, setExtraSecure] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const inputRef = useRef(null);
+  // inputRef removed - using fileInputRef instead
   const { create, loading } = useLinksContext();
 
   const viewsBtnRef = useRef(null);
@@ -79,35 +81,94 @@ const AudioModal = ({ closeModal }) => {
     };
   }, [successLink]);
 
+  // Global drag prevention - prevent browser from opening files
+  useEffect(() => {
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    // Only prevent defaults on the document, not on our drop area
+    document.addEventListener("dragover", preventDefaults, false);
+    document.addEventListener("drop", preventDefaults, false);
+
+    return () => {
+      document.removeEventListener("dragover", preventDefaults, false);
+      document.removeEventListener("drop", preventDefaults, false);
+    };
+  }, []);
+
   const handleDrop = (e) => {
+    console.log("🔥 AUDIO DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
-    const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
+    setIsDragActive(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    console.log("🔥 Dropped files:", droppedFiles);
+
+    // Filter for audio files
+    const audioFiles = droppedFiles.filter((file) =>
       file.type.startsWith("audio/")
     );
-    setFiles((prev) => [...prev, ...droppedFiles]);
+
+    console.log("🔥 Audio files:", audioFiles);
+
+    if (audioFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...audioFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
   };
 
   const handleDragOver = (e) => {
+    console.log("🔥 AUDIO DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
+    console.log("🔥 AUDIO DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
+    setIsDragActive(true);
   };
 
   const handleDragLeave = (e) => {
+    console.log("🔥 AUDIO DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
+    // Only set to false if we're leaving the drop area completely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragActive(false);
+    }
   };
 
   const handleFileSelect = (e) => {
-    const selectedFiles = Array.from(e.target.files).filter((file) =>
+    console.log("🔥 AUDIO FILE INPUT CHANGE");
+    const selectedFiles = Array.from(e.target.files);
+    console.log("🔥 Selected files:", selectedFiles);
+
+    const audioFiles = selectedFiles.filter((file) =>
       file.type.startsWith("audio/")
     );
-    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    if (audioFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...audioFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
+  };
+
+  const handleClick = () => {
+    console.log("🔥 AUDIO DROP AREA CLICKED");
+    if (!loading && !uploading && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const removeFile = (index) => {
@@ -438,24 +499,22 @@ const AudioModal = ({ closeModal }) => {
           </div>
           <div className="flex-1 flex flex-col gap-2 items-center">
             <div
-              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed border-gray-700 rounded-md ${
+              className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed rounded-md ${
                 loading || uploading
-                  ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer"
+                  ? "cursor-not-allowed opacity-50 border-gray-700"
+                  : isDragActive
+                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                  : "cursor-pointer border-gray-700"
               }`}
-              onClick={() =>
-                !loading && !uploading && inputRef.current?.click()
-              }
-              onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={loading || uploading ? undefined : handleDragOver}
-              onDragEnter={loading || uploading ? undefined : handleDragEnter}
-              onDragLeave={loading || uploading ? undefined : handleDragLeave}
+              onClick={handleClick}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              style={{ minHeight: "280px", width: "100%", zIndex: 10 }}
             >
-              <p className="text-sm">
-                Choose a file or drop it here (optional)
-              </p>
               <input
-                ref={inputRef}
+                ref={fileInputRef}
                 type="file"
                 accept="audio/*"
                 multiple
@@ -463,6 +522,11 @@ const AudioModal = ({ closeModal }) => {
                 onChange={handleFileSelect}
                 disabled={loading || uploading}
               />
+              <p className="text-sm">
+                {isDragActive
+                  ? "Drop your audio files here!"
+                  : "Choose files or drop them here (optional)"}
+              </p>
             </div>
             {files.length > 0 && (
               <div className="rounded-lg p-4">

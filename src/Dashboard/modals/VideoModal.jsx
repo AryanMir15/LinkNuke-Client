@@ -37,6 +37,7 @@ const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 
 const VideoModal = ({ closeModal }) => {
   const [files, setFiles] = useState([]);
+  const fileInputRef = useRef(null);
   const [form, setForm] = useState(initialState);
   const [maxViewsObj, setMaxViewsObj] = useState(maxViewsOptions[0]);
   const [expiryObj, setExpiryObj] = useState(expiryOptions[0]);
@@ -78,40 +79,96 @@ const VideoModal = ({ closeModal }) => {
     };
   }, [successLink]);
 
+  // Global drag prevention - prevent browser from opening files
+  useEffect(() => {
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    // Only prevent defaults on the document, not on our drop area
+    document.addEventListener("dragover", preventDefaults, false);
+    document.addEventListener("drop", preventDefaults, false);
+
+    return () => {
+      document.removeEventListener("dragover", preventDefaults, false);
+      document.removeEventListener("drop", preventDefaults, false);
+    };
+  }, []);
+
   const handleDrop = (e) => {
+    console.log("🔥 VIDEO DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(false);
-    const droppedFiles = Array.from(e.dataTransfer.files).filter(
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    console.log("🔥 Dropped files:", droppedFiles);
+
+    // Filter for valid video files
+    const validFiles = droppedFiles.filter(
       (file) =>
         file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/")
     );
-    setFiles((prev) => [...prev, ...droppedFiles]);
+
+    console.log("🔥 Valid video files:", validFiles);
+
+    if (validFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...validFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
   };
 
   const handleDragOver = (e) => {
+    console.log("🔥 VIDEO DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
+    console.log("🔥 VIDEO DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(true);
   };
 
   const handleDragLeave = (e) => {
+    console.log("🔥 VIDEO DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
-    setIsDragOver(false);
+    // Only set to false if we're leaving the drop area completely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragOver(false);
+    }
   };
 
   const handleFileSelect = (e) => {
-    const selectedFiles = Array.from(e.target.files).filter(
+    console.log("🔥 VIDEO FILE INPUT CHANGE");
+    const selectedFiles = Array.from(e.target.files);
+    console.log("🔥 Selected files:", selectedFiles);
+
+    const validFiles = selectedFiles.filter(
       (file) =>
         file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/")
     );
-    setFiles((prev) => [...prev, ...selectedFiles]);
+
+    if (validFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...validFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
+  };
+
+  const handleClick = () => {
+    console.log("🔥 VIDEO DROP AREA CLICKED");
+    if (!loading && !uploading && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   const removeFile = (index) => {
@@ -449,21 +506,15 @@ const VideoModal = ({ closeModal }) => {
                   ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
                   : "cursor-pointer border-gray-700"
               }`}
-              onClick={() =>
-                !loading && !uploading && inputRef.current?.click()
-              }
-              onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={loading || uploading ? undefined : handleDragOver}
-              onDragEnter={loading || uploading ? undefined : handleDragEnter}
-              onDragLeave={loading || uploading ? undefined : handleDragLeave}
+              onClick={handleClick}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              style={{ minHeight: "280px", width: "100%", zIndex: 10 }}
             >
-              <p className="text-sm">
-                {isDragOver
-                  ? "Drop your video here!"
-                  : "Choose a file or drop it here (optional)"}
-              </p>
               <input
-                ref={inputRef}
+                ref={fileInputRef}
                 type="file"
                 accept="video/*"
                 multiple
@@ -471,6 +522,11 @@ const VideoModal = ({ closeModal }) => {
                 onChange={handleFileSelect}
                 disabled={loading || uploading}
               />
+              <p className="text-sm">
+                {isDragOver
+                  ? "Drop your video files here!"
+                  : "Choose files or drop them here (optional)"}
+              </p>
             </div>
             {files.length > 0 && (
               <div className="rounded-lg p-4">
