@@ -8,6 +8,7 @@ import Switch from "../../components/ui/Switch";
 import InfoModal from "../../components/ui/InfoModal";
 import { AnimatePresence, motion } from "framer-motion";
 import SuccessModal from "../../components/ui/SuccessModal";
+// Removed react-dropzone - using native HTML5 drag and drop
 
 const initialState = {
   title: "",
@@ -78,7 +79,7 @@ const ImageModal = ({ closeModal }) => {
   const [uploading, setUploading] = useState(false);
   const [extraSecure, setExtraSecure] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const inputRef = useRef(null);
+  // inputRef removed - using react-dropzone's input
   const { create, loading } = useLinksContext();
   const [viewsOpen, setViewsOpen] = useState(false);
   const [expiryOpen, setExpiryOpen] = useState(false);
@@ -86,7 +87,97 @@ const ImageModal = ({ closeModal }) => {
   const expiryBtnRef = useRef(null);
   const [viewsWidth, setViewsWidth] = useState(undefined);
   const [expiryWidth, setExpiryWidth] = useState(undefined);
-  const [isDragOver, setIsDragOver] = useState(false);
+  // Debug: Monitor files state changes
+  useEffect(() => {
+    console.log("🔥 Files state updated:", files);
+  }, [files]);
+
+  // Native HTML5 drag and drop state
+  const [isDragActive, setIsDragActive] = useState(false);
+  const fileInputRef = useRef(null);
+
+  // Native drag and drop handlers
+  const handleDragEnter = (e) => {
+    console.log("🔥 NATIVE DRAG ENTER");
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  };
+
+  const handleDragOver = (e) => {
+    console.log("🔥 NATIVE DRAG OVER");
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e) => {
+    console.log("🔥 NATIVE DRAG LEAVE");
+    e.preventDefault();
+    e.stopPropagation();
+    // Only set to false if we're leaving the drop area completely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    console.log("🔥 NATIVE DROP EVENT!");
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    console.log("🔥 Dropped files:", droppedFiles);
+
+    // Filter for image files
+    const imageFiles = droppedFiles.filter((file) =>
+      file.type.startsWith("image/")
+    );
+
+    console.log("🔥 Image files:", imageFiles);
+
+    if (imageFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...imageFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    console.log("🔥 FILE INPUT CHANGE");
+    const selectedFiles = Array.from(e.target.files);
+    console.log("🔥 Selected files:", selectedFiles);
+
+    if (selectedFiles.length > 0) {
+      setFiles((prev) => {
+        const newFiles = [...prev, ...selectedFiles];
+        console.log("🔥 New files state:", newFiles);
+        return newFiles;
+      });
+    }
+  };
+
+  const handleClick = () => {
+    console.log("🔥 DROP AREA CLICKED");
+    if (!loading && !uploading && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Debug: Log component mount
+  useEffect(() => {
+    console.log("🔥 ImageModal mounted");
+    console.log("🔥 Loading state:", loading);
+    console.log("🔥 Uploading state:", uploading);
+    console.log("🔥 File input ref:", fileInputRef.current);
+  }, []);
+
+  // Debug: Track isDragActive changes
+  useEffect(() => {
+    console.log("🔥 isDragActive changed:", isDragActive);
+  }, [isDragActive]);
 
   useEffect(() => {
     if (viewsBtnRef.current) {
@@ -111,37 +202,26 @@ const ImageModal = ({ closeModal }) => {
     };
   }, [successLink]);
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(false);
-    const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
-      file.type.startsWith("image/")
-    );
-    setFiles((prev) => [...prev, ...droppedFiles]);
-  };
+  // Global drag prevention - prevent browser from opening files
+  useEffect(() => {
+    const preventDefaults = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+    // Only prevent defaults on the document, not on our drop area
+    document.addEventListener("dragover", preventDefaults, false);
+    document.addEventListener("drop", preventDefaults, false);
 
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(true);
-  };
+    return () => {
+      document.removeEventListener("dragover", preventDefaults, false);
+      document.removeEventListener("drop", preventDefaults, false);
+    };
+  }, []);
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(false);
-  };
+  // Old drag handlers removed - now using react-dropzone
 
-  const handleFileSelect = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setFiles((prev) => [...prev, ...selectedFiles]);
-  };
+  // handleFileSelect removed - now using react-dropzone
 
   const removeFile = (index) => {
     const newFiles = [...files];
@@ -270,10 +350,6 @@ const ImageModal = ({ closeModal }) => {
           ? "bg-[#2A2A2E] border border-gray-700 shadow-lg"
           : "bg-[#2A2A2E]/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       }`}
-      onDragOver={handleDragOver}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
     >
       {/* Cyan gradient circles - only on desktop */}
       {window.innerWidth >= 768 && (
@@ -480,25 +556,19 @@ const ImageModal = ({ closeModal }) => {
               className={`flex flex-col items-center justify-center bg-[#232326] text-gray-400 text-center transition-all duration-300 w-full h-full min-h-[280px] border-2 border-dashed rounded-md ${
                 loading || uploading
                   ? "cursor-not-allowed opacity-50 border-gray-700"
-                  : isDragOver
+                  : isDragActive
                   ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
                   : "cursor-pointer border-gray-700"
               }`}
-              onClick={() =>
-                !loading && !uploading && inputRef.current?.click()
-              }
-              onDrop={loading || uploading ? undefined : handleDrop}
-              onDragOver={loading || uploading ? undefined : handleDragOver}
-              onDragEnter={loading || uploading ? undefined : handleDragEnter}
-              onDragLeave={loading || uploading ? undefined : handleDragLeave}
+              onClick={handleClick}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              style={{ minHeight: "280px", width: "100%", zIndex: 10 }}
             >
-              <p className="text-sm">
-                {isDragOver
-                  ? "Drop your image here!"
-                  : "Choose a file or drop it here (optional)"}
-              </p>
               <input
-                ref={inputRef}
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 multiple
@@ -506,6 +576,11 @@ const ImageModal = ({ closeModal }) => {
                 onChange={handleFileSelect}
                 disabled={loading || uploading}
               />
+              <p className="text-sm">
+                {isDragActive
+                  ? "Drop your images here!"
+                  : "Choose files or drop them here (optional)"}
+              </p>
             </div>
             {files.length > 0 && (
               <div className="rounded-lg p-4">
