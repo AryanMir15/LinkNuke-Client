@@ -6,6 +6,7 @@ import { useSession } from "../context/useSession.jsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Sparkles } from "lucide-react";
 import posthog from "../lib/posthog.js";
+import toast from "react-hot-toast";
 
 const tiers = [
   {
@@ -93,16 +94,29 @@ export default function PricingSection() {
       const storedUser = localStorage.getItem("user");
       const token = localStorage.getItem("token");
       if (!storedUser || !token) {
-        // Redirect to register for Free tier, pricing for others
-        if (tier.name === "Free") {
+        // Show toast notification for unauthenticated users
+        toast.error(
+          "You must be logged in to purchase a plan. Please sign up or log in first.",
+          {
+            duration: 5000,
+            style: {
+              background: "#dc2626",
+              color: "#fff",
+              border: "1px solid #ef4444",
+              borderRadius: "12px",
+              boxShadow: "0 10px 25px rgba(220, 38, 38, 0.3)",
+            },
+            icon: "🔒",
+          }
+        );
+
+        setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
+
+        // Redirect to register after a short delay to show the toast
+        setTimeout(() => {
           window.location.href = "/register";
-          setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
-          return;
-        } else {
-          window.location.href = `/pricing?trial=${tier.name.toLowerCase()}`;
-          setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
-          return;
-        }
+        }, 1000);
+        return;
       }
 
       const response = await axios.post(
@@ -125,9 +139,40 @@ export default function PricingSection() {
         timestamp: new Date().toISOString(),
       });
 
-      window.location.href = response.data.checkoutUrl;
+      // Show success toast before redirecting
+      toast.success(`Redirecting to ${tier.name} checkout...`, {
+        duration: 3000,
+        style: {
+          background: "#059669",
+          color: "#fff",
+          border: "1px solid #10b981",
+          borderRadius: "12px",
+          boxShadow: "0 10px 25px rgba(5, 150, 105, 0.3)",
+        },
+        icon: "🚀",
+      });
+
+      // Small delay to show the toast before redirect
+      setTimeout(() => {
+        window.location.href = response.data.checkoutUrl;
+      }, 500);
     } catch (err) {
-      setError("Failed to initiate payment. Please try again.");
+      const errorMessage = "Failed to initiate payment. Please try again.";
+      setError(errorMessage);
+
+      // Show error toast
+      toast.error(errorMessage, {
+        duration: 4000,
+        style: {
+          background: "#dc2626",
+          color: "#fff",
+          border: "1px solid #ef4444",
+          borderRadius: "12px",
+          boxShadow: "0 10px 25px rgba(220, 38, 38, 0.3)",
+        },
+        icon: "❌",
+      });
+
       posthog.capture("payment_error", {
         error: err.message,
         tier: tier.name,
