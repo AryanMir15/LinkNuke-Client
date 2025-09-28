@@ -94,11 +94,22 @@ export default function PricingSection() {
       const storedUser = localStorage.getItem("user");
       const token = localStorage.getItem("token");
       if (!storedUser || !token) {
-        // Show toast notification for unauthenticated users
+        // Show toast notification for unauthenticated users with clickable link
         toast.error(
-          "You must be logged in to purchase a plan. Please sign up or log in first.",
+          (t) => (
+            <div className="flex items-center space-x-2">
+              <span>🔒 You must be logged in to purchase a plan. </span>
+              <Link
+                to="/register"
+                className="text-white underline hover:text-gray-200 transition-colors"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                Click here to register
+              </Link>
+            </div>
+          ),
           {
-            duration: 5000,
+            duration: 8000,
             style: {
               background: "#dc2626",
               color: "#fff",
@@ -106,16 +117,10 @@ export default function PricingSection() {
               borderRadius: "12px",
               boxShadow: "0 10px 25px rgba(220, 38, 38, 0.3)",
             },
-            icon: "🔒",
           }
         );
 
         setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
-
-        // Redirect to register after a short delay to show the toast
-        setTimeout(() => {
-          window.location.href = "/register";
-        }, 1000);
         return;
       }
 
