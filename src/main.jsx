@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Toaster
           position="top-center"
           reverseOrder={false}
+          closeButton={false}
           toastOptions={{
             duration: 4000,
             style: {
