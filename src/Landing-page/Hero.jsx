@@ -8,6 +8,9 @@ const Hero = () => {
     typeof window !== "undefined" && localStorage.getItem("token");
 
   useEffect(() => {
+    // Only create cursor trail on laptop screens and above (1024px+)
+    if (window.innerWidth < 1024) return;
+
     // Create custom cursor trail
     const trail = document.createElement("div");
     trail.className = "custom-cursor-trail";
@@ -53,9 +56,21 @@ const Hero = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     animateTrail();
 
+    // Handle resize to show/hide cursor trail
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        if (trail.parentNode) trail.parentNode.removeChild(trail);
+      } else if (!document.querySelector(".custom-cursor-trail")) {
+        document.body.appendChild(trail);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
     return () => {
       document.removeEventListener("mousemove", updateTrail);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
       if (trail.parentNode) trail.parentNode.removeChild(trail);
     };
   }, []);
@@ -76,18 +91,8 @@ const Hero = () => {
         role="banner"
         aria-label="LinkNuke - Secure Self-Destructing Links Hero Section"
       >
-        {/* Glassmorphic Green Block */}
-        <div className="absolute inset-0 bg-black">
-          <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(29, 228, 191, 0.15) 0%, rgba(11, 243, 162, 0.08) 50%, transparent 70%)",
-              filter: "blur(60px)",
-              backdropFilter: "blur(20px)",
-            }}
-          />
-        </div>
+        {/* Background */}
+        <div className="absolute inset-0 bg-black" />
         <div className="mx-auto max-w-4xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
           <div className="flex flex-col items-center text-center">
             {/* MAIN HEADLINE */}
@@ -115,7 +120,7 @@ const Hero = () => {
                   <Link
                     to="/dashboard"
                     onClick={() => handleCTAClick("go_to_dashboard")}
-                    className="group relative inline-flex items-center justify-center text-lg rounded-xl bg-gray-900 px-12 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     title="dashboard"
                   >
                     Go to Dashboard
@@ -144,7 +149,7 @@ const Hero = () => {
                   <Link
                     to="/register"
                     onClick={() => handleCTAClick("start_sharing_securely")}
-                    className="group relative inline-flex items-center justify-center text-lg rounded-xl bg-gray-900 px-12 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     title="payment"
                   >
                     Get Started For Free
@@ -279,7 +284,7 @@ const Hero = () => {
           scroll-padding-top: 80px;
         }
 
-        /* Custom cursor trail */
+        /* Custom cursor trail - only on laptop screens and above */
         .custom-cursor-trail {
           position: fixed;
           width: 8px;
@@ -291,6 +296,13 @@ const Hero = () => {
           opacity: 0.8;
           transition: transform 0.15s ease-out;
           box-shadow: 0 0 10px rgba(29, 228, 191, 0.5);
+        }
+
+        /* Hide cursor trail on screens below laptop (1024px) */
+        @media (max-width: 1023px) {
+          .custom-cursor-trail {
+            display: none !important;
+          }
         }
       `}</style>
     </main>

@@ -156,20 +156,33 @@ export default function Navbar() {
                     Dashboard
                   </Link>
                 ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="text-xs text-gray-300 hover:text-[#1de4bf]"
-                    >
-                      Log in
-                    </Link>
+                  <div className="relative inline-flex items-center justify-center gap-4 group">
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <Link
                       to="/register"
-                      className="text-xs px-3 py-1.5 rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
+                      className="group relative inline-flex items-center justify-center text-xs rounded-xl bg-gray-900 px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                      title="register"
                     >
-                      Sign up
+                      Get Started
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 10 10"
+                        height={10}
+                        width={10}
+                        fill="none"
+                        className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                      >
+                        <path
+                          d="M0 5h7"
+                          className="transition opacity-0 group-hover:opacity-100"
+                        />
+                        <path
+                          d="M1 1l4 4-4 4"
+                          className="transition group-hover:translate-x-[3px]"
+                        />
+                      </svg>
                     </Link>
-                  </>
+                  </div>
                 )}
                 <button
                   className="text-gray-300 text-lg ml-1"
@@ -201,6 +214,14 @@ export default function Navbar() {
           >
             Pricing
           </button>
+          {!isLoggedIn && (
+            <Link
+              to="/login"
+              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
+            >
+              Log in
+            </Link>
+          )}
         </div>
       )}
     </header>
