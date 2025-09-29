@@ -281,7 +281,7 @@ export default function PricingSection() {
               // Card styling based on your provided design
               background:
                 tier.name === "Pro"
-                  ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.18), #0c0d0d)"
+                  ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.12), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                   : tier.name === "Lifetime"
                   ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                   : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
@@ -291,30 +291,6 @@ export default function PricingSection() {
             }}
           >
             {/* Animated dots - Only on Pro card and desktop */}
-            {tier.featured && !isMobile && (
-              <>
-                {/* Dot 1 - Top-left, clockwise */}
-                <div
-                  className="absolute w-1 h-1 bg-white rounded-full z-20"
-                  style={{
-                    left: "15%",
-                    top: "15%",
-                    boxShadow: "0 0 10px #ffffff",
-                    animation: "moveDot 6s linear infinite",
-                  }}
-                />
-                {/* Dot 2 - Top-right, counter-clockwise */}
-                <div
-                  className="absolute w-1 h-1 bg-white rounded-full z-20"
-                  style={{
-                    right: "15%",
-                    top: "15%",
-                    boxShadow: "0 0 10px #ffffff",
-                    animation: "moveDotReverse 6s linear infinite",
-                  }}
-                />
-              </>
-            )}
 
             {/* Card content */}
             <div
@@ -325,7 +301,7 @@ export default function PricingSection() {
               style={{
                 background:
                   tier.name === "Pro"
-                    ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.18), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.18), #0c0d0d)"
+                    ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.12), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                     : tier.name === "Lifetime"
                     ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                     : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
@@ -546,46 +522,6 @@ export default function PricingSection() {
       {/* CSS for animations - Only load on desktop */}
       {!isMobile && (
         <style jsx="true">{`
-          @keyframes moveDot {
-            0%,
-            100% {
-              top: 15%;
-              left: 15%;
-            }
-            25% {
-              top: 15%;
-              left: calc(100% - 15%);
-            }
-            50% {
-              top: calc(100% - 15%);
-              left: calc(100% - 15%);
-            }
-            75% {
-              top: calc(100% - 15%);
-              left: 15%;
-            }
-          }
-
-          @keyframes moveDotReverse {
-            0%,
-            100% {
-              top: 15%;
-              right: 15%;
-            }
-            25% {
-              top: calc(100% - 15%);
-              right: 15%;
-            }
-            50% {
-              top: calc(100% - 15%);
-              right: calc(100% - 15%);
-            }
-            75% {
-              top: 15%;
-              right: calc(100% - 15%);
-            }
-          }
-
           .button-wrapper:hover .text-wrapper {
             transform: translateY(-100%);
             opacity: 0;
