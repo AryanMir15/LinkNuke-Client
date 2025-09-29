@@ -1,26 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Play } from "lucide-react";
 
 const Preview = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    const element = document.getElementById("preview");
-    if (element) observer.observe(element);
-
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, []);
 
   return (
     <section
@@ -54,11 +35,7 @@ const Preview = () => {
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         {/* Header Section */}
-        <div
-          className={`text-center mb-16 sm:mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="text-center mb-16 sm:mb-20">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             See LinkNuke in
             <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
@@ -74,11 +51,7 @@ const Preview = () => {
         </div>
 
         {/* Video Placeholder Section */}
-        <div
-          className={`transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div>
           <div className="relative max-w-6xl mx-auto">
             {/* Video Container - Built to fit video dimensions */}
             <div className="relative w-full rounded-2xl border border-gray-400/20 overflow-hidden shadow-2xl">

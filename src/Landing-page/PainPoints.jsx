@@ -86,26 +86,7 @@ const solutions = [
 ];
 
 function PainPoints() {
-  const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("problems");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const element = document.getElementById("pain-points");
-    if (element) observer.observe(element);
-
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, []);
 
   return (
     <section
@@ -128,11 +109,7 @@ function PainPoints() {
       <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/20" />
       <div className="relative max-w-6xl mx-auto z-10">
         {/* Header */}
-        <div
-          className={`text-center mb-16 sm:mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="text-center mb-16 sm:mb-20">
           <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6">
             <AlertTriangle className="h-4 w-4 mr-2" />
             The Problem
@@ -178,13 +155,7 @@ function PainPoints() {
         {/* Desktop Side-by-Side Layout */}
         <div className="hidden sm:grid sm:grid-cols-2 gap-8 lg:gap-12">
           {/* Problems Side */}
-          <div
-            className={`transition-all duration-700 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-8"
-            }`}
-          >
+          <div>
             <div className="relative bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
               {/* Subtle Grid Pattern Overlay */}
               <div
@@ -224,13 +195,7 @@ function PainPoints() {
           </div>
 
           {/* Solutions Side */}
-          <div
-            className={`transition-all duration-700 delay-200 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-8"
-            }`}
-          >
+          <div>
             <div className="relative bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-8 lg:p-10 backdrop-blur-sm">
               {/* Subtle Grid Pattern Overlay */}
               <div
@@ -273,13 +238,7 @@ function PainPoints() {
         {/* Mobile Single Column Layout */}
         <div className="sm:hidden">
           {activeTab === "problems" && (
-            <div
-              className={`transition-all duration-500 ${
-                isVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-8"
-              }`}
-            >
+            <div>
               <div className="relative bg-gradient-to-br from-red-500/5 to-red-600/5 border border-red-500/20 rounded-2xl p-6 backdrop-blur-sm">
                 {/* Subtle Grid Pattern Overlay */}
                 <div
@@ -319,13 +278,7 @@ function PainPoints() {
           )}
 
           {activeTab === "solutions" && (
-            <div
-              className={`transition-all duration-500 ${
-                isVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-8"
-              }`}
-            >
+            <div>
               <div className="relative bg-gradient-to-br from-green-500/5 to-green-600/5 border border-green-500/20 rounded-2xl p-6 backdrop-blur-sm">
                 {/* Subtle Grid Pattern Overlay */}
                 <div
@@ -368,11 +321,7 @@ function PainPoints() {
         </div>
 
         {/* Bottom CTA */}
-        <div
-          className={`text-center mt-16 sm:mt-20 transition-all duration-700 delay-500 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="text-center mt-16 sm:mt-20">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 text-green-400 text-sm font-medium">
             <Shield className="h-4 w-4 mr-2" />
             Secure by Design

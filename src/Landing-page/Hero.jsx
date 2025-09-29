@@ -1,11 +1,64 @@
 import { Link } from "react-router-dom";
 import ShineButton from "../components/ui/ShineButton";
-import { GridBackground } from "../components/ui/grid-background";
 import { trackEvent } from "../lib/analytics";
+import { useEffect } from "react";
 
 const Hero = () => {
   const isLoggedIn =
     typeof window !== "undefined" && localStorage.getItem("token");
+
+  useEffect(() => {
+    // Create custom cursor trail
+    const trail = document.createElement("div");
+    trail.className = "custom-cursor-trail";
+    document.body.appendChild(trail);
+
+    let mouseX = 0,
+      mouseY = 0;
+    let trailX = 0,
+      trailY = 0;
+
+    const updateTrail = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const animateTrail = () => {
+      trailX += (mouseX - trailX) * 0.05;
+      trailY += (mouseY - trailY) * 0.05;
+
+      trail.style.left = trailX - 4 + "px";
+      trail.style.top = trailY - 4 + "px";
+
+      requestAnimationFrame(animateTrail);
+    };
+
+    // Speed-capped scroll behavior
+    let isScrolling = false;
+    let scrollTimeout;
+
+    const handleScroll = () => {
+      if (!isScrolling) {
+        isScrolling = true;
+        document.body.style.scrollBehavior = "smooth";
+      }
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
+    };
+
+    document.addEventListener("mousemove", updateTrail);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    animateTrail();
+
+    return () => {
+      document.removeEventListener("mousemove", updateTrail);
+      window.removeEventListener("scroll", handleScroll);
+      if (trail.parentNode) trail.parentNode.removeChild(trail);
+    };
+  }, []);
 
   const handleCTAClick = (action) => {
     trackEvent("hero_cta_clicked", {
@@ -23,116 +76,118 @@ const Hero = () => {
         role="banner"
         aria-label="LinkNuke - Secure Self-Destructing Links Hero Section"
       >
-      <GridBackground
-        className="bg-black"
-        gridSize="4:4"
-        colors={{
-          background: "bg-black",
-          borderColor: "border-gray-900/10",
-          borderSize: "1px",
-        }}
-        beams={{
-          count: 3,
-          speed: 8,
-          colors: ["bg-gray-600/20", "bg-gray-500/15", "bg-gray-400/10"],
-          shadow: "shadow-sm shadow-gray-500/10 rounded-full",
-        }}
-      >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-            {/* LEFT SIDE - TEXT CONTENT */}
-            <div className="lg:pt-4 lg:pr-8">
-              <div className="lg:max-w-lg">
-                <div className="text-white space-y-8">
-                  <div className="space-y-6">
-                    <h1 className="font-semibold text-[48px] sm:text-[56px] lg:text-[64px] leading-tight tracking-tight">
-                      One-Time Links That
-                      <br />
-                      <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
-                        Self-Destruct
-                      </span>
-                    </h1>
+        {/* Glassmorphic Green Block */}
+        <div className="absolute inset-0 bg-black">
+          <div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(29, 228, 191, 0.15) 0%, rgba(11, 243, 162, 0.08) 50%, transparent 70%)",
+              filter: "blur(60px)",
+              backdropFilter: "blur(20px)",
+            }}
+          />
+        </div>
+        <div className="mx-auto max-w-4xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
+          <div className="flex flex-col items-center text-center">
+            {/* MAIN HEADLINE */}
+            <div className="space-y-8 mb-8">
+              <h1 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
+                One-Time Links That
+                <br />
+                <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
+                  Self-Destruct
+                </span>
+              </h1>
 
-                    <p className="text-lg sm:text-xl text-gray-300 leading-relaxed w-full max-w-[28rem] sm:max-w-[32rem] break-words font-normal">
-                      Share sensitive files and links that automatically delete
-                      themselves after being viewed. Complete privacy, zero
-                      traces left behind.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row flex-nowrap gap-4 pt-4">
-                    {isLoggedIn ? (
-                      <Link
-                        to="/dashboard"
-                        onClick={() => handleCTAClick("go_to_dashboard")}
-                        className="group relative bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-[#1de4bf] focus:ring-offset-2 transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl flex items-center justify-center shine-button"
-                      >
-                        <span className="relative z-10">Go to Dashboard</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0bf3a2] to-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </Link>
-                    ) : (
-                      <>
-                        <Link
-                          to="/register"
-                          onClick={() =>
-                            handleCTAClick("start_sharing_securely")
-                          }
-                          className="inline-flex w-full sm:w-auto"
-                        >
-                          <ShineButton
-                            size="lg"
-                            label="Start Sharing Securely"
-                            className="px-8 py-4 rounded-full w-full sm:w-auto shine-button"
-                            bgColor="linear-gradient(325deg, hsl(160 84% 39%) 0%, hsl(174 84% 40%) 55%, hsl(160 84% 39%) 90%)"
-                          />
-                        </Link>
-                        <Link
-                          to="/login"
-                          onClick={() => handleCTAClick("sign_in")}
-                          className="group relative bg-transparent text-white border-2 border-white/30 font-medium px-8 py-4 rounded-full text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 transition-all duration-300 hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl inline-flex items-center justify-center min-h-[44px] w-full sm:w-auto"
-                        >
-                          Sign In
-                        </Link>
-                      </>
-                    )}
-                  </div>
-
-                  <div className="text-sm text-gray-400 font-normal">
-                    No credit card required. Get started for free.
-                  </div>
-                </div>
-              </div>
+              <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto font-thin">
+                Share sensitive files and links that automatically delete
+                themselves after being viewed. Complete privacy, zero traces
+                left behind.
+              </p>
             </div>
 
-            {/* RIGHT SIDE - DASHBOARD IMAGE */}
-            <img
-              src="/dashboard.png"
-              alt="LinkNuke Dashboard"
-              className="w-3xl max-w-md md:max-w-none rounded-xl shadow-lg ring-1 ring-white/5 sm:w-228 md:-ml-4 lg:-ml-0 lg:w-[120%] lg:-mr-16 xl:w-[135%] xl:-mr-28"
-              style={{
-                filter: "drop-shadow(0 8px 16px rgba(29, 228, 191, 0.08))",
-                boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
-              }}
-            />
+            {/* CTA BUTTON */}
+            <div className="mb-32">
+              {isLoggedIn ? (
+                <div className="relative inline-flex items-center justify-center gap-4 group">
+                  <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                  <Link
+                    to="/dashboard"
+                    onClick={() => handleCTAClick("go_to_dashboard")}
+                    className="group relative inline-flex items-center justify-center text-lg rounded-xl bg-gray-900 px-12 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    title="dashboard"
+                  >
+                    Go to Dashboard
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 10 10"
+                      height={10}
+                      width={10}
+                      fill="none"
+                      className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                    >
+                      <path
+                        d="M0 5h7"
+                        className="transition opacity-0 group-hover:opacity-100"
+                      />
+                      <path
+                        d="M1 1l4 4-4 4"
+                        className="transition group-hover:translate-x-[3px]"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              ) : (
+                <div className="relative inline-flex items-center justify-center gap-4 group">
+                  <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                  <Link
+                    to="/register"
+                    onClick={() => handleCTAClick("start_sharing_securely")}
+                    className="group relative inline-flex items-center justify-center text-lg rounded-xl bg-gray-900 px-12 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    title="payment"
+                  >
+                    Get Started For Free
+                    <svg
+                      aria-hidden="true"
+                      viewBox="0 0 10 10"
+                      height={10}
+                      width={10}
+                      fill="none"
+                      className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                    >
+                      <path
+                        d="M0 5h7"
+                        className="transition opacity-0 group-hover:opacity-100"
+                      />
+                      <path
+                        d="M1 1l4 4-4 4"
+                        className="transition group-hover:translate-x-[3px]"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* DASHBOARD IMAGE */}
+            <div className="w-full max-w-5xl scale-[1.3]">
+              <img
+                src="/dashboard.png"
+                alt="LinkNuke Dashboard"
+                className="w-full rounded-2xl shadow-2xl ring-1 ring-white/10"
+                style={{
+                  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
+                }}
+              />
+            </div>
           </div>
         </div>
-      </GridBackground>
       </section>
-    </main>
 
-      {/* CSS for mobile optimizations */}
+      {/* CSS for mobile optimizations and custom cursor */}
       <style jsx="true">{`
-        /* Reduce particles to 3 on mobile */
-        @media (max-width: 768px) {
-          [data-slot="grid-background"] [class*="animate-"] {
-            display: none !important;
-          }
-          [data-slot="grid-background"] [class*="animate-"]:nth-child(-n + 3) {
-            display: block !important;
-          }
-        }
-
-        /* CTA button shine effect only - no cart animation */
+        /* CTA button shine effect */
         .shine-button {
           position: relative;
           overflow: hidden;
@@ -157,7 +212,88 @@ const Hero = () => {
         .shine-button:hover::before {
           left: 100%;
         }
+
+        /* Capped slow smooth scroll */
+        html {
+          scroll-behavior: smooth;
+          scroll-padding-top: 80px;
+          scroll-timeline: auto;
+          scroll-snap-type: none;
+        }
+
+        * {
+          scroll-behavior: smooth;
+        }
+
+        /* Speed-capped smooth scroll */
+        @media (prefers-reduced-motion: no-preference) {
+          html {
+            scroll-behavior: smooth;
+            scroll-timeline: auto;
+            scroll-snap-type: none;
+            /* Cap scroll speed */
+            scroll-snap-align: none;
+          }
+
+          body {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            /* Limit scroll velocity */
+            scroll-snap-type: none;
+          }
+
+          /* ULTRA slow speed limiting */
+          * {
+            scroll-behavior: smooth;
+            transition: scroll-behavior 1.8s
+              cubic-bezier(0.05, 0.15, 0.25, 0.95);
+            scroll-snap-type: none;
+          }
+        }
+
+        /* Capped scroll with custom easing */
+        @supports (scroll-behavior: smooth) {
+          html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+            scroll-snap-type: none;
+            /* Speed cap */
+            scroll-snap-align: none;
+          }
+
+          * {
+            scroll-behavior: smooth;
+            scroll-timeline: auto;
+            /* Custom slow easing */
+            transition: scroll-behavior 0.5s
+              cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+        }
+
+        /* Additional speed capping */
+        html,
+        body {
+          scroll-behavior: smooth;
+          scroll-snap-type: none;
+          /* Limit maximum scroll speed */
+          scroll-padding-top: 80px;
+        }
+
+        /* Custom cursor trail */
+        .custom-cursor-trail {
+          position: fixed;
+          width: 8px;
+          height: 8px;
+          background: #1de4bf;
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9999;
+          opacity: 0.8;
+          transition: transform 0.15s ease-out;
+          box-shadow: 0 0 10px rgba(29, 228, 191, 0.5);
+        }
       `}</style>
+    </main>
   );
 };
 

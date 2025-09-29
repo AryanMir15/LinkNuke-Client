@@ -1,25 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Features = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const element = document.getElementById("features");
-    if (element) observer.observe(element);
-
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, []);
 
   return (
     <section
@@ -52,11 +33,7 @@ const Features = () => {
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         {/* Header Section */}
-        <div
-          className={`text-center mb-16 sm:mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="text-center mb-16 sm:mb-20">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             Why LinkNuke is
             <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
@@ -72,11 +49,7 @@ const Features = () => {
         </div>
 
         {/* Feature 1: Extra Secure Features */}
-        <div
-          className={`mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="mb-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
             <div className="relative order-2 lg:order-1">
@@ -108,11 +81,7 @@ const Features = () => {
         </div>
 
         {/* Feature 2: Link Management */}
-        <div
-          className={`transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div>
           <div className="space-y-8">
             {/* Text Content */}
             <div className="text-center space-y-6">

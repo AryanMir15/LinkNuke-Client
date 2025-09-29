@@ -65,7 +65,6 @@ function classNames(...classes) {
 }
 
 export default function PricingSection() {
-  const [isVisible, setIsVisible] = useState(false);
   const [loadingStates, setLoadingStates] = useState({
     Free: false,
     Pro: false,
@@ -221,21 +220,6 @@ export default function PricingSection() {
     }
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    const element = document.getElementById("pricing");
-    if (element) observer.observe(element);
-    return () => {
-      if (element) observer.unobserve(element);
-    };
-  }, []);
 
   return (
     <section
@@ -266,11 +250,7 @@ export default function PricingSection() {
 
       {/* Header */}
       <div className="relative mx-auto max-w-4xl text-center z-10">
-        <div
-          className={`transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div>
           <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-sm font-medium mb-4">
             <Sparkles className="h-4 w-4 mr-2" />
             Limited Time Offer
@@ -287,11 +267,7 @@ export default function PricingSection() {
       </div>
 
       {/* Cards */}
-      <div
-        className={`mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-3 transition-all duration-700 delay-200 z-10 relative ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        }`}
-      >
+      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-3 z-10 relative">
         {tiers.map((tier, index) => (
           <div
             key={tier.name}
