@@ -34,10 +34,10 @@ export default function FounderDashboardNote() {
             <Heart className="h-3 w-3 mr-2" />
             From the Founder
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why I Built LinkNuke
           </h2>
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-thin">
             A personal journey from frustration to innovation in digital
             privacy.
           </p>
@@ -60,10 +60,10 @@ export default function FounderDashboardNote() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Personal Mission
               </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white">
+              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
                 Hi, I'm the founder of LinkNuke
               </h3>
-              <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
+              <div className="space-y-4 text-gray-300 text-lg leading-relaxed font-thin">
                 <p>
                   I created LinkNuke because I was tired of seeing my personal
                   information scattered across the internet. Every time I shared
@@ -95,10 +95,10 @@ export default function FounderDashboardNote() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Future Vision
               </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white">
+              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
                 My Vision for the Future
               </h3>
-              <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
+              <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto font-thin">
                 I believe everyone deserves to share information without fear.
                 LinkNuke is just the beginning. I'm committed to building tools
                 that make privacy the default, not the exception.

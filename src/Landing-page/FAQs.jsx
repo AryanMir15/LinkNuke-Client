@@ -59,7 +59,7 @@ export default function Faq() {
     >
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#1de4bf]/10 via-black to-transparent opacity-40" />
 
-      <h2 className="text-4xl font-bold mb-10 text-center">
+      <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight mb-10 text-center text-white">
         Frequently Asked Questions
       </h2>
 
@@ -71,7 +71,7 @@ export default function Faq() {
         {faqData.map((item, index) => (
           <div key={index}>
             <AccordionItem value={`faq-${index}`}>
-              <AccordionTrigger className="text-left text-base sm:text-lg font-medium text-white hover:text-[#0bf3a2] focus:text-[#0bf3a2]">
+              <AccordionTrigger className="text-left text-base sm:text-lg font-thin text-white hover:text-[#0bf3a2] focus:text-[#0bf3a2]">
                 {item.q}
               </AccordionTrigger>
               <AccordionContent className="text-gray-300 text-sm sm:text-base leading-relaxed">

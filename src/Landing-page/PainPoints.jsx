@@ -115,7 +115,7 @@ function PainPoints() {
             The Problem
           </div>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why risky links put your
             <span className="bg-gradient-to-r from-red-400 to-red-600 text-transparent bg-clip-text">
               {" "}
@@ -123,7 +123,7 @@ function PainPoints() {
             </span>
           </h2>
 
-          <p className="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto font-thin">
             Here's what's wrong and how LinkNuke fixes it.
           </p>
         </div>
@@ -172,7 +172,9 @@ function PainPoints() {
                 <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
                   <AlertTriangle className="h-5 w-5 text-red-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white">The Problems</h3>
+                <h3 className="font-thin text-[24px] text-white">
+                  The Problems
+                </h3>
               </div>
 
               <div className="relative space-y-5">
@@ -212,7 +214,9 @@ function PainPoints() {
                 <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
                   <Check className="h-5 w-5 text-green-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white">The Solutions</h3>
+                <h3 className="font-thin text-[24px] text-white">
+                  The Solutions
+                </h3>
               </div>
 
               <div className="relative space-y-5">
@@ -255,7 +259,9 @@ function PainPoints() {
                   <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
                     <AlertTriangle className="h-5 w-5 text-red-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">The Problems</h3>
+                  <h3 className="font-thin text-[24px] text-white">
+                    The Problems
+                  </h3>
                 </div>
 
                 <div className="relative space-y-4">

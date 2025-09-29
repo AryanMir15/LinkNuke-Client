@@ -19,7 +19,7 @@ const TestimonialCard = ({ testimonial }) => (
     <p className="text-lg mb-4 italic leading-relaxed text-gray-300">
       “{testimonial.quote}”
     </p>
-    <h4 className="font-bold text-white">{testimonial.name}</h4>
+    <h4 className="font-thin text-white">{testimonial.name}</h4>
     <p className="text-sm text-gray-400">{testimonial.title}</p>
   </motion.div>
 );
@@ -60,7 +60,7 @@ export default function Testimonials() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#111111] to-[#0a0a0a]" />
 
       <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold tracking-tight">
+        <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
           Real People. Real Results.
         </h2>
         <p className="text-gray-400 text-sm mt-2 italic">

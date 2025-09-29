@@ -50,8 +50,8 @@ export default function MobileFeatures() {
   return (
     <section className="bg-black py-24 px-4 text-white" id="features">
       <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold tracking-tight mb-3">
-          Everything You Need. Nothing You Don’t.
+        <h2 className="font-thin text-[32px] sm:text-[40px] leading-tight tracking-tight mb-3 text-white">
+          Everything You Need. Nothing You Don't.
         </h2>
         <p className="text-gray-400 text-base">
           LinkNuke isn’t bloated. It’s the cleanest way to show off everything
@@ -64,7 +64,9 @@ export default function MobileFeatures() {
           <FadeInCard key={i}>
             <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5">
               <div className="mb-3 text-cyan-300">{item.icon}</div>
-              <h3 className="text-lg font-semibold mb-1">{item.title}</h3>
+              <h3 className="text-lg font-thin mb-1 text-white">
+                {item.title}
+              </h3>
               <p className="text-gray-400 text-sm">{item.desc}</p>
             </div>
           </FadeInCard>

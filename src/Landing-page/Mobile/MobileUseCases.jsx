@@ -30,7 +30,7 @@ export default function MobileUseCases() {
       <div className="absolute inset-0 bg-gradient-to-br from-purple-700/10 via-fuchsia-600/5 to-transparent blur-2xl -z-10" />
 
       <div className="max-w-2xl mx-auto text-center mb-16">
-        <h2 className="text-3xl font-bold mb-4 leading-snug">
+        <h2 className="font-thin text-[32px] sm:text-[40px] leading-tight tracking-tight mb-4 text-white">
           Built for creators. <br /> Powered by possibilities.
         </h2>
         <p className="text-gray-400 text-base">
@@ -49,7 +49,7 @@ export default function MobileUseCases() {
             <div className="mb-4 w-12 h-12 flex items-center justify-center bg-white/10 rounded-full shadow-inner shadow-black/30">
               {item.icon}
             </div>
-            <h4 className="text-lg font-semibold mb-1">{item.title}</h4>
+            <h4 className="text-lg font-thin mb-1 text-white">{item.title}</h4>
             <p className="text-sm text-gray-400">{item.desc}</p>
           </div>
         ))}

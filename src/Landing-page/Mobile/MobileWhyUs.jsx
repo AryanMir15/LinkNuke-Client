@@ -42,7 +42,7 @@ export default function MobileWhyUs() {
 
       {/* Heading */}
       <div className="text-center mb-14 max-w-xl mx-auto animate-fade-up">
-        <h2 className="text-3xl font-bold mb-3 leading-snug">
+        <h2 className="font-thin text-[32px] sm:text-[40px] leading-tight tracking-tight mb-3 text-white">
           Why creators choose
           <span className="block bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
             LinkNuke
@@ -62,7 +62,9 @@ export default function MobileWhyUs() {
             className="bg-white/5 border border-white/10 rounded-2xl backdrop-blur-md p-5"
           >
             <div className="text-3xl mb-3">{feature.icon}</div>
-            <h4 className="text-lg font-semibold mb-1">{feature.title}</h4>
+            <h4 className="text-lg font-thin mb-1 text-white">
+              {feature.title}
+            </h4>
             <p className="text-sm text-gray-400">{feature.desc}</p>
           </div>
         ))}

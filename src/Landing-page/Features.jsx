@@ -33,7 +33,7 @@ const Features = () => {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         {/* Header Section */}
         <div className="text-center mb-16 sm:mb-20">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why LinkNuke is
             <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
               {" "}
@@ -41,7 +41,7 @@ const Features = () => {
             </span>
           </h2>
 
-          <p className="text-base sm:text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto font-thin">
             Two core features that make LinkNuke the most secure and
             user-friendly file sharing solution.
           </p>
@@ -64,10 +64,10 @@ const Features = () => {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Enhanced Privacy
               </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white">
+              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
                 Extra Secure Features
               </h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
+              <p className="text-gray-300 text-lg leading-relaxed font-thin">
                 When enabled, we add basic browser-level protections to
                 discourage casual copying. Right-click is disabled, developer
                 tools are blocked, and print functions are disabled. While these
@@ -87,10 +87,10 @@ const Features = () => {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Complete Control
               </div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white">
+              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
                 Smart Link Management
               </h3>
-              <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto">
+              <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto font-thin">
                 Complete control over your shared links with real-time tracking,
                 view limits, and expiration settings. Monitor who accessed what,
                 when, and how many times. This is how grand our link management

@@ -13,11 +13,11 @@ export default function FinalCTA() {
   return (
     <section className="relative bg-black py-16 sm:py-24 px-6 text-white overflow-hidden rounded-2xl mt-12 mb-12">
       <div className="max-w-3xl mx-auto text-center relative z-10">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 tracking-tight leading-tight">
+        <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight mb-6">
           Send sensitive files without the fear of oversharing.
         </h2>
 
-        <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 max-w-xl mx-auto">
+        <p className="text-lg sm:text-xl text-gray-300 leading-relaxed mb-8 sm:mb-10 max-w-xl mx-auto font-thin">
           Stop your investor deck from getting leaked. Your data, your control,
           deleted forever after one view.
         </p>

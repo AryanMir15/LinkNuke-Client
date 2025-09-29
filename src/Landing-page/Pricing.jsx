@@ -255,11 +255,11 @@ export default function PricingSection() {
             Limited Time Offer
           </div>
           <h2 className="text-base font-semibold text-[#1de4bf]">Pricing</h2>
-          <p className="mt-2 text-5xl font-semibold tracking-tight sm:text-6xl">
+          <p className="mt-2 font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight">
             Choose the right plan for you
           </p>
         </div>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 sm:text-xl">
+        <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-gray-300 leading-relaxed font-thin">
           Choose an affordable plan that's packed with the best features for
           secure, self-destructing links.
         </p>
@@ -365,8 +365,8 @@ export default function PricingSection() {
                 <div className="space-y-3">
                   <h3
                     className={classNames(
-                      "font-bold text-white",
-                      tier.featured ? "text-3xl" : "text-2xl"
+                      "font-thin text-white",
+                      tier.featured ? "text-[32px]" : "text-[28px]"
                     )}
                   >
                     {tier.name}
@@ -376,8 +376,8 @@ export default function PricingSection() {
                     <div className="flex items-baseline justify-center gap-3">
                       <div
                         className={classNames(
-                          "font-bold",
-                          tier.featured ? "text-5xl" : "text-4xl"
+                          "font-thin",
+                          tier.featured ? "text-[48px]" : "text-[40px]"
                         )}
                         style={{
                           background:
