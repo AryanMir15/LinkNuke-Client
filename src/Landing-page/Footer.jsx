@@ -4,126 +4,81 @@ import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
-    <footer className="relative isolate bg-gradient-to-b from-black via-gray-950 to-black text-gray-300 pt-24 pb-12 px-6 lg:px-8">
-      {/* Lightweight Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#1de4bf]/3 to-transparent rounded-full blur-2xl"></div>
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-tl from-[#0bf3a2]/3 to-transparent rounded-full blur-2xl"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto">
+    <footer className="bg-black text-gray-300 py-12 px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-16 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Logo and Brand Section */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-4 mb-6">
-              <img src="/logo.svg" alt="LinkNuke Logo" className="w-12 h-12" />
-              <div className="relative">
-                <h3 className="font-bold text-2xl text-white">LinkNuke</h3>
-                {/* Wavy SVG Line */}
-                <svg
-                  viewBox="0 0 120 8"
-                  className="absolute -bottom-1 left-0 w-24 h-2 z-0"
-                  style={{ transform: "rotate(-1deg)" }}
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient
-                      id="linknuke-footer-underline"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop offset="0%" stopColor="#1de4bf" />
-                      <stop offset="100%" stopColor="#0bf3a2" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M5 4 Q 30 1, 60 4 T 115 4"
-                    fill="none"
-                    stroke="url(#linknuke-footer-underline)"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <img src="/logo.svg" alt="LinkNuke Logo" className="w-8 h-8" />
+              <h3 className="font-bold text-xl text-white">LinkNuke</h3>
             </div>
-            <p className="text-gray-300 text-lg leading-relaxed max-w-md mb-8">
-              Secure link-sharing built for privacy and control. Disappear your
-              links when you're done with enterprise-grade security.
+            <p className="text-gray-400 text-sm leading-relaxed mb-4">
+              Secure link-sharing built for privacy and control.
             </p>
-
-            {/* Social Links */}
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <a
                 href="https://x.com/Tanzeelmirr"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
-                className="w-12 h-12 bg-gray-800/50 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-[#1de4bf]/20 hover:border-[#1de4bf]/30 border border-gray-700/50 transition-all duration-300 group"
+                className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#1de4bf]/20 transition-colors"
               >
-                <Twitter className="w-5 h-5 text-gray-300 group-hover:text-[#1de4bf] transition-colors" />
+                <Twitter className="w-4 h-4 text-gray-300 hover:text-[#1de4bf]" />
               </a>
               <a
                 href="https://github.com/AryanMir15"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
-                className="w-12 h-12 bg-gray-800/50 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-[#1de4bf]/20 hover:border-[#1de4bf]/30 border border-gray-700/50 transition-all duration-300 group"
+                className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#1de4bf]/20 transition-colors"
               >
-                <Github className="w-5 h-5 text-gray-300 group-hover:text-[#1de4bf] transition-colors" />
+                <Github className="w-4 h-4 text-gray-300 hover:text-[#1de4bf]" />
               </a>
               <a
                 href="mailto:support@whynotship.me"
                 aria-label="Email"
-                className="w-12 h-12 bg-gray-800/50 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-[#1de4bf]/20 hover:border-[#1de4bf]/30 border border-gray-700/50 transition-all duration-300 group"
+                className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-[#1de4bf]/20 transition-colors"
               >
-                <Mail className="w-5 h-5 text-gray-300 group-hover:text-[#1de4bf] transition-colors" />
+                <Mail className="w-4 h-4 text-gray-300 hover:text-[#1de4bf]" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-white text-lg mb-6 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#1de4bf]" />
-              Product
-            </h4>
-            <ul className="space-y-4">
+            <h4 className="font-semibold text-white text-base mb-4">Product</h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/"
-                  className="text-gray-300 hover:text-[#1de4bf] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Home
                 </Link>
               </li>
               <li>
                 <a
                   href="#features"
-                  className="text-gray-300 hover:text-[#1de4bf] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Features
                 </a>
               </li>
               <li>
                 <a
                   href="#pricing"
-                  className="text-gray-300 hover:text-[#1de4bf] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Pricing
                 </a>
               </li>
               <li>
                 <a
                   href="#faqs"
-                  className="text-gray-300 hover:text-[#1de4bf] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   FAQs
                 </a>
               </li>
@@ -132,45 +87,30 @@ export default function Footer() {
 
           {/* Legal & Support */}
           <div>
-            <h4 className="font-semibold text-white text-lg mb-6 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-[#0bf3a2]" />
-              Support
-            </h4>
-            <ul className="space-y-4">
+            <h4 className="font-semibold text-white text-base mb-4">Support</h4>
+            <ul className="space-y-2">
               <li>
                 <Link
                   to="/privacy"
-                  className="text-gray-300 hover:text-[#0bf3a2] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#0bf3a2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link
                   to="/terms"
-                  className="text-gray-300 hover:text-[#0bf3a2] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#0bf3a2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Terms of Service
                 </Link>
               </li>
               <li>
                 <a
                   href="mailto:support@whynotship.me"
-                  className="text-gray-300 hover:text-[#0bf3a2] transition-colors duration-300 flex items-center gap-2 group"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  <span className="w-1 h-1 bg-[#0bf3a2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   Contact Support
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://whynotship.me"
-                  className="text-gray-300 hover:text-[#0bf3a2] transition-colors duration-300 flex items-center gap-2 group"
-                >
-                  <span className="w-1 h-1 bg-[#0bf3a2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                  WhyNotShip.me
                 </a>
               </li>
             </ul>
@@ -178,35 +118,26 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800/50 pt-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
+        <div className="border-t border-gray-800 pt-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
               <img
                 src="/logo.svg"
                 alt="LinkNuke"
-                className="w-8 h-8 opacity-60"
+                className="w-6 h-6 opacity-60"
               />
-              <span className="text-gray-400 text-sm">
+              <span className="text-gray-500 text-sm">
                 &copy; {new Date().getFullYear()} LinkNuke. All rights reserved.
               </span>
             </div>
-
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2 text-gray-400">
-                <span>Part of</span>
-                <a
-                  href="https://whynotship.me"
-                  className="font-medium text-[#0bf3a2] hover:underline transition-colors"
-                >
-                  WhyNotShip.me
-                </a>
-              </div>
-
-              <div className="hidden sm:flex items-center gap-2 text-gray-400">
-                <span>Secure your links</span>
-                <span className="text-[#1de4bf]">→</span>
-                <span className="text-white font-medium">LinkNuke</span>
-              </div>
+            <div className="text-gray-500 text-sm">
+              Part of{" "}
+              <a
+                href="https://whynotship.me"
+                className="text-[#1de4bf] hover:underline"
+              >
+                WhyNotShip.me
+              </a>
             </div>
           </div>
         </div>

@@ -313,20 +313,20 @@ export default function PricingSection() {
             >
               {/* Border lines - Behind content */}
               <div
-                className="absolute w-full h-px bg-gradient-to-r from-gray-500/30 to-gray-800/30"
-                style={{ top: "15%", zIndex: 1 }}
+                className="absolute h-px bg-gradient-to-r from-gray-500/30 to-gray-800/30"
+                style={{ top: "15%", left: "15%", right: "15%", zIndex: 1 }}
               />
               <div
-                className="absolute w-full h-px bg-gray-800/30"
-                style={{ bottom: "15%", zIndex: 1 }}
+                className="absolute h-px bg-gray-800/30"
+                style={{ bottom: "15%", left: "15%", right: "15%", zIndex: 1 }}
               />
               <div
-                className="absolute w-px h-full bg-gradient-to-b from-gray-500/30 to-gray-800/30"
-                style={{ left: "15%", zIndex: 1 }}
+                className="absolute w-px bg-gradient-to-b from-gray-500/30 to-gray-800/30"
+                style={{ left: "15%", top: "15%", bottom: "15%", zIndex: 1 }}
               />
               <div
-                className="absolute w-px h-full bg-gray-800/30"
-                style={{ right: "15%", zIndex: 1 }}
+                className="absolute w-px bg-gray-800/30"
+                style={{ right: "15%", top: "15%", bottom: "15%", zIndex: 1 }}
               />
 
               {/* Featured badge */}

@@ -6,10 +6,10 @@ const Features = () => {
       className="relative w-full py-24 sm:py-32 overflow-hidden"
       id="features"
     >
-      {/* Background with visible grid and adjusted fade ratio (60/40) */}
+      {/* Background with blackened grid */}
       <div className="absolute inset-0 bg-black" />
       <div
-        className="absolute inset-0 opacity-[0.15]"
+        className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(29, 228, 191, 0.3) 1px, transparent 1px),
@@ -19,14 +19,25 @@ const Features = () => {
         }}
       />
 
-      {/* Adjusted radial gradient for 60/40 ratio */}
+      {/* Increased grid opacity in specific areas */}
       <div
-        className="absolute inset-0 bg-white dark:bg-black"
+        className="absolute inset-0"
         style={{
-          maskImage:
-            "radial-gradient(ellipse at center, transparent 40%, black)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at center, transparent 40%, black)",
+          backgroundImage: `
+            linear-gradient(rgba(29, 228, 191, 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(29, 228, 191, 0.3) 1px, transparent 1px)
+          `,
+          backgroundSize: "40px 40px",
+          maskImage: `
+            radial-gradient(circle 300px at 85% 20%, black 0%, transparent 60%),
+            radial-gradient(circle 300px at 15% 80%, black 0%, transparent 60%),
+            radial-gradient(circle 300px at 15% 20%, black 0%, transparent 60%)
+          `,
+          WebkitMaskImage: `
+            radial-gradient(circle 300px at 85% 20%, black 0%, transparent 60%),
+            radial-gradient(circle 300px at 15% 80%, black 0%, transparent 60%),
+            radial-gradient(circle 300px at 15% 20%, black 0%, transparent 60%)
+          `,
         }}
       />
 
