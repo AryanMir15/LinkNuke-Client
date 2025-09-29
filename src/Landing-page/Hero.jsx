@@ -16,10 +16,13 @@ const Hero = () => {
   };
 
   return (
-    <section
-      className="relative isolate overflow-hidden min-h-[100dvh]"
-      id="home"
-    >
+    <main>
+      <section
+        className="relative isolate overflow-hidden min-h-[100dvh]"
+        id="home"
+        role="banner"
+        aria-label="LinkNuke - Secure Self-Destructing Links Hero Section"
+      >
       <GridBackground
         className="bg-black"
         gridSize="4:4"
@@ -114,6 +117,8 @@ const Hero = () => {
           </div>
         </div>
       </GridBackground>
+      </section>
+    </main>
 
       {/* CSS for mobile optimizations */}
       <style jsx="true">{`
@@ -153,7 +158,6 @@ const Hero = () => {
           left: 100%;
         }
       `}</style>
-    </section>
   );
 };
 

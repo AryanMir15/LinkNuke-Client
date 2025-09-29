@@ -21,6 +21,7 @@ import OAuthSuccess from "./components/OAuthSuccess";
 function App() {
   return (
     <div className="min-h-screen bg-white dark:bg-black">
+      {/* SEO: Main navigation */}
       <Navbar />
       <Routes>
         <Route

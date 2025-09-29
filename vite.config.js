@@ -9,9 +9,24 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
     sourcemap: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
-        manualChunks: undefined,
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          ui: ["@headlessui/react", "@heroicons/react", "framer-motion"],
+          utils: ["axios", "clsx", "tailwind-merge"],
+        },
+        chunkFileNames: "assets/js/[name]-[hash].js",
+        entryFileNames: "assets/js/[name]-[hash].js",
+        assetFileNames: "assets/[ext]/[name]-[hash].[ext]",
       },
     },
   },
@@ -23,5 +38,14 @@ export default defineConfig({
         secure: false,
       },
     },
+  },
+  // Performance optimizations
+  optimizeDeps: {
+    include: ["react", "react-dom", "react-router-dom"],
+  },
+  // Enable gzip compression hints
+  define: {
+    __VUE_OPTIONS_API__: false,
+    __VUE_PROD_DEVTOOLS__: false,
   },
 });
