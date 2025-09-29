@@ -153,60 +153,8 @@ export default function PricingSection() {
         timestamp: new Date().toISOString(),
       });
 
-      // Show modern success toast before redirecting
-      toast.success(
-        (t) => (
-          <div className="flex items-center space-x-3 p-1">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white">
-                Redirecting to {tier.name} checkout
-              </p>
-              <p className="text-xs text-green-200 mt-1">
-                Please wait while we prepare your payment
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          </div>
-        ),
-        {
-          duration: 3000,
-          style: {
-            background: "linear-gradient(135deg, #059669 0%, #047857 100%)",
-            color: "#fff",
-            border: "1px solid rgba(16, 185, 129, 0.3)",
-            borderRadius: "16px",
-            boxShadow:
-              "0 20px 40px rgba(5, 150, 105, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(10px)",
-            padding: "16px",
-            minWidth: "320px",
-          },
-        }
-      );
-
-      // Small delay to show the toast before redirect
-      setTimeout(() => {
-        window.location.href = response.data.checkoutUrl;
-      }, 500);
+      // Redirect immediately to checkout
+      window.location.href = response.data.checkoutUrl;
     } catch (err) {
       const errorMessage = "Failed to initiate payment. Please try again.";
       setError(errorMessage);
