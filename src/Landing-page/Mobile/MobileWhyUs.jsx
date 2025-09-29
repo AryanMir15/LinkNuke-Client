@@ -35,27 +35,6 @@ const features = [
 ];
 
 export default function MobileWhyUs() {
-  const gridRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target); // Only once
-        }
-      },
-      {
-        threshold: 0.2,
-      }
-    );
-
-    if (gridRef.current) observer.observe(gridRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section className="py-24 bg-black text-white px-6 relative overflow-hidden">
       {/* Background blur */}
@@ -75,15 +54,8 @@ export default function MobileWhyUs() {
         </p>
       </div>
 
-      {/* Cards grid with scroll-based reveal */}
-      <div
-        ref={gridRef}
-        className={`space-y-6 max-w-xl mx-auto transform transition-all duration-700 ${
-          isVisible
-            ? "opacity-100 translate-y-0 animate-fade-up-once"
-            : "opacity-0 translate-y-8"
-        }`}
-      >
+      {/* Cards grid */}
+      <div className="space-y-6 max-w-xl mx-auto">
         {features.map((feature, i) => (
           <div
             key={i}

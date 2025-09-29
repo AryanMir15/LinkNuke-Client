@@ -43,30 +43,7 @@ const features = [
 ];
 
 function FadeInCard({ children }) {
-  const ref = useRef();
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setShow(true);
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ease-out ${
-        show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-    >
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 }
 
 export default function MobileFeatures() {

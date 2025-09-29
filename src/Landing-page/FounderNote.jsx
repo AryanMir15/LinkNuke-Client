@@ -1,33 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function FounderDashboardNote() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative px-4 py-24 sm:px-6 sm:py-32 lg:px-8 overflow-hidden"
-    >
+    <section className="relative px-4 py-24 sm:px-6 sm:py-32 lg:px-8 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-black" />
       <div
@@ -67,11 +44,7 @@ export default function FounderDashboardNote() {
         </div>
 
         {/* Founder Story */}
-        <div
-          className={`mb-20 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="mb-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
             <div className="relative order-2 lg:order-1">
@@ -115,11 +88,7 @@ export default function FounderDashboardNote() {
         </div>
 
         {/* Vision */}
-        <div
-          className={`transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div>
           <div className="space-y-8">
             {/* Text Content */}
             <div className="text-center space-y-6">
@@ -139,11 +108,7 @@ export default function FounderDashboardNote() {
         </div>
 
         {/* CTA */}
-        <div
-          className={`mt-16 text-center transition-all duration-700 delay-500 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
-        >
+        <div className="mt-16 text-center">
           <Link
             to="/feedback"
             className="group relative inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(29,228,191,0.4)] hover:scale-105 shine-button overflow-hidden"

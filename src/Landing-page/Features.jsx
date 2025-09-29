@@ -1,7 +1,6 @@
 import React from "react";
 
 const Features = () => {
-
   return (
     <section
       className="relative w-full py-24 sm:py-32 overflow-hidden"

@@ -2,7 +2,6 @@ import React from "react";
 import { Play } from "lucide-react";
 
 const Preview = () => {
-
   return (
     <section
       className="relative w-full overflow-hidden py-32 sm:py-40"
