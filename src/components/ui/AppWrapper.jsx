@@ -91,16 +91,7 @@ function AppWrapper() {
             }
           />
           <Route path="/preview/:linkId" element={<PreviewPage />} />
-          <Route
-            path="/feedback"
-            element={
-              <ProtectedRoute>
-                <LinksProvider>
-                  <FeedbackForm />
-                </LinksProvider>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/feedback" element={<FeedbackForm />} />
 
           {/* Catch-all route must be last */}
           <Route path="/*" element={<App />} />

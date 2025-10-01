@@ -30,7 +30,8 @@ const Feedback = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Share Your Feedback</h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            We'd love to hear your thoughts, suggestions, or any issues you've encountered.
+            We'd love to hear your thoughts, suggestions, or any issues you've
+            encountered.
           </p>
         </div>
         <div className="bg-gray-900 p-6 sm:p-8 rounded-xl max-w-2xl mx-auto">
@@ -54,15 +55,15 @@ const FeedbackButton = () => {
     >
       <div className="relative">
         {/* Gradient Background */}
-        <div 
+        <div
           className={`absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter ${
-            isHovered ? 'opacity-100' : 'opacity-60'
+            isHovered ? "opacity-100" : "opacity-60"
           }`}
           style={{
-            width: 'calc(100% + 4px)',
-            height: 'calc(100% + 4px)',
-            top: '-2px',
-            left: '-2px',
+            width: "calc(100% + 4px)",
+            height: "calc(100% + 4px)",
+            top: "-2px",
+            left: "-2px",
           }}
         />
         {/* Button */}
@@ -120,8 +121,10 @@ function App() {
       trail.className = "custom-cursor-trail";
       document.body.appendChild(trail);
 
-      let mouseX = 0, mouseY = 0;
-      let trailX = 0, trailY = 0;
+      let mouseX = 0,
+        mouseY = 0;
+      let trailX = 0,
+        trailY = 0;
 
       const updateTrail = (e) => {
         mouseX = e.clientX;
