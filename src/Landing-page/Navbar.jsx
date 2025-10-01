@@ -52,22 +52,22 @@ export default function Navbar() {
 
   return (
     <header className="fixed w-full z-50 top-0 mt-5">
-      <div className="py-1 px-2">
-        <div className="max-w-5xl mx-auto">
+      <div className="py-2 px-3">
+        <div className="max-w-4xl mx-auto">
           <div className="backdrop-blur-sm bg-black/20 border border-gray-700/50 rounded-full transition-all duration-300 hover:bg-black/30 hover:border-gray-600/60">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center" style={{ margin: '3px' }}>
               {/* Logo */}
               <Link
                 to="/"
-                className="relative flex items-center gap-1.5 font-extrabold text-lg sm:text-lg md:text-xl text-white select-none"
+                className="relative flex items-center gap-1.5 font-extrabold text-xl sm:text-xl md:text-2xl text-white select-none"
                 style={{ lineHeight: 1 }}
               >
                 <img
                   src="/logo.svg"
                   alt="LinkNuke Logo"
-                  className="w-11 h-11 sm:w-12 sm:h-12 md:w-12 md:h-12"
+                  className="w-12 h-12 sm:w-[50px] sm:h-[50px] md:w-[50px] md:h-[50px]"
                 />
-                <span className="z-10 relative font-thin hidden md:block">
+                <span className="z-10 relative font-thin hidden md:block text-xl">
                   LinkNuke
                 </span>
               </Link>
@@ -75,7 +75,7 @@ export default function Navbar() {
               {/* Desktop Nav */}
               <div className="hidden md:flex items-center justify-center flex-1">
                 <NavigationMenu>
-                  <NavigationMenuList className="flex gap-7 text-sm">
+                  <NavigationMenuList className="flex gap-8 text-base">
                     {navLinks.map(({ label, href }) => (
                       <NavigationMenuItem key={label}>
                         <button
@@ -99,11 +99,11 @@ export default function Navbar() {
               </div>
 
               {/* Desktop Auth Buttons */}
-              <div className="hidden md:flex items-center gap-5">
+              <div className="hidden md:flex items-center gap-6">
                 {isLoggedIn ? (
                   <Link
                     to="/dashboard"
-                    className="px-6 py-3 rounded-full text-sm font-thin text-black bg-white hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+                    className="px-7 py-3.5 rounded-full text-base font-thin text-black bg-white hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
                   >
                     Dashboard
                   </Link>
@@ -111,7 +111,7 @@ export default function Navbar() {
                   <>
                     <Link
                       to="/login"
-                      className="text-sm text-white hover:text-[#1de4bf] transition font-thin"
+                      className="text-base text-white hover:text-[#1de4bf] transition font-thin"
                     >
                       Log in
                     </Link>
@@ -119,7 +119,7 @@ export default function Navbar() {
                       <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                       <Link
                         to="/register"
-                        className="group relative inline-flex items-center justify-center text-sm rounded-full bg-gray-900 px-7 py-3.5 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                        className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                         title="register"
                       >
                         Get Started
@@ -147,20 +147,20 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Right Buttons */}
-              <div className="md:hidden flex items-center gap-3">
+              <div className="md:hidden flex items-center justify-between gap-3 -ml-2">
                 {isLoggedIn ? (
                   <Link
                     to="/dashboard"
-                    className="text-xs px-[2px] py-[2px] rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
+                    className="text-sm px-3 py-2 rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
                   >
                     Dashboard
                   </Link>
                 ) : (
-                  <div className="relative inline-flex items-center justify-center gap-4 group">
+                  <div className="relative inline-flex items-center justify-center gap-3 group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <Link
                       to="/register"
-                      className="group relative inline-flex items-center justify-center text-xs rounded-xl bg-gray-900 px-[2px] py-[2px] font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                      className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                       title="register"
                     >
                       Get Started
@@ -185,7 +185,7 @@ export default function Navbar() {
                   </div>
                 )}
                 <button
-                  className="text-gray-300 text-lg ml-1"
+                  className="text-gray-300 text-xl -ml-1"
                   onClick={() => setShowMobile((prev) => !prev)}
                 >
                   ☰
