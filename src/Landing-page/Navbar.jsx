@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   NavigationMenu,
@@ -55,7 +55,10 @@ export default function Navbar() {
       <div className="py-2 px-3">
         <div className="max-w-4xl mx-auto">
           <div className="backdrop-blur-sm bg-black/20 border border-gray-700/50 rounded-full transition-all duration-300 hover:bg-black/30 hover:border-gray-600/60">
-            <div className="flex justify-between items-center" style={{ margin: '3px' }}>
+            <div
+              className="flex justify-between items-center"
+              style={{ margin: "3px" }}
+            >
               {/* Logo */}
               <Link
                 to="/"
@@ -80,7 +83,7 @@ export default function Navbar() {
                       <NavigationMenuItem key={label}>
                         <button
                           onClick={() => scrollToSection(href)}
-                          className="text-white hover:text-[#1de4bf] transition cursor-pointer font-thin"
+                          className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer font-thin"
                         >
                           {label}
                         </button>
@@ -89,7 +92,7 @@ export default function Navbar() {
                     <NavigationMenuItem>
                       <button
                         onClick={() => scrollToSection("#pricing")}
-                        className="text-white hover:text-[#1de4bf] transition cursor-pointer font-thin"
+                        className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer font-thin"
                       >
                         Pricing
                       </button>

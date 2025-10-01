@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import ShineButton from "../components/ui/ShineButton";
 import { trackEvent } from "../lib/analytics";
-import { useEffect } from "react";
 import GridPattern from "../components/ui/GridPattern";
+import SocialProof from "./SocialProof";
 
 const Hero = () => {
   const isLoggedIn =
@@ -47,7 +47,7 @@ const Hero = () => {
             </div>
 
             {/* CTA BUTTON */}
-            <div className="mb-32">
+            <div className="mb-8">
               {isLoggedIn ? (
                 <div className="relative inline-flex items-center justify-center gap-4 group">
                   <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
@@ -109,8 +109,13 @@ const Hero = () => {
               )}
             </div>
 
+            {/* SOCIAL PROOF */}
+            <div className="mb-12">
+              <SocialProof />
+            </div>
+
             {/* DASHBOARD IMAGE */}
-            <div className="w-full max-w-5xl scale-[1.3]">
+            <div className="w-full max-w-5xl scale-[1.3] mt-16 sm:mt-20 md:mt-24 lg:mt-28">
               <img
                 src="/dashboard.png"
                 alt="LinkNuke Dashboard"
