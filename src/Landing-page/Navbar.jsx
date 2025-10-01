@@ -101,12 +101,15 @@ export default function Navbar() {
               {/* Desktop Auth Buttons */}
               <div className="hidden md:flex items-center gap-6">
                 {isLoggedIn ? (
-                  <Link
-                    to="/dashboard"
-                    className="px-7 py-3.5 rounded-full text-base font-thin text-black bg-white hover:bg-gray-100 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
-                  >
-                    Dashboard
-                  </Link>
+                  <div className="relative inline-flex items-center justify-center group">
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                    <Link
+                      to="/dashboard"
+                      className="group relative inline-flex items-center justify-center text-sm rounded-full bg-gray-900 px-8 py-3.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    >
+                      Dashboard
+                    </Link>
+                  </div>
                 ) : (
                   <>
                     <Link
@@ -149,12 +152,15 @@ export default function Navbar() {
               {/* Mobile Right Buttons */}
               <div className="md:hidden flex items-center justify-between gap-3 -ml-2">
                 {isLoggedIn ? (
-                  <Link
-                    to="/dashboard"
-                    className="text-sm px-3 py-2 rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
-                  >
-                    Dashboard
-                  </Link>
+                  <div className="relative inline-flex items-center justify-center group">
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                    <Link
+                      to="/dashboard"
+                      className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    >
+                      Dashboard
+                    </Link>
+                  </div>
                 ) : (
                   <div className="relative inline-flex items-center justify-center gap-3 group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
@@ -185,7 +191,7 @@ export default function Navbar() {
                   </div>
                 )}
                 <button
-                  className="text-gray-300 text-xl -ml-1"
+                  className="text-gray-300 text-xl -ml-1 mr-1"
                   onClick={() => setShowMobile((prev) => !prev)}
                 >
                   ☰
