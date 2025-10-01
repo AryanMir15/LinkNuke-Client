@@ -148,3 +148,10 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+/* Responsive font-weight tweak: slightly thicken very thin text on small screens */
+@media (max-width: 639px) {
+  .font-thin {
+    font-weight: 200 !important; /* thin(100) -> extra-light(200) */
+  }
+}
+

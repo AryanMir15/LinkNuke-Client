@@ -51,10 +51,10 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed w-full z-50 top-0">
-      <div className="py-3 px-4">
+    <header className="fixed w-full z-50 top-0 mt-5">
+      <div className="py-1 px-2">
         <div className="max-w-5xl mx-auto">
-          <div className="backdrop-blur-lg bg-gray-800/30 border border-gray-600/20 rounded-full py-3 px-5">
+          <div className="backdrop-blur-sm bg-black/20 border border-gray-700/50 rounded-full transition-all duration-300 hover:bg-black/30 hover:border-gray-600/60">
             <div className="flex justify-between items-center">
               {/* Logo */}
               <Link
@@ -151,7 +151,7 @@ export default function Navbar() {
                 {isLoggedIn ? (
                   <Link
                     to="/dashboard"
-                    className="text-xs px-3 py-1.5 rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
+                    className="text-xs px-[2px] py-[2px] rounded-full text-black bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:opacity-90"
                   >
                     Dashboard
                   </Link>
@@ -160,7 +160,7 @@ export default function Navbar() {
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <Link
                       to="/register"
-                      className="group relative inline-flex items-center justify-center text-xs rounded-xl bg-gray-900 px-4 py-2 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                      className="group relative inline-flex items-center justify-center text-xs rounded-xl bg-gray-900 px-[2px] py-[2px] font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                       title="register"
                     >
                       Get Started
@@ -198,26 +198,26 @@ export default function Navbar() {
 
       {/* Mobile Dropdown */}
       {showMobile && (
-        <div className="md:hidden flex flex-col items-center gap-4 py-4 backdrop-blur-md bg-black/90 border-b border-gray-800">
+        <div className="md:hidden flex flex-col items-center gap-4 py-4 backdrop-blur-md bg-black/95 border-b border-gray-800/50 rounded-b-2xl mx-2 mt-1">
           {navLinks.map(({ label, href }) => (
             <button
               key={label}
               onClick={() => scrollToSection(href)}
-              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
+              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
             >
               {label}
             </button>
           ))}
           <button
             onClick={() => scrollToSection("#pricing")}
-            className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
+            className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
           >
             Pricing
           </button>
           {!isLoggedIn && (
             <Link
               to="/login"
-              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer"
+              className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
             >
               Log in
             </Link>

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import ShineButton from "../components/ui/ShineButton";
 import { trackEvent } from "../lib/analytics";
 import { useEffect } from "react";
+import GridPattern from "../components/ui/GridPattern";
 
 const Hero = () => {
   const isLoggedIn =
@@ -93,6 +94,7 @@ const Hero = () => {
       >
         {/* Background */}
         <div className="absolute inset-0 bg-black" />
+        <GridPattern />
         <div className="mx-auto max-w-4xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
           <div className="flex flex-col items-center text-center">
             {/* MAIN HEADLINE */}
