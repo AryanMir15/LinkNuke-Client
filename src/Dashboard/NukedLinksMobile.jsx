@@ -79,10 +79,9 @@ const NukedLinksMobile = () => {
       setIsDeleting(true);
       try {
         await remove(deletingId);
-        toast.success("Link deleted!");
+        // The toast is now handled by the LinksContext
       } catch (error) {
-        // Delete failed
-        toast.error("Failed to delete link");
+        // Error toast is handled by the LinksContext
       } finally {
         setIsDeleting(false);
         setDeletingId(null);

@@ -30,7 +30,7 @@ const Hero = () => {
           <div className="flex flex-col items-center text-center">
             {/* MAIN HEADLINE */}
             <div className="space-y-8 mb-8">
-              <h1 className="font-light sm:font-thin md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
+              <h1 className="font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
                 One-Time Links That
                 <br />
                 <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
