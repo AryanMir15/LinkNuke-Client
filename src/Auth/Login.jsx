@@ -91,6 +91,7 @@ export default function Login() {
             <Loader2 className="animate-spin mx-auto text-[#1de4bf]" />
           </div>
         </div>
+      )}
       {/* Left: Login Form */}
       <div className="w-full sm:w-1/2 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md space-y-6">
@@ -101,46 +102,7 @@ export default function Login() {
                 alt="LinkNuke Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12"
               />
-              <h1 className="text-3xl sm:text-4xl font-extrabold relative inline-block">
-                <span className="relative z-10 text-white">LinkNuke</span>
-                <svg
-                  viewBox="0 0 120 24"
-                  preserveAspectRatio="none"
-                  className="absolute -bottom-2 left-0 w-full h-3"
-                >
-                  <path
-                    d="M0,12 C20,12 30,3 60,3 C90,3 100,12 120,12"
-                    stroke="#1de4bf"
-                    strokeWidth="3"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="opacity-30"
-                  />
-                  <path
-                    d="M0,12 C20,12 30,3 60,3 C90,3 100,12 120,12"
-                    stroke="url(#gradient-underline)"
-                    strokeWidth="3"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="opacity-100"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="gradient-underline"
-                      x1="0"
-                      y1="0"
-                      x2="100%"
-                      y2="0"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop offset="0%" stopColor="#1de4bf" />
-                      <stop offset="100%" stopColor="#1de4bf" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white">LinkNuke</h1>
             </div>
             <p className="text-sm mt-6 text-gray-400">
               Login to your LinkNuke account
@@ -148,6 +110,7 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {[
               {
                 label: "Email",
                 name: "email",
@@ -159,7 +122,7 @@ export default function Login() {
                 name: "password",
                 type: "password",
                 placeholder: "••••••••",
-              },
+              }
             ].map(({ label, name, type, placeholder }) => (
               <div key={name} className="space-y-1">
                 <label htmlFor={name} className="text-sm text-gray-400 block">
