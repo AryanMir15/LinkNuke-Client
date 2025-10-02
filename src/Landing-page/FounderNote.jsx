@@ -34,7 +34,7 @@ export default function FounderDashboardNote() {
             <Heart className="h-3 w-3 mr-2" />
             From the Founder
           </div>
-          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
+          <h2 className="font-normal md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why I Built LinkNuke
           </h2>
           <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-thin">

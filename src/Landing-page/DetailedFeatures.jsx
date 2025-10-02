@@ -101,7 +101,7 @@ export default function Features() {
       id="features"
     >
       <div className="max-w-6xl mx-auto text-center mb-20">
-        <h2 className="text-4xl font-bold tracking-tight mb-4">
+        <h2 className="text-4xl font-normal md:font-medium tracking-tight mb-4">
           Everything You Need. Nothing You Don’t.
         </h2>
         <p className="text-gray-400 text-lg max-w-2xl mx-auto">

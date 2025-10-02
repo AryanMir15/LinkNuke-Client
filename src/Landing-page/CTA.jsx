@@ -13,7 +13,7 @@ export default function FinalCTA() {
   return (
     <section className="relative bg-black py-16 sm:py-24 px-6 text-white overflow-hidden rounded-2xl mt-12 mb-12">
       <div className="max-w-3xl mx-auto text-center relative z-10">
-        <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight mb-6">
+        <h2 className="font-normal md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight mb-6">
           Send sensitive files without the fear of oversharing.
         </h2>
 
