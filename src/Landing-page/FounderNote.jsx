@@ -8,22 +8,22 @@ export default function FounderDashboardNote() {
       {/* Background */}
       <div className="absolute inset-0 bg-black" />
       <div
-        className="absolute inset-0 opacity-[0.15]"
+        className="absolute inset-0 opacity-[0.1]"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(29, 228, 191, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(29, 228, 191, 0.3) 1px, transparent 1px)
+            linear-gradient(rgba(29, 228, 191, 0.2) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(29, 228, 191, 0.2) 1px, transparent 1px)
           `,
-          backgroundSize: "40px 40px",
+          backgroundSize: "60px 60px",
         }}
       />
       <div
-        className="absolute inset-0 bg-white dark:bg-black"
+        className="absolute inset-0 bg-white/10 dark:bg-black/90"
         style={{
           maskImage:
-            "radial-gradient(ellipse at center, transparent 40%, black)",
+            "radial-gradient(ellipse at center, transparent 30%, black 70%)",
           WebkitMaskImage:
-            "radial-gradient(ellipse at center, transparent 40%, black)",
+            "radial-gradient(ellipse at center, transparent 30%, black 70%)",
         }}
       />
 
@@ -109,47 +109,36 @@ export default function FounderDashboardNote() {
 
         {/* CTA */}
         <div className="mt-16 text-center">
-          <Link
-            to="/feedback"
-            className="group relative inline-flex items-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(29,228,191,0.4)] hover:scale-105 shine-button overflow-hidden"
-          >
-            <span className="relative z-10">Share Your Feedback</span>
-            <Heart className="w-4 h-4 ml-2 relative z-10" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0bf3a2] to-[#1de4bf] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </Link>
-          <p className="text-gray-400 text-sm mt-4">
-            Your input shapes the future of LinkNuke
-          </p>
+          <div className="relative inline-flex items-center justify-center gap-4 group">
+            <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+            <Link
+              to="/feedback"
+              className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-8 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+              title="Share Your Feedback"
+            >
+              Share Your Feedback
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 10 10"
+                height={10}
+                width={10}
+                fill="none"
+                className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+              >
+                <path
+                  d="M0 5h7"
+                  className="transition opacity-0 group-hover:opacity-100"
+                />
+                <path
+                  d="M1 1l4 4-4 4"
+                  className="transition group-hover:translate-x-[3px]"
+                />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* CSS for shine effect */}
-      <style jsx="true">{`
-        .shine-button {
-          position: relative;
-          overflow: hidden;
-        }
-
-        .shine-button::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.4),
-            transparent
-          );
-          transition: left 0.5s ease;
-        }
-
-        .shine-button:hover::before {
-          left: 100%;
-        }
-      `}</style>
     </section>
   );
 }
