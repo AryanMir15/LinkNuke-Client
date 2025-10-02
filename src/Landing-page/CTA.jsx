@@ -23,45 +23,36 @@ export default function FinalCTA() {
         </p>
 
         <div className="flex justify-center">
-          <a
-            href="/register"
-            onClick={handleCTAClick}
-            className="group relative bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] hover:from-[#1de4bf]/90 hover:to-[#0bf3a2]/90 text-black font-semibold py-3 sm:py-4 px-6 sm:px-10 rounded-full text-base sm:text-lg shadow-lg flex items-center gap-2 transition-all duration-300 hover:scale-[1.03] active:scale-95 shine-button overflow-hidden"
-          >
-            <span className="relative z-10">Send a Self-Destructing Link</span>
-            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0bf3a2] to-[#1de4bf] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </a>
+          <div className="relative inline-flex items-center justify-center gap-4 group">
+            <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+            <a
+              href="/register"
+              onClick={handleCTAClick}
+              className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-8 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+            >
+              Send a Self-Destructing Link
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 10 10"
+                height={10}
+                width={10}
+                fill="none"
+                className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+              >
+                <path
+                  d="M0 5h7"
+                  className="transition opacity-0 group-hover:opacity-100"
+                />
+                <path
+                  d="M1 1l4 4-4 4"
+                  className="transition group-hover:translate-x-[3px]"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* CSS for shine effect */}
-      <style jsx="true">{`
-        .shine-button {
-          position: relative;
-          overflow: hidden;
-        }
-
-        .shine-button::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.4),
-            transparent
-          );
-          transition: left 0.5s ease;
-        }
-
-        .shine-button:hover::before {
-          left: 100%;
-        }
-      `}</style>
     </section>
   );
 }

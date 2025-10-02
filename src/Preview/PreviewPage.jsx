@@ -151,7 +151,7 @@ const PreviewPage = () => {
         <Toaster position="top-center" />
         <div className="text-center max-w-md mx-auto px-4">
           {error === "This link has been nuked by LinkNuke" ? (
-            // Special styling for nuked links
+            // Special styling for nuked links with CTA
             <div className="space-y-6">
               <div className="w-24 h-24 mx-auto bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center">
                 <svg
@@ -174,13 +174,45 @@ const PreviewPage = () => {
                   This link has been automatically destroyed by LinkNuke
                 </p>
                 <p className="text-gray-500 text-sm">
-                  The link reached its view limit and has been permanently
-                  removed
+                  The link reached its view limit and has been permanently removed
                 </p>
+                
+                {/* CTA Section */}
+                <div className="pt-6 space-y-4">
+                  <p className="text-gray-200">
+                    Create your own secure links that self-destruct after viewing
+                  </p>
+                  <div className="relative inline-flex items-center justify-center gap-4 group">
+                    <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                    <a
+                      href="/register"
+                      className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-8 py-4 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                    >
+                      Get Started For Free
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 10 10"
+                        height={10}
+                        width={10}
+                        fill="none"
+                        className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                      >
+                        <path
+                          d="M0 5h7"
+                          className="transition opacity-0 group-hover:opacity-100"
+                        />
+                        <path
+                          d="M1 1l4 4-4 4"
+                          className="transition group-hover:translate-x-[3px]"
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div className="pt-4">
-                <div className="inline-flex items-center px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg">
-                  <span className="text-gray-400 text-sm">Powered by </span>
+              <div className="pt-2">
+                <div className="inline-flex items-center px-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg">
+                  <span className="text-gray-500 text-sm">Powered by </span>
                   <span className="ml-1 text-[#1de4bf] font-semibold">
                     LinkNuke
                   </span>

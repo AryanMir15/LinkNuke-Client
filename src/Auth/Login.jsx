@@ -91,48 +91,63 @@ export default function Login() {
             <Loader2 className="animate-spin mx-auto text-[#1de4bf]" />
           </div>
         </div>
-      )}
-
       {/* Left: Login Form */}
       <div className="w-full sm:w-1/2 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-extrabold relative inline-block">
-              <span className="relative z-10 text-white">LinkNuke</span>
-              <svg
-                viewBox="0 0 120 24"
-                preserveAspectRatio="none"
-                className="absolute left-1/2 transform -translate-x-1/2 top-full mt-[-4px] w-[115%] h-5 sm:h-6 z-0 pointer-events-none"
-                aria-hidden="true"
-              >
-                <defs>
-                  <linearGradient
-                    id="linknuke-underline"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop offset="0%" stopColor="#1de4bf" />
-                    <stop offset="100%" stopColor="#0bf3a2" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M5 18 Q 60 30, 115 12"
-                  fill="none"
-                  stroke="url(#linknuke-underline)"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </h1>
-            <p className="text-sm mt-8 text-gray-400">
+            <div className="flex items-center justify-center space-x-3 mb-2">
+              <img
+                src="/logo.svg"
+                alt="LinkNuke Logo"
+                className="w-10 h-10 sm:w-12 sm:h-12"
+              />
+              <h1 className="text-3xl sm:text-4xl font-extrabold relative inline-block">
+                <span className="relative z-10 text-white">LinkNuke</span>
+                <svg
+                  viewBox="0 0 120 24"
+                  preserveAspectRatio="none"
+                  className="absolute -bottom-2 left-0 w-full h-3"
+                >
+                  <path
+                    d="M0,12 C20,12 30,3 60,3 C90,3 100,12 120,12"
+                    stroke="#1de4bf"
+                    strokeWidth="3"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="opacity-30"
+                  />
+                  <path
+                    d="M0,12 C20,12 30,3 60,3 C90,3 100,12 120,12"
+                    stroke="url(#gradient-underline)"
+                    strokeWidth="3"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="opacity-100"
+                  />
+                  <defs>
+                    <linearGradient
+                      id="gradient-underline"
+                      x1="0"
+                      y1="0"
+                      x2="100%"
+                      y2="0"
+                      gradientUnits="userSpaceOnUse"
+                    >
+                      <stop offset="0%" stopColor="#1de4bf" />
+                      <stop offset="100%" stopColor="#1de4bf" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </h1>
+            </div>
+            <p className="text-sm mt-6 text-gray-400">
               Login to your LinkNuke account
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {[
               {
                 label: "Email",
                 name: "email",
