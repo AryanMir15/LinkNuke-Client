@@ -136,7 +136,7 @@ function App() {
         trailY += (mouseY - trailY) * 0.05;
 
         trail.style.left = trailX - 4 + "px";
-        trail.style.top = trailY - 4 + "px";
+        trail.style.top = trailY - 3 + "px"; // Changed from -4 to -3 to move it 1px lower
 
         requestAnimationFrame(animateTrail);
       };
