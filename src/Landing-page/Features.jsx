@@ -37,14 +37,14 @@ const Features = () => {
             radial-gradient(circle 300px at 85% 20%, black 0%, transparent 60%),
             radial-gradient(circle 300px at 15% 80%, black 0%, transparent 60%),
             radial-gradient(circle 300px at 15% 20%, black 0%, transparent 60%)
-          `,
+          `
         }}
       />
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         {/* Header Section */}
         <div className="text-center mb-16 sm:mb-20">
-          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
+          <h2 className="font-light sm:font-thin md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why LinkNuke is
             <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
               {" "}

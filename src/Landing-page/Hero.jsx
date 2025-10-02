@@ -25,13 +25,12 @@ const Hero = () => {
         aria-label="LinkNuke - Secure Self-Destructing Links Hero Section"
       >
         {/* Background */}
-        <div className="absolute inset-0 bg-black" />
         <GridPattern />
         <div className="mx-auto max-w-4xl px-6 lg:px-8 py-20 md:py-[8rem] relative z-10">
           <div className="flex flex-col items-center text-center">
             {/* MAIN HEADLINE */}
             <div className="space-y-8 mb-8">
-              <h1 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
+              <h1 className="font-light sm:font-thin md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
                 One-Time Links That
                 <br />
                 <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
