@@ -30,7 +30,7 @@ const Hero = () => {
           <div className="flex flex-col items-center text-center">
             {/* MAIN HEADLINE */}
             <div className="space-y-8 mb-8">
-              <h1 className=" font-normal md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
+              <h1 className="font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white">
                 One-Time Links That
                 <br />
                 <span className="bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-transparent bg-clip-text">
@@ -115,14 +115,14 @@ const Hero = () => {
 
             {/* DASHBOARD IMAGE */}
             <div className="w-full max-w-5xl scale-[1.3] mt-16 sm:mt-20 md:mt-24 lg:mt-28">
-              <img
-                src="/dashboard.png"
-                alt="LinkNuke Dashboard"
-                className="w-full rounded-2xl shadow-2xl ring-1 ring-white/10"
-                style={{
-                  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.3)",
-                }}
-              />
+              <div className="relative inline-flex items-center justify-center w-full group">
+                <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-2xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+                <img
+                  src="/dashboard.png"
+                  alt="LinkNuke Dashboard"
+                  className="relative w-full rounded-2xl ring-1 ring-white/10 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5 group-hover:shadow-gray-600/30"
+                />
+              </div>
             </div>
           </div>
         </div>

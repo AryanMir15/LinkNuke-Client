@@ -34,7 +34,7 @@ export default function FounderDashboardNote() {
             <Heart className="h-3 w-3 mr-2" />
             From the Founder
           </div>
-          <h2 className="font-normal md:font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
+          <h2 className="font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why I Built LinkNuke
           </h2>
           <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-thin">
@@ -60,7 +60,7 @@ export default function FounderDashboardNote() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Personal Mission
               </div>
-              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
+              <h3 className="font-medium text-[32px] sm:text-[40px] text-white">
                 Hi, I'm the founder of LinkNuke
               </h3>
               <div className="space-y-4 text-gray-300 text-lg leading-relaxed font-thin">
@@ -95,7 +95,7 @@ export default function FounderDashboardNote() {
               <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-xs font-medium">
                 Future Vision
               </div>
-              <h3 className="font-thin text-[32px] sm:text-[40px] text-white">
+              <h3 className="font-medium text-[32px] sm:text-[40px] text-white">
                 My Vision for the Future
               </h3>
               <p className="text-gray-300 text-lg leading-relaxed max-w-3xl mx-auto font-thin">

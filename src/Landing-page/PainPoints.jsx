@@ -115,7 +115,7 @@ function PainPoints() {
             The Problem
           </div>
 
-          <h2 className="font-thin text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
+          <h2 className="font-medium text-[48px] sm:text-[56px] lg:text-[72px] leading-tight tracking-tight text-white mb-6">
             Why risky links put your
             <span className="bg-gradient-to-r from-red-400 to-red-600 text-transparent bg-clip-text">
               {" "}
