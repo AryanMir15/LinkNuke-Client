@@ -9,7 +9,7 @@ import AppWrapper from "./components/ui/AppWrapper";
 import "./lib/posthog"; // Initialize PostHog
 import { initSessionTracking } from "./lib/analytics";
 
-// Initialize session tracking
+// Initialize session tracking (fake push)
 initSessionTracking();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
