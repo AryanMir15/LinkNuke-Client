@@ -1,11 +1,10 @@
 import * as React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "../components/ui/navigation-menu";
+// import {
+//   NavigationMenu,
+//   NavigationMenuItem,
+//   NavigationMenuList,
+// } from "../components/ui/navigation-menu";
 import DarkModeToggle from "../components/ui/DarkModeToggle";
 import { trackEvent } from "../lib/analytics";
 
@@ -60,8 +59,8 @@ export default function Navbar() {
               style={{ margin: "3px" }}
             >
               {/* Logo */}
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="relative flex items-center gap-1.5 font-extrabold text-xl sm:text-xl md:text-2xl text-white select-none"
                 style={{ lineHeight: 1 }}
               >
@@ -73,11 +72,11 @@ export default function Navbar() {
                 <span className="z-10 relative font-thin hidden md:block text-xl">
                   LinkNuke
                 </span>
-              </Link>
+              </a>
 
               {/* Desktop Nav */}
               <div className="hidden md:flex items-center justify-center flex-1">
-                <NavigationMenu>
+                {/* <NavigationMenu>
                   <NavigationMenuList className="flex gap-8 text-base">
                     {navLinks.map(({ label, href }) => (
                       <NavigationMenuItem key={label}>
@@ -98,7 +97,27 @@ export default function Navbar() {
                       </button>
                     </NavigationMenuItem>
                   </NavigationMenuList>
-                </NavigationMenu>
+                </NavigationMenu> */}
+                <div className="flex gap-8 text-base">
+                  {navLinks.map(({ label, href }) => (
+                    <div key={label}>
+                      <button
+                        onClick={() => scrollToSection(href)}
+                        className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer font-thin"
+                      >
+                        {label}
+                      </button>
+                    </div>
+                  ))}
+                  <div>
+                    <button
+                      onClick={() => scrollToSection("#pricing")}
+                      className="text-gray-300 hover:text-[#1de4bf] transition cursor-pointer font-thin"
+                    >
+                      Pricing
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {/* Desktop Auth Buttons */}
@@ -106,25 +125,25 @@ export default function Navbar() {
                 {isLoggedIn ? (
                   <div className="relative inline-flex items-center justify-center group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <Link
-                      to="/dashboard"
+                    <a
+                      href="/dashboard"
                       className="group relative inline-flex items-center justify-center text-sm rounded-full bg-gray-900 px-8 py-3.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     >
                       Dashboard
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <>
-                    <Link
-                      to="/login"
+                    <a
+                      href="/login"
                       className="text-base text-white hover:text-[#1de4bf] transition font-thin"
                     >
                       Log in
-                    </Link>
+                    </a>
                     <div className="relative inline-flex items-center justify-center gap-4 group">
                       <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                      <Link
-                        to="/register"
+                      <a
+                        href="/register"
                         className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                         title="register"
                       >
@@ -146,7 +165,7 @@ export default function Navbar() {
                             className="transition group-hover:translate-x-[3px]"
                           />
                         </svg>
-                      </Link>
+                      </a>
                     </div>
                   </>
                 )}
@@ -157,18 +176,18 @@ export default function Navbar() {
                 {isLoggedIn ? (
                   <div className="relative inline-flex items-center justify-center group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <Link
-                      to="/dashboard"
+                    <a
+                      href="/dashboard"
                       className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     >
                       Dashboard
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <div className="relative inline-flex items-center justify-center gap-3 group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                    <Link
-                      to="/register"
+                    <a
+                      href="/register"
                       className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                       title="register"
                     >
@@ -190,7 +209,7 @@ export default function Navbar() {
                           className="transition group-hover:translate-x-[3px]"
                         />
                       </svg>
-                    </Link>
+                    </a>
                   </div>
                 )}
                 <button
@@ -224,12 +243,12 @@ export default function Navbar() {
             Pricing
           </button>
           {!isLoggedIn && (
-            <Link
-              to="/login"
+            <a
+              href="/login"
               className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
             >
               Log in
-            </Link>
+            </a>
           )}
         </div>
       )}

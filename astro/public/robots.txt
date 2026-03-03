@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://linknuke.com/sitemap.xml
+
+# Disallow private areas
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /oauth-success
+
+# Allow important pages
+Allow: /
+Allow: /privacy
+Allow: /terms
+Allow: /refund-policy
+Allow: /login
+Allow: /register
+
+# Crawl delay (optional - helps prevent server overload)
+Crawl-delay: 1

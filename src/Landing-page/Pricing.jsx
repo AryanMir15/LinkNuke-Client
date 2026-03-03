@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { useSession } from "../context/useSession.jsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Sparkles } from "lucide-react";
@@ -98,21 +97,21 @@ export default function PricingSection() {
           (t) => (
             <div className="flex items-center space-x-1">
               <span>Please </span>
-              <Link
-                to="/login"
+              <a
+                href="/login"
                 className="text-white underline hover:text-gray-200 transition-colors"
                 onClick={() => toast.dismiss(t.id)}
               >
                 login
-              </Link>
+              </a>
               <span> or </span>
-              <Link
-                to="/register"
+              <a
+                href="/register"
                 className="text-white underline hover:text-gray-200 transition-colors"
                 onClick={() => toast.dismiss(t.id)}
               >
-                register
-              </Link>
+                create an account
+              </a>
               <span> to purchase</span>
             </div>
           ),
@@ -125,7 +124,7 @@ export default function PricingSection() {
               borderRadius: "8px",
               boxShadow: "0 4px 12px rgba(220, 38, 38, 0.3)",
             },
-          }
+          },
         );
 
         setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
@@ -141,7 +140,7 @@ export default function PricingSection() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       posthog.capture("upgrade_clicked", {
@@ -208,7 +207,7 @@ export default function PricingSection() {
             padding: "16px",
             minWidth: "320px",
           },
-        }
+        },
       );
 
       posthog.capture("payment_error", {
@@ -275,7 +274,7 @@ export default function PricingSection() {
               tier.name === "Pro" && "hover:scale-[1.05]",
               tier.name === "Lifetime" && "hover:scale-[1.02]",
               tier.name === "Free" && "hover:scale-[1.02]",
-              tier.featured && "lg:scale-105"
+              tier.featured && "lg:scale-105",
             )}
             style={{
               // Card styling based on your provided design
@@ -283,8 +282,8 @@ export default function PricingSection() {
                 tier.name === "Pro"
                   ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.12), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                   : tier.name === "Lifetime"
-                  ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
-                  : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
+                    ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                    : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
               border: "1px solid #202222",
               borderRadius: "10px",
               padding: "1px",
@@ -296,15 +295,15 @@ export default function PricingSection() {
             <div
               className={classNames(
                 "w-full h-full rounded-lg flex flex-col items-center relative",
-                tier.name === "Free" ? "justify-start pt-8" : "justify-center"
+                tier.name === "Free" ? "justify-start pt-8" : "justify-center",
               )}
               style={{
                 background:
                   tier.name === "Pro"
                     ? "radial-gradient(circle 280px at 0% 0%, rgba(29, 228, 191, 0.12), #0c0d0d), radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
                     : tier.name === "Lifetime"
-                    ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
-                    : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
+                      ? "radial-gradient(circle 280px at 100% 100%, rgba(29, 228, 191, 0.12), #0c0d0d)"
+                      : "radial-gradient(circle 280px at 0% 0%, #555555, #0c0d0d)",
                 border: "solid 1px #202222",
                 minHeight: "500px",
                 width: "calc(100% + 6px)",
@@ -342,7 +341,7 @@ export default function PricingSection() {
                   <h3
                     className={classNames(
                       "font-thin text-white",
-                      tier.featured ? "text-[32px]" : "text-[28px]"
+                      tier.featured ? "text-[32px]" : "text-[28px]",
                     )}
                   >
                     {tier.name}
@@ -353,7 +352,7 @@ export default function PricingSection() {
                       <div
                         className={classNames(
                           "font-thin",
-                          tier.featured ? "text-[48px]" : "text-[40px]"
+                          tier.featured ? "text-[48px]" : "text-[40px]",
                         )}
                         style={{
                           background:
@@ -411,12 +410,12 @@ export default function PricingSection() {
                       <CheckIcon
                         className={classNames(
                           "text-[#1de4bf] flex-none mt-0.5",
-                          tier.featured ? "h-5 w-5" : "h-4 w-4"
+                          tier.featured ? "h-5 w-5" : "h-4 w-4",
                         )}
                       />
                       <span
                         className={classNames(
-                          tier.featured ? "text-sm" : "text-xs"
+                          tier.featured ? "text-sm" : "text-xs",
                         )}
                       >
                         {feature}
@@ -427,11 +426,11 @@ export default function PricingSection() {
 
                 <>
                   {tier.name === "Free" ? (
-                    <Link
-                      to="/register"
+                    <a
+                      href="/register"
                       className={classNames(
                         "button-wrapper relative overflow-hidden transition-transform duration-300 block",
-                        "hover:scale-105"
+                        "hover:scale-105",
                       )}
                       style={{
                         width: "100%",
@@ -447,14 +446,14 @@ export default function PricingSection() {
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-white font-semibold">Register</div>
                       </div>
-                    </Link>
+                    </a>
                   ) : (
                     <div
                       className={classNames(
                         "button-wrapper relative overflow-hidden transition-transform duration-300",
                         tier.featured &&
                           "shadow-lg shadow-[#1de4bf]/20 hover:scale-105",
-                        loadingStates[tier.name] && "processing"
+                        loadingStates[tier.name] && "processing",
                       )}
                       style={{
                         width: "100%",
@@ -475,8 +474,8 @@ export default function PricingSection() {
                           {loadingStates[tier.name]
                             ? "Processing..."
                             : tier.name === "Lifetime"
-                            ? "Get Lifetime Access"
-                            : "Get Pro Plan"}
+                              ? "Get Lifetime Access"
+                              : "Get Pro Plan"}
                         </div>
                         <div className="icon-wrapper absolute inset-0 flex items-center justify-center text-white opacity-0 transition-all duration-500 transform translate-y-full">
                           <svg

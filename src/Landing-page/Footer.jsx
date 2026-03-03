@@ -1,6 +1,5 @@
 // src/Landing-page/Footer.jsx
 import { Twitter, Github, Mail, Shield, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 
 const SocialProof = () => {
   // Public avatars from the /public folder
@@ -26,7 +26,7 @@ const SocialProof = () => {
       style={{ marginTop: "5px" }}
     >
       {/* 1) Trusted By (first) */}
-      <motion.span
+      {/* <motion.span
         className="text-white/90 tracking-wide leading-tight"
         style={{
           fontFamily: '"Style Script", cursive',
@@ -39,20 +39,27 @@ const SocialProof = () => {
         viewport={{ once: true, amount: 0.6 }}
       >
         Trusted By
-      </motion.span>
+      </motion.span> */}
+      <span
+        className="text-white/90 tracking-wide leading-tight"
+        style={{
+          fontFamily: '"Style Script", cursive',
+          fontSize: "1.2rem",
+          fontStyle: "italic",
+        }}
+      >
+        Trusted By
+      </span>
 
       <div className="flex items-center">
         {/* 2) Avatars fade one-by-one */}
         <div className="flex items-center -space-x-[14px]">
           {userAvatars.map((user, index) => (
-            <motion.div
+            // <motion.div
+            <div
               key={index}
               className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-800"
               title={user.name}
-              variants={fadeUp(0.12 + index * 0.08)}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.6 }}
             >
               <img
                 src={user.src}
@@ -61,10 +68,10 @@ const SocialProof = () => {
                 loading="lazy"
                 decoding="async"
               />
-            </motion.div>
+            </div>
           ))}
           {/* 3) Plus as a black avatar at the end */}
-          <motion.div
+          {/* <motion.div
             className="w-10 h-10 rounded-full border-2 border-gray-800 bg-black flex items-center justify-center"
             title="More users"
             variants={fadeUp(0.12 + userAvatars.length * 0.08)}
@@ -73,11 +80,17 @@ const SocialProof = () => {
             viewport={{ once: true, amount: 0.6 }}
           >
             <span className="text-white text-xl leading-none">+</span>
-          </motion.div>
+          </motion.div> */}
+          <div
+            className="w-10 h-10 rounded-full border-2 border-gray-800 bg-black flex items-center justify-center"
+            title="More users"
+          >
+            <span className="text-white text-xl leading-none">+</span>
+          </div>
         </div>
 
         {/* 4) 'And More' comes last with clear spacing */}
-        <motion.span
+        {/* <motion.span
           className="text-white/90"
           style={{
             fontFamily: '"Style Script", cursive',
@@ -90,7 +103,17 @@ const SocialProof = () => {
           viewport={{ once: true, amount: 0.6 }}
         >
           And More
-        </motion.span>
+        </motion.span> */}
+        <span
+          className="text-white/90"
+          style={{
+            fontFamily: '"Style Script", cursive',
+            fontStyle: "normal",
+            marginLeft: "7px",
+          }}
+        >
+          And More
+        </span>
       </div>
     </div>
   );

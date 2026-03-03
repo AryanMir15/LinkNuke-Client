@@ -1,0 +1,23 @@
+{
+  "name": "LinkNuke - Secure Self-Destructing Links",
+  "short_name": "LinkNuke",
+  "description": "Share sensitive files and links that automatically delete themselves after being viewed. Complete privacy, zero traces left behind.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#1de4bf",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business", "utilities"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

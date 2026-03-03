@@ -1,0 +1,14 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Dashboard from '../../../src/Dashboard/Dashboard.jsx';
+import { AuthProvider } from '../../../src/context/AuthContext.jsx';
+import AppWrapper from '../../../src/App.jsx';
+---
+
+<MainLayout title="Dashboard - LinkNuke" description="Access your LinkNuke dashboard to manage links and view analytics.">
+	<AppWrapper client:only="react">
+		<AuthProvider>
+			<Dashboard />
+		</AuthProvider>
+	</AppWrapper>
+</MainLayout>
