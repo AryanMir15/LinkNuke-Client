@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useSession } from "../context/useSession.jsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Sparkles } from "lucide-react";
 import posthog from "../lib/posthog.js";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const tiers = [
   {
@@ -74,14 +74,14 @@ export default function PricingSection() {
   const { user } = useSession();
 
   // Check if mobile for performance optimization
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  // useEffect(() => {
+  //   const checkMobile = () => {
+  //     setIsMobile(window.innerWidth < 768);
+  //   };
+  //   checkMobile();
+  //   window.addEventListener("resize", checkMobile);
+  //   return () => window.removeEventListener("resize", checkMobile);
+  // }, []);
 
   const handleUpgradeClick = async (tier) => {
     try {
@@ -92,42 +92,8 @@ export default function PricingSection() {
       const storedUser = localStorage.getItem("user");
       const token = localStorage.getItem("token");
       if (!storedUser || !token) {
-        // Show simple toast notification for unauthenticated users
-        toast.error(
-          (t) => (
-            <div className="flex items-center space-x-1">
-              <span>Please </span>
-              <a
-                href="/login"
-                className="text-white underline hover:text-gray-200 transition-colors"
-                onClick={() => toast.dismiss(t.id)}
-              >
-                login
-              </a>
-              <span> or </span>
-              <a
-                href="/register"
-                className="text-white underline hover:text-gray-200 transition-colors"
-                onClick={() => toast.dismiss(t.id)}
-              >
-                create an account
-              </a>
-              <span> to purchase</span>
-            </div>
-          ),
-          {
-            duration: 5000,
-            style: {
-              background: "#dc2626",
-              color: "#fff",
-              border: "1px solid #ef4444",
-              borderRadius: "8px",
-              boxShadow: "0 4px 12px rgba(220, 38, 38, 0.3)",
-            },
-          },
-        );
-
-        setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
+        // Show simple alert for unauthenticated users
+        alert("Please login or create an account to purchase");
         return;
       }
 
@@ -157,58 +123,8 @@ export default function PricingSection() {
       const errorMessage = "Failed to initiate payment. Please try again.";
       setError(errorMessage);
 
-      // Show modern error toast
-      toast.error(
-        (t) => (
-          <div className="flex items-center space-x-3 p-1">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white">Payment failed</p>
-              <p className="text-xs text-red-200 mt-1">
-                Please try again or contact support
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <button
-                className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-sm"
-                onClick={() => toast.dismiss(t.id)}
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        ),
-        {
-          duration: 4000,
-          style: {
-            background: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
-            color: "#fff",
-            border: "1px solid rgba(239, 68, 68, 0.3)",
-            borderRadius: "16px",
-            boxShadow:
-              "0 20px 40px rgba(220, 38, 38, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(10px)",
-            padding: "16px",
-            minWidth: "320px",
-          },
-        },
-      );
+      // Show simple error alert
+      alert(errorMessage);
 
       posthog.capture("payment_error", {
         error: err.message,

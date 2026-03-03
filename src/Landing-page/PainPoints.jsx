@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   AlertTriangle,
   Check,
@@ -11,35 +11,35 @@ import {
 
 const painPoints = [
   {
-    icon: <AlertTriangle className="h-5 w-5" />,
+    icon: "AlertTriangle",
     text: "Links stay live forever even when they're not supposed to.",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/20",
   },
   {
-    icon: <Eye className="h-5 w-5" />,
+    icon: "Eye",
     text: "Previews can leak sensitive info before someone even clicks.",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/20",
   },
   {
-    icon: <Zap className="h-5 w-5" />,
+    icon: "Zap",
     text: "You can't control where that link ends up once it's out.",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/20",
   },
   {
-    icon: <Clock className="h-5 w-5" />,
+    icon: "Clock",
     text: "There's no way to set a proper expiry or time bomb.",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
     borderColor: "border-red-500/20",
   },
   {
-    icon: <Shield className="h-5 w-5" />,
+    icon: "Shield",
     text: "You end up relying on trust when you should rely on tech.",
     color: "text-red-400",
     bgColor: "bg-red-500/10",
@@ -49,35 +49,35 @@ const painPoints = [
 
 const solutions = [
   {
-    icon: <Check className="h-5 w-5" />,
+    icon: "Check",
     text: "LinkNuke nukes your link after one view or a timer you set. Your rules.",
     color: "text-green-400",
     bgColor: "bg-green-500/10",
     borderColor: "border-green-500/20",
   },
   {
-    icon: <Eye className="h-5 w-5" />,
+    icon: "Eye",
     text: "Everything stays hidden until opened. No previews, no leaks.",
     color: "text-green-400",
     bgColor: "bg-green-500/10",
     borderColor: "border-green-500/20",
   },
   {
-    icon: <Lock className="h-5 w-5" />,
+    icon: "Lock",
     text: "You can lock links with view limits and time-based nukes.",
     color: "text-green-400",
     bgColor: "bg-green-500/10",
     borderColor: "border-green-500/20",
   },
   {
-    icon: <Clock className="h-5 w-5" />,
+    icon: "Clock",
     text: "Set it, forget it. Link gone exactly when you said.",
     color: "text-green-400",
     bgColor: "bg-green-500/10",
     borderColor: "border-green-500/20",
   },
   {
-    icon: <Shield className="h-5 w-5" />,
+    icon: "Shield",
     text: "You're in full control. No guessing. No false hope.",
     color: "text-green-400",
     bgColor: "bg-green-500/10",
@@ -87,6 +87,19 @@ const solutions = [
 
 function PainPoints() {
   const [activeTab, setActiveTab] = useState("problems");
+
+  const renderIcon = (iconName) => {
+    const iconMap = {
+      AlertTriangle: <AlertTriangle className="h-5 w-5" />,
+      Eye: <Eye className="h-5 w-5" />,
+      Zap: <Zap className="h-5 w-5" />,
+      Clock: <Clock className="h-5 w-5" />,
+      Shield: <Shield className="h-5 w-5" />,
+      Check: <Check className="h-5 w-5" />,
+      Lock: <Lock className="h-5 w-5" />,
+    };
+    return iconMap[iconName] || null;
+  };
 
   return (
     <section
@@ -185,7 +198,7 @@ function PainPoints() {
                     style={{ transitionDelay: `${index * 100}ms` }}
                   >
                     <div className={`mt-0.5 shrink-0 ${point.color}`}>
-                      {point.icon}
+                      {renderIcon(point.icon)}
                     </div>
                     <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
                       {point.text}
@@ -212,7 +225,7 @@ function PainPoints() {
               />
               <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                  <Check className="h-5 w-5 text-green-400" />
+                  {renderIcon("Check")}
                 </div>
                 <h3 className="font-thin text-[24px] text-white">
                   The Solutions
@@ -227,7 +240,7 @@ function PainPoints() {
                     style={{ transitionDelay: `${index * 100}ms` }}
                   >
                     <div className={`mt-0.5 shrink-0 ${solution.color}`}>
-                      {solution.icon}
+                      {renderIcon(solution.icon)}
                     </div>
                     <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
                       {solution.text}
@@ -257,7 +270,7 @@ function PainPoints() {
                 />
                 <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                    <AlertTriangle className="h-5 w-5 text-red-400" />
+                    {renderIcon("AlertTriangle")}
                   </div>
                   <h3 className="font-thin text-[24px] text-white">
                     The Problems
@@ -299,7 +312,7 @@ function PainPoints() {
                 />
                 <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                    <Check className="h-5 w-5 text-green-400" />
+                    {renderIcon("Check")}
                   </div>
                   <h3 className="text-xl font-bold text-white">
                     The Solutions
