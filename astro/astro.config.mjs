@@ -29,5 +29,8 @@ export default defineConfig({
         process.env.PUBLIC_API_URL,
       ),
     },
+    ssr: {
+      noExternal: [],
+    },
   },
 });
