@@ -134,7 +134,7 @@ export default function RefundPolicy() {
       <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           <strong>Policy Effective Date:</strong>{" "}
-          {new Date().toLocaleDateString()}
+          {typeof window !== "undefined" ? new Date().toLocaleDateString() : ""}
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
           This refund policy is compliant with Paddle's requirements and follows

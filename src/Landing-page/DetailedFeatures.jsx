@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import MobileFeatures from "./Mobile/ModileFeatures";
-import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Sparkles,
@@ -13,50 +12,36 @@ import {
 
 const features = [
   {
-    icon: <LayoutDashboard size={28} />,
+    icon: LayoutDashboard,
     title: "Custom Themes",
     desc: "Your link page, your rules. Pick colors, gradients, and fonts that match your vibe—no bloat, just you.",
   },
   {
-    icon: <BarChart3 size={28} />,
+    icon: BarChart3,
     title: "Analytics That Matter",
     desc: "Clicks, views, traffic sources—no fluff, just the facts you actually care about.",
   },
   {
-    icon: <Share2 size={28} />,
+    icon: Share2,
     title: "Social Embeds",
     desc: "Showcase your latest YouTube, tweet, or playlist right on your page. No extra steps.",
   },
   {
-    icon: <CalendarCheck size={28} />,
+    icon: CalendarCheck,
     title: "Smart Scheduling",
     desc: "Schedule links to appear when you want. Launch promos while you sleep. Set it and forget it.",
   },
   {
-    icon: <Bot size={28} />,
+    icon: Bot,
     title: "AI Bio Generator",
     desc: "Can’t think of what to write? Our AI will do the charm-offensive for you—no cringe.",
   },
   {
-    icon: <Sparkles size={28} />,
+    icon: Sparkles,
     title: "Magic Previews",
     desc: "Preview links in style with rich thumbnails that don’t leak info or look like junk.",
   },
 ];
-
-const diagonalFade = {
-  hidden: { opacity: 0, x: -40, y: -40 },
-  show: (i = 0) => ({
-    opacity: 1,
-    x: 0,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      delay: i * 0.1,
-      ease: "easeOut",
-    },
-  }),
-};
 
 function LazyCard({ children }) {
   const ref = useRef();
@@ -65,7 +50,7 @@ function LazyCard({ children }) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -82,6 +67,8 @@ export default function Features() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // Skip during SSR
+
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -113,21 +100,18 @@ export default function Features() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {features.map((feature, i) => (
           <LazyCard key={i}>
-            <motion.div
-              custom={i}
-              variants={diagonalFade}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.3 }}
+            <div
               className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md p-6
                          transition-all duration-300
                          hover:scale-[1.025]
                          hover:border-fuchsia-700/40"
             >
-              <div className="mb-4 text-cyan-300">{feature.icon}</div>
+              <div className="mb-4 text-cyan-300">
+                <feature.icon size={28} />
+              </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
               <p className="text-gray-400 text-sm">{feature.desc}</p>
-            </motion.div>
+            </div>
           </LazyCard>
         ))}
       </div>

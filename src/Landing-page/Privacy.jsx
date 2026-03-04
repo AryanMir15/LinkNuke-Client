@@ -98,7 +98,8 @@ export default function Privacy() {
         .
       </p>
       <p className="text-xs text-gray-500">
-        Last updated: {new Date().toLocaleDateString()}
+        Last updated:{" "}
+        {typeof window !== "undefined" ? new Date().toLocaleDateString() : ""}
       </p>
     </div>
   );

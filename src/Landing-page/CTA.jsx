@@ -6,7 +6,7 @@ export default function FinalCTA() {
   const handleCTAClick = () => {
     trackEvent("final_cta_clicked", {
       source: "landing_page_bottom",
-      timestamp: new Date().toISOString(),
+      timestamp: typeof window !== "undefined" ? new Date().toISOString() : "",
     });
   };
 
@@ -52,7 +52,6 @@ export default function FinalCTA() {
           </div>
         </div>
       </div>
-
     </section>
   );
 }

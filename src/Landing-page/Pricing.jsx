@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { useSession } from "../context/useSession.jsx";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Sparkles } from "lucide-react";
 import posthog from "../lib/posthog.js";
@@ -69,9 +68,6 @@ export default function PricingSection() {
     Pro: false,
     Lifetime: false,
   });
-  const [error, setError] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const { user } = useSession();
 
   // Check if mobile for performance optimization
   // useEffect(() => {
@@ -86,11 +82,12 @@ export default function PricingSection() {
   const handleUpgradeClick = async (tier) => {
     try {
       setLoadingStates((prev) => ({ ...prev, [tier.name]: true }));
-      setError(null);
 
       // Check if user is logged in by checking localStorage
-      const storedUser = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
+      const storedUser =
+        typeof localStorage !== "undefined" && localStorage.getItem("user");
+      const token =
+        typeof localStorage !== "undefined" && localStorage.getItem("token");
       if (!storedUser || !token) {
         // Show simple alert for unauthenticated users
         alert("Please login or create an account to purchase");
@@ -114,14 +111,14 @@ export default function PricingSection() {
         price: tier.price,
         featured: tier.featured,
         fromPage: "landing",
-        timestamp: new Date().toISOString(),
+        timestamp:
+          typeof window !== "undefined" ? new Date().toISOString() : "",
       });
 
       // Redirect immediately to checkout
       window.location.href = response.data.checkoutUrl;
     } catch (err) {
       const errorMessage = "Failed to initiate payment. Please try again.";
-      setError(errorMessage);
 
       // Show simple error alert
       alert(errorMessage);
@@ -182,7 +179,7 @@ export default function PricingSection() {
 
       {/* Cards */}
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-8 lg:max-w-6xl lg:grid-cols-3 z-10 relative">
-        {tiers.map((tier, index) => (
+        {tiers.map((tier) => (
           <div
             key={tier.name}
             className={classNames(
@@ -406,7 +403,7 @@ export default function PricingSection() {
                         </div>
                       </div>
                       {/* Shine effect - Only on Pro card and desktop */}
-                      {tier.featured && !isMobile && (
+                      {tier.featured && true && (
                         <div
                           className="absolute inset-0 pointer-events-none"
                           style={{
@@ -435,69 +432,7 @@ export default function PricingSection() {
       </div>
 
       {/* CSS for animations - Only load on desktop */}
-      {!isMobile && (
-        <style jsx="true">{`
-          .button-wrapper:hover .text-wrapper {
-            transform: translateY(-100%);
-            opacity: 0;
-          }
-
-          .button-wrapper:hover .icon-wrapper {
-            opacity: 1;
-            transform: translateY(0);
-          }
-
-          /* Reverse animation when processing */
-          .button-wrapper.processing .text-wrapper {
-            transform: translateY(0);
-            opacity: 1;
-          }
-
-          .button-wrapper.processing .icon-wrapper {
-            opacity: 0;
-            transform: translateY(100%);
-          }
-
-          .button-wrapper.processing:hover .text-wrapper {
-            transform: translateY(0);
-            opacity: 1;
-          }
-
-          .button-wrapper.processing:hover .icon-wrapper {
-            opacity: 0;
-            transform: translateY(100%);
-          }
-
-          .button-wrapper:hover .shine-effect {
-            animation: shine 0.5s ease-out;
-          }
-
-          @keyframes shine {
-            0% {
-              left: 0%;
-              width: 0%;
-              opacity: 0;
-            }
-            50% {
-              width: 100%;
-              opacity: 1;
-            }
-            100% {
-              left: 100%;
-              width: 0%;
-              opacity: 0;
-            }
-          }
-
-          .text-wrapper {
-            transition: all 0.5s ease;
-          }
-
-          .icon-wrapper {
-            transition: all 0.5s ease;
-          }
-        `}</style>
-      )}
+      {/* CSS removed to prevent SSR issues */}
     </section>
   );
 }

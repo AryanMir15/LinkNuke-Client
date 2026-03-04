@@ -1,13 +1,4 @@
 import React, { useState } from "react";
-import {
-  AlertTriangle,
-  Check,
-  Shield,
-  Zap,
-  Eye,
-  Clock,
-  Lock,
-} from "lucide-react";
 
 const painPoints = [
   {
@@ -88,19 +79,6 @@ const solutions = [
 function PainPoints() {
   const [activeTab, setActiveTab] = useState("problems");
 
-  const renderIcon = (iconName) => {
-    const iconMap = {
-      AlertTriangle: <AlertTriangle className="h-5 w-5" />,
-      Eye: <Eye className="h-5 w-5" />,
-      Zap: <Zap className="h-5 w-5" />,
-      Clock: <Clock className="h-5 w-5" />,
-      Shield: <Shield className="h-5 w-5" />,
-      Check: <Check className="h-5 w-5" />,
-      Lock: <Lock className="h-5 w-5" />,
-    };
-    return iconMap[iconName] || null;
-  };
-
   return (
     <section
       className="relative w-full bg-black py-24 sm:py-40 px-4 sm:px-6 lg:px-8 overflow-hidden"
@@ -124,7 +102,19 @@ function PainPoints() {
         {/* Header */}
         <div className="text-center mb-16 sm:mb-20">
           <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6">
-            {renderIcon("AlertTriangle")}
+            <svg
+              className="h-4 w-4 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
+            </svg>
             The Problem
           </div>
 
@@ -183,7 +173,19 @@ function PainPoints() {
               />
               <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                  {renderIcon("AlertTriangle")}
+                  <svg
+                    className="h-6 w-6 text-red-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
                 </div>
                 <h3 className="font-thin text-[24px] text-white">
                   The Problems
@@ -191,20 +193,101 @@ function PainPoints() {
               </div>
 
               <div className="relative space-y-5">
-                {painPoints.map((point, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${point.bgColor} ${point.borderColor}`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                  >
-                    <div className={`mt-0.5 shrink-0 ${point.color}`}>
-                      {renderIcon(point.icon)}
+                {painPoints.map((point, index) => {
+                  const iconSvg =
+                    point.icon === "AlertTriangle" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
+                      </svg>
+                    ) : point.icon === "Eye" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    ) : point.icon === "Zap" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    ) : point.icon === "Clock" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    ) : point.icon === "Shield" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                        />
+                      </svg>
+                    ) : null;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${point.bgColor} ${point.borderColor}`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
+                    >
+                      <div className={`mt-0.5 shrink-0 ${point.color}`}>
+                        {iconSvg}
+                      </div>
+                      <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        {point.text}
+                      </p>
                     </div>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-                      {point.text}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -225,7 +308,19 @@ function PainPoints() {
               />
               <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                  {renderIcon("Check")}
+                  <svg
+                    className="h-6 w-6 text-green-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
                 </div>
                 <h3 className="font-thin text-[24px] text-white">
                   The Solutions
@@ -233,20 +328,101 @@ function PainPoints() {
               </div>
 
               <div className="relative space-y-5">
-                {solutions.map((solution, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${solution.bgColor} ${solution.borderColor}`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                  >
-                    <div className={`mt-0.5 shrink-0 ${solution.color}`}>
-                      {renderIcon(solution.icon)}
+                {solutions.map((solution, index) => {
+                  const iconSvg =
+                    solution.icon === "Check" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    ) : solution.icon === "Eye" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    ) : solution.icon === "Lock" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    ) : solution.icon === "Clock" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    ) : solution.icon === "Shield" ? (
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                        />
+                      </svg>
+                    ) : null;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] ${solution.bgColor} ${solution.borderColor}`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
+                    >
+                      <div className={`mt-0.5 shrink-0 ${solution.color}`}>
+                        {iconSvg}
+                      </div>
+                      <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        {solution.text}
+                      </p>
                     </div>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
-                      {solution.text}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -270,7 +446,19 @@ function PainPoints() {
                 />
                 <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                    {renderIcon("AlertTriangle")}
+                    <svg
+                      className="h-6 w-6 text-red-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
+                    </svg>
                   </div>
                   <h3 className="font-thin text-[24px] text-white">
                     The Problems
@@ -278,19 +466,100 @@ function PainPoints() {
                 </div>
 
                 <div className="relative space-y-4">
-                  {painPoints.map((point, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-start gap-3 p-3 rounded-xl border ${point.bgColor} ${point.borderColor}`}
-                    >
-                      <div className={`mt-0.5 shrink-0 ${point.color}`}>
-                        {renderIcon(point.icon)}
+                  {painPoints.map((point, index) => {
+                    const iconSvg =
+                      point.icon === "AlertTriangle" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                          />
+                        </svg>
+                      ) : point.icon === "Eye" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      ) : point.icon === "Zap" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                      ) : point.icon === "Clock" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      ) : point.icon === "Shield" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                          />
+                        </svg>
+                      ) : null;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`flex items-start gap-3 p-3 rounded-xl border ${point.bgColor} ${point.borderColor}`}
+                      >
+                        <div className={`mt-0.5 shrink-0 ${point.color}`}>
+                          {iconSvg}
+                        </div>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {point.text}
+                        </p>
                       </div>
-                      <p className="text-gray-300 text-sm leading-relaxed">
-                        {point.text}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -312,7 +581,19 @@ function PainPoints() {
                 />
                 <div className="relative flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                    {renderIcon("Check")}
+                    <svg
+                      className="h-6 w-6 text-green-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
                   </div>
                   <h3 className="text-xl font-bold text-white">
                     The Solutions
@@ -320,19 +601,100 @@ function PainPoints() {
                 </div>
 
                 <div className="relative space-y-4">
-                  {solutions.map((solution, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-start gap-3 p-3 rounded-xl border ${solution.bgColor} ${solution.borderColor}`}
-                    >
-                      <div className={`mt-0.5 shrink-0 ${solution.color}`}>
-                        {renderIcon(solution.icon)}
+                  {solutions.map((solution, index) => {
+                    const iconSvg =
+                      solution.icon === "Check" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      ) : solution.icon === "Eye" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      ) : solution.icon === "Lock" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                          />
+                        </svg>
+                      ) : solution.icon === "Clock" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      ) : solution.icon === "Shield" ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                          />
+                        </svg>
+                      ) : null;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`flex items-start gap-3 p-3 rounded-xl border ${solution.bgColor} ${solution.borderColor}`}
+                      >
+                        <div className={`mt-0.5 shrink-0 ${solution.color}`}>
+                          {iconSvg}
+                        </div>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {solution.text}
+                        </p>
                       </div>
-                      <p className="text-gray-300 text-sm leading-relaxed">
-                        {solution.text}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -342,7 +704,19 @@ function PainPoints() {
         {/* Bottom CTA */}
         <div className="text-center mt-16 sm:mt-20">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 text-green-400 text-sm font-medium">
-            {renderIcon("Shield")}
+            <svg
+              className="h-4 w-4 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
+            </svg>
             Secure by Design
           </div>
         </div>
