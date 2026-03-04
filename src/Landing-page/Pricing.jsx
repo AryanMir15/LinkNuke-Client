@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import { CheckIcon } from "@heroicons/react/20/solid";
-import { Sparkles } from "lucide-react";
 import posthog from "../lib/posthog.js";
 // import toast from "react-hot-toast";
 
@@ -163,7 +161,19 @@ export default function PricingSection() {
       <div className="relative mx-auto max-w-4xl text-center z-10">
         <div>
           <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1de4bf]/10 border border-[#1de4bf]/20 text-[#1de4bf] text-sm font-medium mb-4">
-            <Sparkles className="h-4 w-4 mr-2" />
+            <svg
+              className="h-4 w-4 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              />
+            </svg>
             Limited Time Offer
           </div>
           <h2 className="text-base font-semibold text-[#1de4bf]">Pricing</h2>
@@ -320,12 +330,22 @@ export default function PricingSection() {
                 <ul className="text-gray-300 space-y-4 text-left max-w-sm mx-auto">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-x-3">
-                      <CheckIcon
+                      <svg
                         className={classNames(
                           "text-[#1de4bf] flex-none mt-0.5",
                           tier.featured ? "h-5 w-5" : "h-4 w-4",
                         )}
-                      />
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
                       <span
                         className={classNames(
                           tier.featured ? "text-sm" : "text-xs",

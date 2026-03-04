@@ -31,6 +31,7 @@ const { title, description } = Astro.props;
 		<!-- Dark Mode Script -->
 		<script>
 			(function() {
+				if (typeof window === 'undefined') return; // Skip during SSR
 				const theme = localStorage.getItem('theme');
 				if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
 					document.documentElement.classList.add('dark');
