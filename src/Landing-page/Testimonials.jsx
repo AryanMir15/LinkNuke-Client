@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+// import { AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const staticTestimonials = [
@@ -8,20 +8,16 @@ const staticTestimonials = [
 ];
 
 const TestimonialCard = ({ testimonial }) => (
-  <motion.div
+  <div
     key={testimonial.name + testimonial.quote}
     className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-md text-center text-white transition-all duration-300 hover:border-purple-500"
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.95 }}
-    transition={{ duration: 0.4 }}
   >
     <p className="text-lg mb-4 italic leading-relaxed text-gray-300">
       “{testimonial.quote}”
     </p>
     <h4 className="font-thin text-white">{testimonial.name}</h4>
     <p className="text-sm text-gray-400">{testimonial.title}</p>
-  </motion.div>
+  </div>
 );
 
 export default function Testimonials() {
@@ -29,21 +25,21 @@ export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const timeoutRef = useRef(null);
 
-  useEffect(() => {
-    const stored = JSON.parse(
-      localStorage.getItem("linknuke_feedbacks") || "[]"
-    );
-    const approved = stored.filter((fb) => fb.approved && fb.text_1);
-    if (approved.length > 0) {
-      setTestimonials(
-        approved.map((fb) => ({
-          name: fb.name || "Anonymous",
-          title: fb.emoji_0 || "User",
-          quote: fb.text_1,
-        }))
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   const stored = JSON.parse(
+  //     localStorage.getItem("linknuke_feedbacks") || "[]",
+  //   );
+  //   const approved = stored.filter((fb) => fb.approved && fb.text_1);
+  //   if (approved.length > 0) {
+  //     setTestimonials(
+  //       approved.map((fb) => ({
+  //         name: fb.name || "Anonymous",
+  //         title: fb.emoji_0 || "User",
+  //         quote: fb.text_1,
+  //       })),
+  //     );
+  //   }
+  // }, []);
 
   const next = () => setIndex((prev) => (prev + 1) % testimonials.length);
   const prev = () =>
@@ -87,9 +83,7 @@ export default function Testimonials() {
 
         {/* Testimonial Card */}
         <div className="mx-auto">
-          <AnimatePresence mode="wait">
-            <TestimonialCard key={index} testimonial={testimonials[index]} />
-          </AnimatePresence>
+          <TestimonialCard key={index} testimonial={testimonials[index]} />
         </div>
 
         {/* Desktop Controls */}

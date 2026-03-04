@@ -124,7 +124,7 @@ function PainPoints() {
         {/* Header */}
         <div className="text-center mb-16 sm:mb-20">
           <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6">
-            <AlertTriangle className="h-4 w-4 mr-2" />
+            {renderIcon("AlertTriangle")}
             The Problem
           </div>
 
@@ -183,7 +183,7 @@ function PainPoints() {
               />
               <div className="relative flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
-                  <AlertTriangle className="h-5 w-5 text-red-400" />
+                  {renderIcon("AlertTriangle")}
                 </div>
                 <h3 className="font-thin text-[24px] text-white">
                   The Problems
@@ -284,7 +284,7 @@ function PainPoints() {
                       className={`flex items-start gap-3 p-3 rounded-xl border ${point.bgColor} ${point.borderColor}`}
                     >
                       <div className={`mt-0.5 shrink-0 ${point.color}`}>
-                        {point.icon}
+                        {renderIcon(point.icon)}
                       </div>
                       <p className="text-gray-300 text-sm leading-relaxed">
                         {point.text}
@@ -326,7 +326,7 @@ function PainPoints() {
                       className={`flex items-start gap-3 p-3 rounded-xl border ${solution.bgColor} ${solution.borderColor}`}
                     >
                       <div className={`mt-0.5 shrink-0 ${solution.color}`}>
-                        {solution.icon}
+                        {renderIcon(solution.icon)}
                       </div>
                       <p className="text-gray-300 text-sm leading-relaxed">
                         {solution.text}
@@ -342,7 +342,7 @@ function PainPoints() {
         {/* Bottom CTA */}
         <div className="text-center mt-16 sm:mt-20">
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 text-green-400 text-sm font-medium">
-            <Shield className="h-4 w-4 mr-2" />
+            {renderIcon("Shield")}
             Secure by Design
           </div>
         </div>

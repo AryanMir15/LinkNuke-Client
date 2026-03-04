@@ -26,20 +26,16 @@ const SocialProof = () => {
       style={{ marginTop: "5px" }}
     >
       {/* 1) Trusted By (first) */}
-      {/* <motion.span
+      <span
         className="text-white/90 tracking-wide leading-tight"
         style={{
           fontFamily: '"Style Script", cursive',
           fontSize: "1.2rem",
           fontStyle: "italic",
         }}
-        variants={fadeUp(0)}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.6 }}
       >
         Trusted By
-      </motion.span> */}
+      </span>
       <span
         className="text-white/90 tracking-wide leading-tight"
         style={{
@@ -55,7 +51,6 @@ const SocialProof = () => {
         {/* 2) Avatars fade one-by-one */}
         <div className="flex items-center -space-x-[14px]">
           {userAvatars.map((user, index) => (
-            // <motion.div
             <div
               key={index}
               className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-800"

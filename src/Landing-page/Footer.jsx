@@ -50,12 +50,12 @@ export default function Footer() {
             <h4 className="font-semibold text-white text-base mb-4">Product</h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  to="/"
+                <a
+                  href="/"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
                   Home
-                </Link>
+                </a>
               </li>
               <li>
                 <a
@@ -89,20 +89,20 @@ export default function Footer() {
             <h4 className="font-semibold text-white text-base mb-4">Support</h4>
             <ul className="space-y-2">
               <li>
-                <Link
-                  to="/privacy"
+                <a
+                  href="/privacy"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
                   Privacy Policy
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
-                  to="/terms"
+                <a
+                  href="/terms"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
                   Terms of Service
-                </Link>
+                </a>
               </li>
               <li>
                 <a
@@ -126,7 +126,7 @@ export default function Footer() {
                 className="w-6 h-6 opacity-60"
               />
               <span className="text-gray-500 text-sm">
-                &copy; {new Date().getFullYear()} LinkNuke. All rights reserved.
+                &copy; 2024 LinkNuke. All rights reserved.
               </span>
             </div>
             <div className="text-gray-500 text-sm">
