@@ -1,24 +1,11 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import Navbar from '../../../src/Landing-page/Navbar.jsx';
-import Hero from '../../../src/Landing-page/Hero.jsx';
-import PainPoints from '../../../src/Landing-page/PainPoints.jsx';
-import Features from '../../../src/Landing-page/Features.jsx';
-import FounderNote from '../../../src/Landing-page/FounderNote.jsx';
-import Pricing from '../../../src/Landing-page/Pricing.jsx';
-import Testimonials from '../../../src/Landing-page/Testimonials.jsx';
-import FAQs from '../../../src/Landing-page/FAQs.jsx';
-import Footer from '../../../src/Landing-page/Footer.jsx';
 ---
 
 <MainLayout title="LinkNuke - Advanced Link Management Platform" description="Transform your link management with powerful analytics, custom branding, and advanced features.">
-	<Navbar client:load />
-	<Hero client:visible />
-	<PainPoints client:visible />
-	<Features client:visible />
-	<FounderNote client:visible />
-	<Pricing client:visible />
-	<Testimonials client:visible />
-	<FAQs client:visible />
-	<Footer client:load />
+	<div class="container mx-auto px-4 py-8">
+		<h1 class="text-4xl font-bold text-center mb-8">LinkNuke</h1>
+		<p class="text-center text-lg mb-8">Advanced Link Management Platform</p>
+		<p class="text-center">Transform your link management with powerful analytics, custom branding, and advanced features.</p>
+	</div>
 </MainLayout>

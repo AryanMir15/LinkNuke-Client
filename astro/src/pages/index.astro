@@ -1,28 +1,8 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import Navbar from '../../../src/Landing-page/Navbar.jsx';
-import Hero from '../../../src/Landing-page/Hero.jsx';
-import Features from '../../../src/Landing-page/Features.jsx';
-import PainPoints from '../../../src/Landing-page/PainPoints.jsx';
-import Preview from '../../../src/Landing-page/Preview.jsx';
-import FAQs from '../../../src/Landing-page/FAQs.jsx';
-import Pricing from '../../../src/Landing-page/Pricing.jsx';
-import CTA from '../../../src/Landing-page/CTA.jsx';
-import Footer from '../../../src/Landing-page/Footer.jsx';
+import LandingPage from '../../../src/Landing-page/LandingPage.jsx';
 ---
 
 <MainLayout title="LinkNuke - Self-Destructing Links" description="Share sensitive files and links that automatically delete themselves">
-	<Navbar client:load />
-	<Hero client:visible />
-	<Preview client:only="react" />
-	<PainPoints client:visible />
-	<Features client:visible />
-	<Pricing client:visible />
-	<FAQs client:visible />
-	<CTA client:visible />
-	<Footer client:visible />
-	<div className="text-center py-20">
-		<h1 className="text-4xl font-bold text-white mb-4">LinkNuke</h1>
-		<p className="text-gray-300 text-lg">Secure link-sharing platform</p>
-	</div>
+	<LandingPage client:load />
 </MainLayout>

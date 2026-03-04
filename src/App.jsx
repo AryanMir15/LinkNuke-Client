@@ -21,6 +21,8 @@ import OAuthSuccess from "./components/OAuthSuccess";
 
 // Import the FeedbackForm component
 import FeedbackForm from "./Dashboard/FeedbackForm";
+import Login from "./Auth/Login";
+import Register from "./Auth/Register";
 
 // Feedback Component
 const Feedback = () => {
