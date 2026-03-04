@@ -1,12 +1,6 @@
 "use client";
 
-import React from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "../components/ui/accordion";
+import React, { useState } from "react";
 
 const faqData = [
   {
@@ -52,6 +46,18 @@ const faqData = [
 ];
 
 export default function Faq() {
+  const [openItems, setOpenItems] = useState(new Set());
+
+  const toggleItem = (index) => {
+    const newOpenItems = new Set(openItems);
+    if (newOpenItems.has(index)) {
+      newOpenItems.delete(index);
+    } else {
+      newOpenItems.add(index);
+    }
+    setOpenItems(newOpenItems);
+  };
+
   return (
     <section
       className="py-28 px-6 text-white relative overflow-hidden bg-black"
@@ -63,24 +69,38 @@ export default function Faq() {
         Frequently Asked Questions
       </h2>
 
-      <Accordion
-        type="single"
-        collapsible
-        className="max-w-2xl mx-auto space-y-2"
-      >
+      <div className="max-w-2xl mx-auto space-y-2">
         {faqData.map((item, index) => (
-          <div key={index}>
-            <AccordionItem value={`faq-${index}`}>
-              <AccordionTrigger className="text-left text-base sm:text-lg font-medium text-white hover:text-[#0bf3a2] focus:text-[#0bf3a2]">
-                {item.q}
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-300 text-sm sm:text-base leading-relaxed">
+          <div key={index} className="border-b border-gray-700">
+            <button
+              onClick={() => toggleItem(index)}
+              className="flex items-center justify-between w-full py-4 text-left text-base sm:text-lg font-medium text-white hover:text-[#0bf3a2] transition-colors"
+            >
+              <span>{item.q}</span>
+              <svg
+                className={`h-5 w-5 transition-transform duration-200 ${
+                  openItems.has(index) ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {openItems.has(index) && (
+              <div className="pb-4 text-gray-300 text-sm sm:text-base leading-relaxed">
                 {item.a}
-              </AccordionContent>
-            </AccordionItem>
+              </div>
+            )}
           </div>
         ))}
-      </Accordion>
+      </div>
     </section>
   );
 }

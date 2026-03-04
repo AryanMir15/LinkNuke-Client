@@ -21,6 +21,8 @@ export default function Navbar() {
     typeof window !== "undefined" && localStorage.getItem("token");
 
   const scrollToSection = (href) => {
+    if (typeof window === "undefined") return; // Skip during SSR
+
     const element = document.querySelector(href);
     if (element) {
       // Very slow slippery scroll
@@ -37,15 +39,14 @@ export default function Navbar() {
           top: targetPosition,
           behavior: "smooth",
         });
-      }, 50);
+      }, 300);
     }
-    setShowMobile(false); // Close mobile menu
 
     // Track navigation clicks
     trackEvent("navbar_clicked", {
       section: href.replace("#", ""),
-      isMobile: window.innerWidth < 768,
-      timestamp: new Date().toISOString(),
+      isMobile: typeof window !== "undefined" ? window.innerWidth < 768 : false,
+      timestamp: typeof window !== "undefined" ? new Date().toISOString() : "",
     });
   };
 

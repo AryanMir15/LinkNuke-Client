@@ -1,5 +1,4 @@
 "use client";
-import { ArrowRight } from "lucide-react";
 import { trackEvent } from "../lib/analytics";
 
 export default function FinalCTA() {

@@ -1,5 +1,4 @@
 import React from "react";
-import { Play } from "lucide-react";
 
 const Preview = () => {
   return (
@@ -62,7 +61,6 @@ const Preview = () => {
                 playsInline
                 onMouseEnter={(e) => e.target.play()}
                 onMouseLeave={(e) => e.target.pause()}
-                poster="/demo-video-poster.jpg"
               >
                 <source src="/Demo-Video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
