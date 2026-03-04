@@ -109,30 +109,46 @@ export default function Footer() {
 
           {/* Legal & Support */}
           <div>
-            <h4 className="font-semibold text-white text-base mb-4">Support</h4>
+            <h4 className="font-semibold text-white text-base mb-4">
+              Contact & Support
+            </h4>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="/privacy"
-                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/terms"
-                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
-                >
-                  Terms of Service
-                </a>
-              </li>
               <li>
                 <a
                   href="mailto:support@whynotship.me"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  Contact Support
+                  📧 support@whynotship.me
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://x.com/Tanzeelmirr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
+                >
+                  🐦 @Tanzeelmirr (Twitter)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/AryanMir15"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
+                >
+                  💻 @AryanMir15 (GitHub)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://whynotship.me"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
+                >
+                  🚀 WhyNotShip.me
                 </a>
               </li>
             </ul>

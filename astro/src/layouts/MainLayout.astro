@@ -19,6 +19,65 @@ const { title, description } = Astro.props;
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		
+		<!-- Canonical URL -->
+		<link rel="canonical" href={`https://linknuke.com${Astro.url.pathname}`} />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={`https://linknuke.com${Astro.url.pathname}`} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="https://linknuke.com/dashboard.png" />
+		<meta property="og:site_name" content="LinkNuke" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={`https://linknuke.com${Astro.url.pathname}`} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="https://linknuke.com/dashboard.png" />
+
+		<!-- Additional SEO Meta Tags -->
+		<meta name="theme-color" content="#000000" />
+		<meta name="robots" content="index, follow" />
+		<meta name="author" content="LinkNuke" />
+		<meta name="keywords" content="self-destructing links, secure file sharing, privacy, temporary links, one-time links" />
+		
+		<!-- Favicon and Icons -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/favicon.svg" />
+		
+		<!-- Structured Data (JSON-LD) -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "LinkNuke",
+			"description": "Secure self-destructing link sharing platform. Share sensitive files and links that automatically delete themselves after being viewed.",
+			"url": "https://linknuke.com",
+			"applicationCategory": "SecurityApplication",
+			"operatingSystem": "Web Browser",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD",
+				"description": "Free tier available"
+			},
+			"creator": {
+				"@type": "Organization",
+				"name": "LinkNuke",
+				"url": "https://linknuke.com"
+			},
+			"potentialAction": {
+				"@type": "UseAction",
+				"target": "https://linknuke.com/register",
+				"description": "Create secure self-destructing links"
+			}
+		}
+		</script>
+		
 		<!-- PostHog Initialization -->
 		<script>
 			!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identifyGroup resetGroup setGroup".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
