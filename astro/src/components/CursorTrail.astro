@@ -1,0 +1,49 @@
+---
+// CursorTrail.astro - Implements mouse-following cursor effect for Astro pages
+---
+
+<script>
+  // Cursor trail effect - only on desktop
+  if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+    const trail = document.createElement("div");
+    trail.className = "custom-cursor-trail";
+    document.body.appendChild(trail);
+
+    let mouseX = 0,
+      mouseY = 0;
+    let trailX = 0,
+      trailY = 0;
+
+    const updateTrail = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const animateTrail = () => {
+      trailX += (mouseX - trailX) * 0.05;
+      trailY += (mouseY - trailY) * 0.05;
+
+      trail.style.left = trailX - 4 + "px";
+      trail.style.top = trailY - 3 + "px"; // Changed from -4 to -3 to move it 1px lower
+
+      requestAnimationFrame(animateTrail);
+    };
+
+    // Start animation
+    requestAnimationFrame(animateTrail);
+    document.addEventListener("mousemove", updateTrail);
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      document.removeEventListener("mousemove", updateTrail);
+      if (trail.parentNode) {
+        trail.parentNode.removeChild(trail);
+      }
+    });
+  }
+</script>
+
+<style>
+  /* Cursor trail styles are already in index.css */
+  /* This component only handles the JavaScript logic */
+</style>

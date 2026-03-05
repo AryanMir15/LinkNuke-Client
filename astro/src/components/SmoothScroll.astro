@@ -1,0 +1,44 @@
+---
+// SmoothScroll.astro - Implements Lenis smooth scrolling for Astro pages
+---
+
+<script>
+  import Lenis from 'lenis';
+
+  // Initialize Lenis smooth scroll
+  const lenis = new Lenis({
+    duration: 1.2, // How long it takes to "catch up" to scroll position
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing for smooth feel
+    direction: "vertical", // Scroll direction
+    gestureDirection: "vertical", // Gesture direction
+    smooth: true, // Enable smooth scrolling
+    mouseMultiplier: 1, // Mouse wheel sensitivity
+    smoothTouch: false, // Disable smooth scrolling on touch devices
+    touchMultiplier: 2, // Touch sensitivity
+    infinite: false, // Don't loop infinitely
+  });
+
+  // Animation frame loop for smooth scrolling
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+
+  requestAnimationFrame(raf);
+
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    lenis.destroy();
+  });
+</script>
+
+<style>
+  /* Let Lenis handle smooth scrolling, override CSS smooth scroll */
+  html {
+    scroll-behavior: auto !important;
+  }
+  
+  * {
+    scroll-behavior: auto !important;
+  }
+</style>
