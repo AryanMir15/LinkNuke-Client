@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
+// import { Link } from "react-router-dom";
 // import {
 //   NavigationMenu,
 //   NavigationMenuItem,
 //   NavigationMenuList,
 // } from "../components/ui/navigation-menu";
-import DarkModeToggle from "../components/ui/DarkModeToggle";
+// import DarkModeToggle from "../components/ui/DarkModeToggle";
 import { trackEvent } from "../lib/analytics";
 
 const navLinks = [
@@ -51,7 +52,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed w-full z-50 top-0 mt-5">
+    <header className="fixed w-full z-[9999] top-0 mt-5">
       <div className="py-2 px-3">
         <div className="max-w-4xl mx-auto">
           <div className="backdrop-blur-sm bg-black/20 border border-gray-700/50 rounded-full transition-all duration-300 hover:bg-black/30 hover:border-gray-600/60">
@@ -135,16 +136,25 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <>
-                    <a
-                      href="/login"
+                    <button
+                      onClick={() => {
+                        if (typeof window !== "undefined") {
+                          // Force navigation to React app root with state
+                          window.location.href = "/?route=login";
+                        }
+                      }}
                       className="text-base text-white hover:text-[#1de4bf] transition font-thin"
                     >
                       Log in
-                    </a>
+                    </button>
                     <div className="relative inline-flex items-center justify-center gap-4 group">
                       <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                      <a
-                        href="/register"
+                      <button
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.location.href = "/?route=register";
+                          }
+                        }}
                         className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                         title="register"
                       >
@@ -166,7 +176,7 @@ export default function Navbar() {
                             className="transition group-hover:translate-x-[3px]"
                           />
                         </svg>
-                      </a>
+                      </button>
                     </div>
                   </>
                 )}
@@ -244,12 +254,16 @@ export default function Navbar() {
             Pricing
           </button>
           {!isLoggedIn && (
-            <a
-              href="/login"
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.location.href = "/login";
+                }
+              }}
               className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
             >
               Log in
-            </a>
+            </button>
           )}
         </div>
       )}

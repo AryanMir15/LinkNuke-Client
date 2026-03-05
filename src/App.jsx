@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 // import posthog from 'posthog-js'  // Disabled analytics
-import { Routes, Route, Link } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import Lenis from "lenis";
 import Hero from "./Landing-page/Hero";
 import FeatureSection from "./Landing-page/Features";
@@ -95,6 +101,45 @@ const FeedbackButton = () => {
 };
 
 function App() {
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+
+  // Get route parameter from both query and hash
+  const route = searchParams.get("route") || location.hash.replace("#", "");
+
+  // Handle routing changes
+  const [currentRoute, setCurrentRoute] = useState(route);
+
+  useEffect(() => {
+    setCurrentRoute(route);
+    console.log("Route parameter:", route);
+  }, [route, location.hash, searchParams]);
+
+  // Determine which component to show
+  const getComponent = () => {
+    if (currentRoute === "login") {
+      return <Login />;
+    } else if (currentRoute === "register") {
+      return <Register />;
+    } else if (currentRoute) {
+      return <div>Route not found: {currentRoute}</div>;
+    } else {
+      return (
+        <>
+          <Hero />
+          <Preview />
+          <PainPoints />
+          <FeatureSection />
+          <Pricing />
+          <FounderNote />
+          <FAQs />
+          <FinalCTA />
+          <Footer />
+        </>
+      );
+    }
+  };
+
   useEffect(() => {
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
@@ -176,25 +221,14 @@ function App() {
       <Navbar />
       <FeedbackButton />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Hero />
-              <Preview />
-              <PainPoints />
-              <FeatureSection />
-              <Pricing />
-              <FounderNote />
-              <FAQs />
-              <FinalCTA />
-              <Footer />
-            </>
-          }
-        />
+        <Route path="/" element={getComponent()} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/#login" element={<Login />} />
+        <Route path="/#register" element={<Register />} />
         <Route path="/dashboard/feedback-admin" element={<FeedbackAdmin />} />
         <Route path="/oauth-success" element={<OAuthSuccess />} />
         <Route path="/feedback" element={<Feedback />} />

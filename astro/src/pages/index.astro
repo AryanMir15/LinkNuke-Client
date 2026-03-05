@@ -1,8 +1,10 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import Navbar from '../../../src/Landing-page/Navbar.jsx';
 import LandingPage from '../../../src/Landing-page/LandingPage.jsx';
 ---
 
 <MainLayout title="LinkNuke - Self-Destructing Links" description="Share sensitive files and links that automatically delete themselves">
+	<Navbar client:load />
 	<LandingPage client:load />
 </MainLayout>
