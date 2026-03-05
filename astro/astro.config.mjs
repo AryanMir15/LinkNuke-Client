@@ -6,6 +6,9 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  // 1. Add your site URL here so sitemaps can be generated
+  site: "https://linknuke.whynotship.me",
+
   output: "static",
   integrations: [
     react(),
