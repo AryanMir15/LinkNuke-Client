@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
+import sharpImageService from "astro/assets/services/sharp";
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,6 +11,17 @@ export default defineConfig({
   site: "https://linknuke.whynotship.me",
 
   output: "static",
+  prefetch: {
+    prefetchAll: true,
+  },
+  build: {
+    inlineStylesheets: "auto",
+  },
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+    },
+  },
   integrations: [
     react(),
     tailwind(),

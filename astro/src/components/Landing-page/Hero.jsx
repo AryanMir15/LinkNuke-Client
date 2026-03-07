@@ -116,11 +116,14 @@ const Hero = () => {
             <div className="w-full max-w-5xl scale-[1.3] mt-16 sm:mt-20 md:mt-24 lg:mt-28">
               <div className="relative inline-flex items-center justify-center w-full group">
                 <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-2xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
-                <img
-                  src="/dashboard.png"
-                  alt="LinkNuke Dashboard"
-                  className="relative w-full rounded-2xl ring-1 ring-white/10 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5 group-hover:shadow-gray-600/30"
-                />
+                <picture>
+                  <source srcset="/dashboard.webp" type="image/webp" />
+                  <img
+                    src="/dashboard.png"
+                    alt="LinkNuke Dashboard"
+                    className="relative w-full rounded-2xl ring-1 ring-white/10 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5 group-hover:shadow-gray-600/30"
+                  />
+                </picture>
               </div>
             </div>
           </div>
