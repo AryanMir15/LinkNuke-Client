@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 const Preview = () => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const video = entry.target;
+            if (!video.src) {
+              video.src = "/Demo-Video.mp4";
+              video.load();
+            }
+            observer.unobserve(video);
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
   return (
     <section
       className="relative w-full overflow-hidden py-32 sm:py-40"
@@ -55,14 +82,15 @@ const Preview = () => {
             <div className="relative w-full rounded-2xl border border-gray-400/20 overflow-hidden shadow-2xl">
               {/* Demo Video - Container adapts to video size */}
               <video
+                ref={videoRef}
                 className="w-full h-auto rounded-2xl"
                 muted
                 loop
                 playsInline
+                preload="none"
                 onMouseEnter={(e) => e.target.play()}
                 onMouseLeave={(e) => e.target.pause()}
               >
-                <source src="/Demo-Video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
 
