@@ -25,17 +25,7 @@ const SocialProof = () => {
       className="flex items-center justify-center gap-[18px] text-gray-400 text-sm"
       style={{ marginTop: "5px" }}
     >
-      {/* 1) Trusted By (first) */}
-      <span
-        className="text-white/90 tracking-wide leading-tight"
-        style={{
-          fontFamily: '"Style Script", cursive',
-          fontSize: "1.2rem",
-          fontStyle: "italic",
-        }}
-      >
-        Trusted By
-      </span>
+      {/* 1) Trusted By */}
       <span
         className="text-white/90 tracking-wide leading-tight"
         style={{
