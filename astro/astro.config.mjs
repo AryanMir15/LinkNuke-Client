@@ -4,12 +4,14 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 import sharpImageService from "astro/assets/services/sharp";
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
   // 1. Add your site URL here so sitemaps can be generated
   site: "https://linknuke.whynotship.me",
-  output: "static",
+  output: "server",
+  adapter: vercel({}),
   prefetch: {
     prefetchAll: true,
   },
