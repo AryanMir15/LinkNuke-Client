@@ -16,6 +16,7 @@ export default function WhyLinkNuke() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="space-y-6"
+          style={{ willChange: "opacity, transform" }}
         >
           <h2 className="text-4xl font-bold tracking-tight leading-snug">
             Why settle for basic?
@@ -59,10 +60,11 @@ export default function WhyLinkNuke() {
           className="relative bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md p-8 
             shadow-[0_5px_30px_-10px_rgba(168,85,247,0.3)] transition-all duration-300 
             hover:scale-[1.03] hover:shadow-[0_0_30px_#a855f740]"
+          style={{ willChange: "opacity, transform" }}
         >
           <div className="space-y-4">
             <h3 className="text-xl font-bold">Ditch the Linktree clones.</h3>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-300 text-sm">
               LinkNuke is smarter, faster, cleaner. This isn’t some
               cookie-cutter profile builder. We give you full control, real
               analytics, and tools that actually grow your brand. No BS.

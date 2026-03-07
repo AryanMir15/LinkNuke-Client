@@ -116,11 +116,11 @@ const Features = () => {
             {/* Image */}
             <div className="relative">
               <img
-                src="/link-management-dashboard.png"
+                src="/link-management-dashboard_small.png"
                 alt="Link Management Dashboard"
                 className="w-full rounded-2xl shadow-2xl"
-                width="4096"
-                height="1080"
+                width="2048"
+                height="540"
               />
             </div>
           </div>

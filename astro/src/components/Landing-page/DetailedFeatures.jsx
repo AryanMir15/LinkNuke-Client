@@ -105,6 +105,7 @@ export default function Features() {
                          transition-all duration-300
                          hover:scale-[1.025]
                          hover:border-fuchsia-700/40"
+              style={{ willChange: "transform" }}
             >
               <div className="mb-4 text-cyan-300">
                 <feature.icon size={28} />
