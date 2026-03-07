@@ -16,6 +16,7 @@ export default defineConfig({
   },
   build: {
     inlineStylesheets: "auto",
+    minify: "esbuild",
   },
   image: {
     service: {

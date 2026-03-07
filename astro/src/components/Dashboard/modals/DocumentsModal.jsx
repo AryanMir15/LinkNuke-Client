@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, Fragment, useEffect } from "react";
 import { X, Copy, ChevronDown, Check, Info } from "lucide-react";
 import { useLinksContext } from "../../context/useLinksContext";
@@ -110,45 +108,37 @@ const DocumentsModal = ({ closeModal }) => {
   }, []);
 
   const handleDrop = (e) => {
-    console.log("🔥 DOCUMENTS DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-    console.log("🔥 Dropped files:", droppedFiles);
 
     // Filter for valid document types
     const validFiles = droppedFiles.filter((file) =>
-      validTypes.includes(file.type)
+      validTypes.includes(file.type),
     );
-
-    console.log("🔥 Valid document files:", validFiles);
 
     if (validFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...validFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleDragOver = (e) => {
-    console.log("🔥 DOCUMENTS DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
-    console.log("🔥 DOCUMENTS DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(true);
   };
 
   const handleDragLeave = (e) => {
-    console.log("🔥 DOCUMENTS DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
     // Only set to false if we're leaving the drop area completely
@@ -158,25 +148,21 @@ const DocumentsModal = ({ closeModal }) => {
   };
 
   const handleFileSelect = (e) => {
-    console.log("🔥 DOCUMENTS FILE INPUT CHANGE");
     const selectedFiles = Array.from(e.target.files);
-    console.log("🔥 Selected files:", selectedFiles);
 
     const validFiles = selectedFiles.filter((file) =>
-      validTypes.includes(file.type)
+      validTypes.includes(file.type),
     );
 
     if (validFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...validFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleClick = () => {
-    console.log("🔥 DOCUMENTS DROP AREA CLICKED");
     if (!loading && !uploading && fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -522,8 +508,8 @@ const DocumentsModal = ({ closeModal }) => {
                 loading || uploading
                   ? "cursor-not-allowed opacity-50 border-gray-700"
                   : isDragActive
-                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
-                  : "cursor-pointer border-gray-700"
+                    ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                    : "cursor-pointer border-gray-700"
               }`}
               onClick={handleClick}
               onDragEnter={handleDragEnter}

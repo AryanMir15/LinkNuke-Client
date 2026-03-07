@@ -112,7 +112,6 @@ function App() {
 
   useEffect(() => {
     setCurrentRoute(route);
-    console.log("Route parameter:", route);
   }, [route, location.hash, searchParams]);
 
   // Determine which component to show

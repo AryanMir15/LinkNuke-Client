@@ -97,46 +97,38 @@ const VideoModal = ({ closeModal }) => {
   }, []);
 
   const handleDrop = (e) => {
-    console.log("🔥 VIDEO DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-    console.log("🔥 Dropped files:", droppedFiles);
 
     // Filter for valid video files
     const validFiles = droppedFiles.filter(
       (file) =>
-        file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/")
+        file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/"),
     );
-
-    console.log("🔥 Valid video files:", validFiles);
 
     if (validFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...validFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleDragOver = (e) => {
-    console.log("🔥 VIDEO DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
-    console.log("🔥 VIDEO DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(true);
   };
 
   const handleDragLeave = (e) => {
-    console.log("🔥 VIDEO DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
     // Only set to false if we're leaving the drop area completely
@@ -146,26 +138,22 @@ const VideoModal = ({ closeModal }) => {
   };
 
   const handleFileSelect = (e) => {
-    console.log("🔥 VIDEO FILE INPUT CHANGE");
     const selectedFiles = Array.from(e.target.files);
-    console.log("🔥 Selected files:", selectedFiles);
 
     const validFiles = selectedFiles.filter(
       (file) =>
-        file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/")
+        file.size <= MAX_VIDEO_SIZE_BYTES && file.type.startsWith("video/"),
     );
 
     if (validFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...validFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleClick = () => {
-    console.log("🔥 VIDEO DROP AREA CLICKED");
     if (!loading && !uploading && fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -503,8 +491,8 @@ const VideoModal = ({ closeModal }) => {
                 loading || uploading
                   ? "cursor-not-allowed opacity-50 border-gray-700"
                   : isDragOver
-                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
-                  : "cursor-pointer border-gray-700"
+                    ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                    : "cursor-pointer border-gray-700"
               }`}
               onClick={handleClick}
               onDragEnter={handleDragEnter}

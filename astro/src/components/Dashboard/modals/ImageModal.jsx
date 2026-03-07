@@ -64,7 +64,7 @@ const shareOptions = [
     ),
     getShareUrl: (url) =>
       `mailto:?subject=Check%20out%20this%20link&body=${encodeURIComponent(
-        url
+        url,
       )}`,
   },
 ];
@@ -88,9 +88,7 @@ const ImageModal = ({ closeModal }) => {
   const [viewsWidth, setViewsWidth] = useState(undefined);
   const [expiryWidth, setExpiryWidth] = useState(undefined);
   // Debug: Monitor files state changes
-  useEffect(() => {
-    console.log("🔥 Files state updated:", files);
-  }, [files]);
+  useEffect(() => {}, [files]);
 
   // Native HTML5 drag and drop state
   const [isDragActive, setIsDragActive] = useState(false);
@@ -98,20 +96,17 @@ const ImageModal = ({ closeModal }) => {
 
   // Native drag and drop handlers
   const handleDragEnter = (e) => {
-    console.log("🔥 NATIVE DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(true);
   };
 
   const handleDragOver = (e) => {
-    console.log("🔥 NATIVE DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragLeave = (e) => {
-    console.log("🔥 NATIVE DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
     // Only set to false if we're leaving the drop area completely
@@ -121,63 +116,47 @@ const ImageModal = ({ closeModal }) => {
   };
 
   const handleDrop = (e) => {
-    console.log("🔥 NATIVE DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-    console.log("🔥 Dropped files:", droppedFiles);
 
     // Filter for image files
     const imageFiles = droppedFiles.filter((file) =>
-      file.type.startsWith("image/")
+      file.type.startsWith("image/"),
     );
-
-    console.log("🔥 Image files:", imageFiles);
 
     if (imageFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...imageFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleFileSelect = (e) => {
-    console.log("🔥 FILE INPUT CHANGE");
     const selectedFiles = Array.from(e.target.files);
-    console.log("🔥 Selected files:", selectedFiles);
 
     if (selectedFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...selectedFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleClick = () => {
-    console.log("🔥 DROP AREA CLICKED");
     if (!loading && !uploading && fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
   // Debug: Log component mount
-  useEffect(() => {
-    console.log("🔥 ImageModal mounted");
-    console.log("🔥 Loading state:", loading);
-    console.log("🔥 Uploading state:", uploading);
-    console.log("🔥 File input ref:", fileInputRef.current);
-  }, []);
+  useEffect(() => {}, []);
 
   // Debug: Track isDragActive changes
-  useEffect(() => {
-    console.log("🔥 isDragActive changed:", isDragActive);
-  }, [isDragActive]);
+  useEffect(() => {}, [isDragActive]);
 
   useEffect(() => {
     if (viewsBtnRef.current) {
@@ -557,8 +536,8 @@ const ImageModal = ({ closeModal }) => {
                 loading || uploading
                   ? "cursor-not-allowed opacity-50 border-gray-700"
                   : isDragActive
-                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
-                  : "cursor-pointer border-gray-700"
+                    ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                    : "cursor-pointer border-gray-700"
               }`}
               onClick={handleClick}
               onDragEnter={handleDragEnter}

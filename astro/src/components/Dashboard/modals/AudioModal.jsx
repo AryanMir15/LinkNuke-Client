@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, Fragment, useEffect } from "react";
 import { X, Copy, ChevronDown, Check, Info } from "lucide-react";
 import { useLinksContext } from "../../context/useLinksContext";
@@ -99,45 +97,37 @@ const AudioModal = ({ closeModal }) => {
   }, []);
 
   const handleDrop = (e) => {
-    console.log("🔥 AUDIO DROP EVENT!");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-    console.log("🔥 Dropped files:", droppedFiles);
 
     // Filter for audio files
     const audioFiles = droppedFiles.filter((file) =>
-      file.type.startsWith("audio/")
+      file.type.startsWith("audio/"),
     );
-
-    console.log("🔥 Audio files:", audioFiles);
 
     if (audioFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...audioFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleDragOver = (e) => {
-    console.log("🔥 AUDIO DRAG OVER");
     e.preventDefault();
     e.stopPropagation();
   };
 
   const handleDragEnter = (e) => {
-    console.log("🔥 AUDIO DRAG ENTER");
     e.preventDefault();
     e.stopPropagation();
     setIsDragActive(true);
   };
 
   const handleDragLeave = (e) => {
-    console.log("🔥 AUDIO DRAG LEAVE");
     e.preventDefault();
     e.stopPropagation();
     // Only set to false if we're leaving the drop area completely
@@ -147,25 +137,21 @@ const AudioModal = ({ closeModal }) => {
   };
 
   const handleFileSelect = (e) => {
-    console.log("🔥 AUDIO FILE INPUT CHANGE");
     const selectedFiles = Array.from(e.target.files);
-    console.log("🔥 Selected files:", selectedFiles);
 
     const audioFiles = selectedFiles.filter((file) =>
-      file.type.startsWith("audio/")
+      file.type.startsWith("audio/"),
     );
 
     if (audioFiles.length > 0) {
       setFiles((prev) => {
         const newFiles = [...prev, ...audioFiles];
-        console.log("🔥 New files state:", newFiles);
         return newFiles;
       });
     }
   };
 
   const handleClick = () => {
-    console.log("🔥 AUDIO DROP AREA CLICKED");
     if (!loading && !uploading && fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -503,8 +489,8 @@ const AudioModal = ({ closeModal }) => {
                 loading || uploading
                   ? "cursor-not-allowed opacity-50 border-gray-700"
                   : isDragActive
-                  ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
-                  : "cursor-pointer border-gray-700"
+                    ? "cursor-pointer border-[#00ffff] bg-[#00ffff]/10"
+                    : "cursor-pointer border-gray-700"
               }`}
               onClick={handleClick}
               onDragEnter={handleDragEnter}
