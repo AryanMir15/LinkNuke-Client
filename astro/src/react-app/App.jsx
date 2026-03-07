@@ -1,29 +1,34 @@
 import React, { useState, useEffect } from "react";
 // import posthog from 'posthog-js'  // Disabled analytics
-import pkg from "react-router-dom";
-const { Routes, Route, Link, useSearchParams, useLocation } = pkg;
+import {
+  Routes,
+  Route,
+  Link,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import Lenis from "lenis";
-import Hero from "../components/Landing-page/Hero";
-import FeatureSection from "../components/Landing-page/Features";
-import Preview from "../components/Landing-page/Preview";
-import Pricing from "../components/Landing-page/Pricing";
-import FAQs from "../components/Landing-page/FAQs";
-import Footer from "../components/Landing-page/Footer";
-import Navbar from "../components/Landing-page/Navbar";
-import FinalCTA from "../components/Landing-page/CTA";
-import PainPoints from "../components/Landing-page/PainPoints";
-import FeedbackAdmin from "../components/Dashboard/FeedbackAdmin";
-import NotFound from "../components/Landing-page/NotFound";
-import FounderNote from "../components/Landing-page/FounderNote";
-import Privacy from "../components/Landing-page/Privacy";
-import Terms from "../components/Landing-page/Terms";
-import RefundPolicy from "../components/Landing-page/RefundPolicy";
-import OAuthSuccess from "../components/components/OAuthSuccess";
+import Hero from "./Landing-page/Hero";
+import FeatureSection from "./Landing-page/Features";
+import Preview from "./Landing-page/Preview";
+import Pricing from "./Landing-page/Pricing";
+import FAQs from "./Landing-page/FAQs";
+import Footer from "./Landing-page/Footer";
+import Navbar from "./Landing-page/Navbar";
+import FinalCTA from "./Landing-page/CTA";
+import PainPoints from "./Landing-page/PainPoints";
+import FeedbackAdmin from "./Dashboard/FeedbackAdmin";
+import NotFound from "./Landing-page/NotFound";
+import FounderNote from "./Landing-page/FounderNote";
+import Privacy from "./Landing-page/Privacy";
+import Terms from "./Landing-page/Terms";
+import RefundPolicy from "./Landing-page/RefundPolicy";
+import OAuthSuccess from "./components/OAuthSuccess";
 
 // Import the FeedbackForm component
-import FeedbackForm from "../components/Dashboard/FeedbackForm";
-import Login from "../components/Auth/Login";
-import Register from "../components/Auth/Register";
+import FeedbackForm from "./Dashboard/FeedbackForm";
+import Login from "./Auth/Login";
+import Register from "./Auth/Register";
 
 // Feedback Component
 const Feedback = () => {
