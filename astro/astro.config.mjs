@@ -9,14 +9,12 @@ import sharpImageService from "astro/assets/services/sharp";
 export default defineConfig({
   // 1. Add your site URL here so sitemaps can be generated
   site: "https://linknuke.whynotship.me",
-
   output: "static",
   prefetch: {
     prefetchAll: true,
   },
   build: {
     inlineStylesheets: "auto",
-    minify: "esbuild",
   },
   image: {
     service: {
@@ -50,6 +48,7 @@ export default defineConfig({
     },
     build: {
       rollupOptions: {
+        treeshake: true,
         output: {
           manualChunks: {
             vendor: ["react", "react-dom"],

@@ -64,14 +64,17 @@ const Features = () => {
             {/* Image */}
             <div className="relative order-2 lg:order-1">
               <picture>
-                <source media="(max-width: 768px)" srcset="/extra-secure-feature_520.png" />
+                <source
+                  media="(max-width: 768px)"
+                  srcset="/extra-secure-feature_mobile.webp"
+                />
                 <img
-                  src="/extra-secure-feature_small.png"
+                  src="/extra-secure-feature_small.webp"
                   alt="Extra Secure Features"
                   className="w-full rounded-2xl shadow-2xl"
                   width="1040"
                   height="1040"
-                  srcset="/extra-secure-feature_520.png 520w, /extra-secure-feature_small.png 1040w"
+                  srcset="/extra-secure-feature_mobile.webp 260w, /extra-secure-feature_small.webp 520w"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </picture>
@@ -119,9 +122,12 @@ const Features = () => {
             {/* Image */}
             <div className="relative">
               <picture>
-                <source media="(max-width: 768px)" srcset="/link-management-dashboard_mobile.png">
+                <source
+                  media="(max-width: 768px)"
+                  srcset="/link-management-dashboard_mobile.webp"
+                />
                 <img
-                  src="/link-management-dashboard_small.png"
+                  src="/link-management-dashboard_small.webp"
                   alt="Link Management Dashboard"
                   className="w-full rounded-2xl shadow-2xl"
                   width="2048"
