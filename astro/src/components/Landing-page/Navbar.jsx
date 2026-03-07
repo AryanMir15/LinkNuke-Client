@@ -128,7 +128,7 @@ export default function Navbar() {
                   <div className="relative inline-flex items-center justify-center group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <a
-                      href="/dashboard"
+                      href="/app/dashboard"
                       className="group relative inline-flex items-center justify-center text-sm rounded-full bg-gray-900 px-8 py-3.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     >
                       Dashboard
@@ -140,7 +140,7 @@ export default function Navbar() {
                       onClick={() => {
                         if (typeof window !== "undefined") {
                           // Force navigation to React app root with state
-                          window.location.href = "/?route=login";
+                          window.location.href = "/app/?route=login";
                         }
                       }}
                       className="text-base text-white hover:text-[#1de4bf] transition font-thin"
@@ -152,7 +152,7 @@ export default function Navbar() {
                       <button
                         onClick={() => {
                           if (typeof window !== "undefined") {
-                            window.location.href = "/?route=register";
+                            window.location.href = "/app/?route=register";
                           }
                         }}
                         className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
@@ -188,7 +188,7 @@ export default function Navbar() {
                   <div className="relative inline-flex items-center justify-center group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <a
-                      href="/dashboard"
+                      href="/app/dashboard"
                       className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                     >
                       Dashboard
@@ -198,7 +198,7 @@ export default function Navbar() {
                   <div className="relative inline-flex items-center justify-center gap-3 group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
                     <a
-                      href="/register"
+                      href="/app/register"
                       className="group relative inline-flex items-center justify-center text-sm rounded-xl bg-gray-900 px-4 py-2.5 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
                       title="register"
                     >
@@ -257,7 +257,7 @@ export default function Navbar() {
             <button
               onClick={() => {
                 if (typeof window !== "undefined") {
-                  window.location.href = "/login";
+                  window.location.href = "/app/login";
                 }
               }}
               className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"

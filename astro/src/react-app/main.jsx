@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { DarkModeProvider } from "./context/DarkModeContext";
-import { SessionProvider } from "./context/useSession";
-import AppWrapper from "./components/ui/AppWrapper";
-import "./lib/posthog"; // Initialize PostHog
-import { initSessionTracking } from "./lib/analytics";
+import { DarkModeProvider } from "../components/context/DarkModeContext";
+import { SessionProvider } from "../components/context/useSession";
+import AppWrapper from "../components/components/ui/AppWrapper";
+import "../components/lib/posthog"; // Initialize PostHog
+import { initSessionTracking } from "../components/lib/analytics";
 
 // Initialize session tracking (fake push)
 initSessionTracking();
@@ -76,5 +76,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </SessionProvider>
       </BrowserRouter>
     </DarkModeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
