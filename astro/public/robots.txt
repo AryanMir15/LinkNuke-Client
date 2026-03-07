@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://linknuke.com/sitemap.xml
+Sitemap: https://linknuke.whynotship.me/sitemap.xml
 
 # Disallow private areas
 Disallow: /dashboard/
