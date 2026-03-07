@@ -48,5 +48,14 @@ export default defineConfig({
     ssr: {
       noExternal: [],
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ["react", "react-dom"],
+          },
+        },
+      },
+    },
   },
 });

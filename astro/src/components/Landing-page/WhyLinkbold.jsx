@@ -20,7 +20,7 @@ export default function WhyLinkNuke() {
           <h2 className="text-4xl font-bold tracking-tight leading-snug">
             Why settle for basic?
           </h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-300 text-lg">
             Other link tools are bloated. They add a million features you’ll
             never use and charge you for it.{" "}
             <span className="text-white font-semibold">LinkNuke</span> focuses
@@ -31,7 +31,7 @@ export default function WhyLinkNuke() {
               <Sparkles size={18} className="text-purple-400 mt-1" />
               <div>
                 <strong>No code. No mess.</strong>
-                <p className="text-gray-400">
+                <p className="text-gray-300">
                   Just plug in your links, tweak the design, and you’re live. As
                   easy as copying a meme.
                 </p>
@@ -41,7 +41,7 @@ export default function WhyLinkNuke() {
               <Sparkles size={18} className="text-purple-400 mt-1" />
               <div>
                 <strong>Privacy first.</strong>
-                <p className="text-gray-400">
+                <p className="text-gray-300">
                   We don’t track weird stuff or sell your data. You own your
                   links, your clicks, your profile.
                 </p>

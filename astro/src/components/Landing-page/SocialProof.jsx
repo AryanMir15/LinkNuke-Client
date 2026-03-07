@@ -4,11 +4,11 @@ import React from "react";
 const SocialProof = () => {
   // Public avatars from the /public folder
   const userAvatars = [
-    { name: "User 1", src: "/User1.jpg" },
-    { name: "User 2", src: "/User2.jpg" },
-    { name: "User 3", src: "/User3.jpg" },
-    { name: "User 4", src: "/User4.jpg" },
-    { name: "User 5", src: "/User5.jpg" },
+    { name: "User 1", src: "/User1_small.jpg" },
+    { name: "User 2", src: "/User2_small.jpg" },
+    { name: "User 3", src: "/User3_small.jpg" },
+    { name: "User 4", src: "/User4_small.jpg" },
+    { name: "User 5", src: "/User5_small.jpg" },
   ];
 
   const fadeUp = (delay = 0) => ({
@@ -52,6 +52,10 @@ const SocialProof = () => {
                 className="w-full h-full object-cover"
                 loading="lazy"
                 decoding="async"
+                srcset={`/User${index + 1}_37.jpg 37w, ${user.src} 74w`}
+                sizes="37px"
+                width="74"
+                height="74"
               />
             </div>
           ))}

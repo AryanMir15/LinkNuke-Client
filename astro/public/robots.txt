@@ -1,5 +1,4 @@
 User-agent: *
-Allow: /
 
 # Sitemap location
 Sitemap: https://linknuke.whynotship.me/sitemap.xml
@@ -18,5 +17,5 @@ Allow: /refund-policy
 Allow: /login
 Allow: /register
 
-# Crawl delay (optional - helps prevent server overload)
+# Crawl delay (supported by Bing/Yandex, ignored by Google)
 Crawl-delay: 1

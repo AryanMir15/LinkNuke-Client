@@ -37,7 +37,7 @@ const Features = () => {
             radial-gradient(circle 300px at 85% 20%, black 0%, transparent 60%),
             radial-gradient(circle 300px at 15% 80%, black 0%, transparent 60%),
             radial-gradient(circle 300px at 15% 20%, black 0%, transparent 60%)
-          `
+          `,
         }}
       />
 
@@ -64,9 +64,13 @@ const Features = () => {
             {/* Image */}
             <div className="relative order-2 lg:order-1">
               <img
-                src="/extra-secure-feature.png"
+                src="/extra-secure-feature_small.png"
                 alt="Extra Secure Features"
                 className="w-full rounded-2xl shadow-2xl"
+                width="1040"
+                height="1040"
+                srcset="/extra-secure-feature_520.png 520w, /extra-secure-feature_small.png 1040w"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
 
@@ -115,6 +119,8 @@ const Features = () => {
                 src="/link-management-dashboard.png"
                 alt="Link Management Dashboard"
                 className="w-full rounded-2xl shadow-2xl"
+                width="4096"
+                height="1080"
               />
             </div>
           </div>

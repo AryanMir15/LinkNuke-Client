@@ -91,7 +91,7 @@ export default function Features() {
         <h2 className="text-4xl font-normal md:font-medium tracking-tight mb-4">
           Everything You Need. Nothing You Don’t.
         </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto">
           LinkNuke isn’t bloated. It’s the cleanest way to show off everything
           you’re doing — with style and simplicity.
         </p>
@@ -110,7 +110,7 @@ export default function Features() {
                 <feature.icon size={28} />
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-400 text-sm">{feature.desc}</p>
+              <p className="text-gray-300 text-sm">{feature.desc}</p>
             </div>
           </LazyCard>
         ))}
