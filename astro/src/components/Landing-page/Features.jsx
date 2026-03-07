@@ -63,15 +63,18 @@ const Features = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Image */}
             <div className="relative order-2 lg:order-1">
-              <img
-                src="/extra-secure-feature_small.png"
-                alt="Extra Secure Features"
-                className="w-full rounded-2xl shadow-2xl"
-                width="1040"
-                height="1040"
-                srcset="/extra-secure-feature_520.png 520w, /extra-secure-feature_small.png 1040w"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+              <picture>
+                <source media="(max-width: 768px)" srcset="/extra-secure-feature_520.png" />
+                <img
+                  src="/extra-secure-feature_small.png"
+                  alt="Extra Secure Features"
+                  className="w-full rounded-2xl shadow-2xl"
+                  width="1040"
+                  height="1040"
+                  srcset="/extra-secure-feature_520.png 520w, /extra-secure-feature_small.png 1040w"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </picture>
             </div>
 
             {/* Text Content */}
@@ -115,13 +118,16 @@ const Features = () => {
 
             {/* Image */}
             <div className="relative">
-              <img
-                src="/link-management-dashboard_small.png"
-                alt="Link Management Dashboard"
-                className="w-full rounded-2xl shadow-2xl"
-                width="2048"
-                height="540"
-              />
+              <picture>
+                <source media="(max-width: 768px)" srcset="/link-management-dashboard_mobile.png">
+                <img
+                  src="/link-management-dashboard_small.png"
+                  alt="Link Management Dashboard"
+                  className="w-full rounded-2xl shadow-2xl"
+                  width="2048"
+                  height="540"
+                />
+              </picture>
             </div>
           </div>
         </div>

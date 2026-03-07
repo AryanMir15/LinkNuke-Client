@@ -1,9 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Preview = () => {
   const videoRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return; // Skip video loading on mobile
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -27,7 +37,7 @@ const Preview = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isMobile]);
   return (
     <section
       className="relative w-full overflow-hidden py-32 sm:py-40"
@@ -81,21 +91,31 @@ const Preview = () => {
             {/* Video Container - Built to fit video dimensions */}
             <div className="relative w-full rounded-2xl border border-gray-400/20 overflow-hidden shadow-2xl">
               {/* Demo Video - Container adapts to video size */}
-              <video
-                ref={videoRef}
-                className="w-full h-auto rounded-2xl"
-                muted
-                loop
-                playsInline
-                preload="none"
-                onMouseEnter={(e) => e.target.play()}
-                onMouseLeave={(e) => e.target.pause()}
-                width="1299"
-                height="782"
-              >
-                <track kind="captions" src="" srclang="en" label="English" />
-                Your browser does not support the video tag.
-              </video>
+              {isMobile ? (
+                <img
+                  src="/Demo-Video-poster.jpg"
+                  alt="Demo Video"
+                  className="w-full h-auto rounded-2xl"
+                  width="1299"
+                  height="782"
+                />
+              ) : (
+                <video
+                  ref={videoRef}
+                  className="w-full h-auto rounded-2xl"
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  onMouseEnter={(e) => e.target.play()}
+                  onMouseLeave={(e) => e.target.pause()}
+                  width="1299"
+                  height="782"
+                >
+                  <track kind="captions" src="" srclang="en" label="English" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
 
               {/* Faint Grid Overlay - positioned over video */}
               <div
