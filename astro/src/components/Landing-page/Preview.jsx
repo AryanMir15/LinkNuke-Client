@@ -90,7 +90,10 @@ const Preview = () => {
                 preload="none"
                 onMouseEnter={(e) => e.target.play()}
                 onMouseLeave={(e) => e.target.pause()}
+                width="1299"
+                height="782"
               >
+                <track kind="captions" src="" srclang="en" label="English" />
                 Your browser does not support the video tag.
               </video>
 

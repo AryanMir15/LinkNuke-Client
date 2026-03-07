@@ -122,6 +122,8 @@ const Hero = () => {
                     src="/dashboard.png"
                     alt="LinkNuke Dashboard"
                     className="relative w-full rounded-2xl ring-1 ring-white/10 transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5 group-hover:shadow-gray-600/30"
+                    width="1299"
+                    height="782"
                   />
                 </picture>
               </div>
