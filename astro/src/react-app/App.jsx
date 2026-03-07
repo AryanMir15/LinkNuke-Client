@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import posthog from 'posthog-js'  // Disabled analytics
-import {
-  Routes,
-  Route,
-  Link,
-  useSearchParams,
-  useLocation,
-} from "react-router-dom";
+import pkg from "react-router-dom";
+const { Routes, Route, Link, useSearchParams, useLocation } = pkg;
 import Lenis from "lenis";
 import Hero from "../components/Landing-page/Hero";
 import FeatureSection from "../components/Landing-page/Features";
