@@ -1,0 +1,12 @@
+---
+import { BrowserRouter } from 'react-router-dom';
+import AppWrapper from '../../components/components/ui/AppWrapper.jsx';
+
+export async function getStaticPaths() {
+  return [{ params: { slug: undefined } }];
+}
+---
+
+<BrowserRouter basename="/app" client:only="react">
+  <AppWrapper client:only="react" />
+</BrowserRouter>

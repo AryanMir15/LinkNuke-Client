@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import App from "../../App";
+import App from "../../../react-app/App.jsx";
 import Login from "../../Auth/Login";
 import Register from "../../Auth/Register";
 import VerifyPin from "../../Auth/verifyPin";

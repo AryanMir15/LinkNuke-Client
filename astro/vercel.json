@@ -1,7 +1,7 @@
 {
-  "buildCommand": "npm run build && cd ../ && npm run build && rm -rf astro/dist/app && mkdir -p astro/dist/app && cp dist/index.html astro/dist/app/ && cp -r dist/assets astro/dist/app/",
-  "outputDirectory": "astro/dist",
-  "installCommand": "npm install && cd ../ && npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
   "headers": [
     {
       "source": "/(.*)\\.(jpg|jpeg|png|gif|ico|svg|webp)",

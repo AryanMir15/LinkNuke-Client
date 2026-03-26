@@ -8,27 +8,27 @@ import {
   useLocation,
 } from "react-router-dom";
 import Lenis from "lenis";
-import Hero from "./Landing-page/Hero";
-import FeatureSection from "./Landing-page/Features";
-import Preview from "./Landing-page/Preview";
-import Pricing from "./Landing-page/Pricing";
-import FAQs from "./Landing-page/FAQs";
-import Footer from "./Landing-page/Footer";
-import Navbar from "./Landing-page/Navbar";
-import FinalCTA from "./Landing-page/CTA";
-import PainPoints from "./Landing-page/PainPoints";
-import FeedbackAdmin from "./Dashboard/FeedbackAdmin";
-import NotFound from "./Landing-page/NotFound";
-import FounderNote from "./Landing-page/FounderNote";
-import Privacy from "./Landing-page/Privacy";
-import Terms from "./Landing-page/Terms";
-import RefundPolicy from "./Landing-page/RefundPolicy";
-import OAuthSuccess from "./components/OAuthSuccess";
+import Hero from "../components/Landing-page/Hero.jsx";
+import FeatureSection from "../components/Landing-page/Features.jsx";
+import Preview from "../components/Landing-page/Preview.jsx";
+import Pricing from "../components/Landing-page/Pricing.jsx";
+import FAQs from "../components/Landing-page/FAQs.jsx";
+import Footer from "../components/Landing-page/Footer.jsx";
+import Navbar from "../components/Landing-page/Navbar.jsx";
+import FinalCTA from "../components/Landing-page/CTA.jsx";
+import PainPoints from "../components/Landing-page/PainPoints.jsx";
+import FeedbackAdmin from "../components/Dashboard/FeedbackAdmin.jsx";
+import NotFound from "../components/Landing-page/NotFound.jsx";
+import FounderNote from "../components/Landing-page/FounderNote.jsx";
+import Privacy from "../components/Landing-page/Privacy.jsx";
+import Terms from "../components/Landing-page/Terms.jsx";
+import RefundPolicy from "../components/Landing-page/RefundPolicy.jsx";
+import OAuthSuccess from "../components/components/OAuthSuccess.jsx";
 
 // Import the FeedbackForm component
-import FeedbackForm from "./Dashboard/FeedbackForm";
-import Login from "./Auth/Login";
-import Register from "./Auth/Register";
+import FeedbackForm from "../components/Dashboard/FeedbackForm.jsx";
+import Login from "../components/Auth/Login.jsx";
+import Register from "../components/Auth/Register.jsx";
 
 // Feedback Component
 const Feedback = () => {
