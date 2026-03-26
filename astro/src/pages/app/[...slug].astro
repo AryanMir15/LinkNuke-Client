@@ -2,6 +2,8 @@
 import { BrowserRouter } from 'react-router-dom';
 import AppWrapper from '../../components/components/ui/AppWrapper.jsx';
 
+export const prerender = false;
+
 export async function getStaticPaths() {
   return [{ params: { slug: undefined } }];
 }
