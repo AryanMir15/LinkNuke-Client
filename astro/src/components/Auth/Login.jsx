@@ -19,7 +19,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + "/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -78,7 +78,7 @@ export default function Login() {
 
   // Google
   const handleGoogleLogin = () => {
-    window.location.href = import.meta.env.VITE_API_URL + "/auth/google";
+    window.location.href = "/api/auth/google";
   };
 
   return (
@@ -102,7 +102,9 @@ export default function Login() {
                 alt="LinkNuke Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12"
               />
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">LinkNuke</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                LinkNuke
+              </h1>
             </div>
             <p className="text-sm mt-6 text-gray-400">
               Login to your LinkNuke account
@@ -122,7 +124,7 @@ export default function Login() {
                 name: "password",
                 type: "password",
                 placeholder: "••••••••",
-              }
+              },
             ].map(({ label, name, type, placeholder }) => (
               <div key={name} className="space-y-1">
                 <label htmlFor={name} className="text-sm text-gray-400 block">

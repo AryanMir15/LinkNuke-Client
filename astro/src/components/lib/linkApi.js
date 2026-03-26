@@ -1,9 +1,9 @@
 // linkApi.js - Centralized API service for Link CRUD
 
-// Use the environment variable for the API base URL
-const API_BASE = import.meta.env.VITE_API_URL;
-const LINKS_URL = API_BASE + "/links";
-const PUBLIC_LINKS_URL = API_BASE + "/public/links";
+// Use relative paths for production compatibility with Vercel rewrites
+const API_BASE = "";
+const LINKS_URL = API_BASE + "/api/links";
+const PUBLIC_LINKS_URL = API_BASE + "/api/public/links";
 
 // Retry configuration
 const MAX_RETRIES = 3;
@@ -19,7 +19,7 @@ async function fetchWithRetry(url, options = {}, retryCount = 0) {
   } catch (error) {
     if (retryCount >= MAX_RETRIES) throw error;
     await new Promise((resolve) =>
-      setTimeout(resolve, RETRY_DELAYS[retryCount])
+      setTimeout(resolve, RETRY_DELAYS[retryCount]),
     );
     return fetchWithRetry(url, options, retryCount + 1);
   }

@@ -34,7 +34,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch(import.meta.env.VITE_API_URL + "/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -108,7 +108,7 @@ export default function Register() {
           });
 
           toast.success(
-            `Started ${trialPlan} trial! You have 3 days to explore.`
+            `Started ${trialPlan} trial! You have 3 days to explore.`,
           );
         } catch (trialError) {
           // Don't fail registration if trial start fails
@@ -136,7 +136,9 @@ export default function Register() {
                 alt="LinkNuke Logo"
                 className="w-10 h-10 sm:w-12 sm:h-12"
               />
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">LinkNuke</h1>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                LinkNuke
+              </h1>
             </div>
             <p className="text-sm mt-6 text-gray-400">
               Create your LinkNuke account
@@ -168,7 +170,7 @@ export default function Register() {
                 name: "confirmPassword",
                 type: "password",
                 placeholder: "••••••••",
-              }
+              },
             ].map(({ label, name, type, placeholder }) => (
               <div key={name} className="space-y-1">
                 <label htmlFor={name} className="text-sm text-gray-400 block">
