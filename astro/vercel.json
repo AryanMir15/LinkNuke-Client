@@ -28,8 +28,8 @@
       "destination": "https://linknuke-backend.fly.dev/api/$1"
     },
     {
-      "source": "/app/(.*)",
-      "destination": "/app/index.html"
+      "source": "/dashboard/(.*)",
+      "destination": "/dashboard/index.html"
     }
   ]
 }

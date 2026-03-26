@@ -1,0 +1,9 @@
+---
+import ReactApp from '../../react-app/ReactApp.jsx';
+
+export async function getStaticPaths() {
+  return [{ params: { slug: undefined } }];
+}
+---
+
+<ReactApp client:only="react" />
