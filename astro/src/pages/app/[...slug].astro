@@ -1,0 +1,32 @@
+---
+// Redirect all /app/* routes to the React app
+export async function getStaticPaths() {
+  return [{ params: { slug: undefined } }];
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting to LinkNuke App...</title>
+  <script>
+    // Redirect to React app - works on both localhost and production
+    const path = window.location.pathname.replace('/app', '') || '/';
+    const search = window.location.search;
+    const hash = window.location.hash;
+    
+    // Use current host to work on localhost and production
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const baseUrl = isLocalhost 
+      ? `http://${window.location.host}/app`
+      : 'https://linknuke.whynotship.me/app';
+    
+    window.location.replace(`${baseUrl}${path}${search}${hash}`);
+  </script>
+</head>
+<body>
+  <p>Redirecting to LinkNuke App...</p>
+</body>
+</html>

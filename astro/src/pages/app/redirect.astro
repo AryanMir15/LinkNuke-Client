@@ -1,0 +1,23 @@
+---
+// Redirect all /app/* routes to the React app
+export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting to LinkNuke App...</title>
+  <script>
+    // Extract the path after /app/ and redirect to the React app
+    const path = window.location.pathname.replace('/app', '') || '/';
+    const search = window.location.search;
+    const hash = window.location.hash;
+    window.location.replace(`https://linknuke.whynotship.me/app${path}${search}${hash}`);
+  </script>
+</head>
+<body>
+  <p>Redirecting to LinkNuke App...</p>
+</body>
+</html>
