@@ -139,7 +139,7 @@ export default function Navbar() {
                     <button
                       onClick={() => {
                         if (typeof window !== "undefined") {
-                          window.location.href = "/dashboard";
+                          window.location.href = "/dashboard/login";
                         }
                       }}
                       className="text-base text-white hover:text-[#1de4bf] transition font-thin"
@@ -256,7 +256,7 @@ export default function Navbar() {
             <button
               onClick={() => {
                 if (typeof window !== "undefined") {
-                  window.location.href = "/dashboard";
+                  window.location.href = "/dashboard/login";
                 }
               }}
               className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"
