@@ -5,7 +5,7 @@ import ReactApp from '../../react-app/ReactApp.jsx';
 export async function getStaticPaths() {
   return [
     { params: { slug: undefined } }, // For /dashboard
-    { params: { slug: [] } },      // For /dashboard/login, /dashboard/register, etc.
+    { params: { slug: "" } },      // For /dashboard/login, /dashboard/register, etc.
   ];
 }
 ---
