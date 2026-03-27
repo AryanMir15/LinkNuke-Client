@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../lib/apiConfig";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -40,14 +41,11 @@ export default function SubscriptionManager() {
     try {
       const token = localStorage.getItem("token");
       // Fetch fresh user data from the server
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/auth/verify`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(buildApiUrl("auth/verify"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.user) {
         // Update localStorage with fresh user data
@@ -80,12 +78,12 @@ export default function SubscriptionManager() {
       }
 
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        buildApiUrl("paddle/subscription-status"),
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setSubscription(response.data.subscription);
@@ -124,7 +122,7 @@ export default function SubscriptionManager() {
   const handleCancelSubscription = async () => {
     if (
       !confirm(
-        "Are you sure you want to cancel your subscription? You'll lose access to premium features at the end of your current billing period."
+        "Are you sure you want to cancel your subscription? You'll lose access to premium features at the end of your current billing period.",
       )
     ) {
       return;
@@ -134,13 +132,13 @@ export default function SubscriptionManager() {
       setCancelling(true);
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/cancel-subscription`,
+        buildApiUrl("paddle/cancel-subscription"),
         {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       await fetchSubscriptionStatus();
@@ -148,11 +146,11 @@ export default function SubscriptionManager() {
       // Show appropriate message based on response
       if (response.data.localCancellation) {
         toast.success(
-          "Subscription cancelled! Due to network issues, the cancellation will be fully processed shortly. You'll receive a confirmation email from Paddle."
+          "Subscription cancelled! Due to network issues, the cancellation will be fully processed shortly. You'll receive a confirmation email from Paddle.",
         );
       } else {
         toast.success(
-          "Subscription cancelled successfully! You'll receive a confirmation email from Paddle."
+          "Subscription cancelled successfully! You'll receive a confirmation email from Paddle.",
         );
       }
     } catch (err) {
@@ -193,13 +191,13 @@ export default function SubscriptionManager() {
       setRefunding(true);
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/request-refund`,
+        buildApiUrl("paddle/request-refund"),
         { reason: refundReason },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       await fetchSubscriptionStatus();
@@ -207,7 +205,7 @@ export default function SubscriptionManager() {
       setRefundReason("");
 
       toast.success(
-        `Refund processed successfully! You've been refunded $${response.data.refundAmount} and your access has been removed immediately.`
+        `Refund processed successfully! You've been refunded $${response.data.refundAmount} and your access has been removed immediately.`,
       );
     } catch (err) {
       let errorMessage = "Failed to process refund request. Please try again.";
@@ -250,10 +248,10 @@ export default function SubscriptionManager() {
       return false;
 
     const firstPaymentDate = new Date(
-      subscription.firstPaymentDate || subscription.startDate
+      subscription.firstPaymentDate || subscription.startDate,
     );
     const daysSincePayment = Math.floor(
-      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24)
+      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24),
     );
 
     return daysSincePayment <= 15;
@@ -264,10 +262,10 @@ export default function SubscriptionManager() {
     if (!subscription?.firstPaymentDate && !subscription?.startDate) return 0;
 
     const firstPaymentDate = new Date(
-      subscription.firstPaymentDate || subscription.startDate
+      subscription.firstPaymentDate || subscription.startDate,
     );
     const daysSincePayment = Math.floor(
-      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24)
+      (Date.now() - firstPaymentDate) / (1000 * 60 * 60 * 24),
     );
 
     return Math.max(0, 15 - daysSincePayment);
@@ -443,7 +441,7 @@ export default function SubscriptionManager() {
           <p className="text-sm text-gray-300">
             {subscription.status === "refunded"
               ? formatDate(
-                  subscription.firstPaymentDate || subscription.startDate
+                  subscription.firstPaymentDate || subscription.startDate,
                 )
               : formatDate(subscription.startDate)}
           </p>
@@ -463,8 +461,8 @@ export default function SubscriptionManager() {
             {subscription.status === "refunded"
               ? "Refunded On"
               : subscription.plan === "lifetime"
-              ? "Valid Until"
-              : "Next Billing"}
+                ? "Valid Until"
+                : "Next Billing"}
           </h4>
           <p className="text-sm text-gray-300">
             {subscription.status === "refunded"

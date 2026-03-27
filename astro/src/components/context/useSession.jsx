@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { buildApiUrl } from "../lib/apiConfig";
 
 const SessionContext = createContext(null);
 
@@ -52,16 +53,13 @@ export function SessionProvider({ children }) {
         const parsedUser = JSON.parse(userData);
 
         // Verify token with server by making a test API call
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/verify`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(buildApiUrl("auth/verify"), {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`Verification failed: ${response.status}`);

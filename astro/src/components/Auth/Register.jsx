@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { trackEvent } from "../lib/analytics";
+import { buildApiUrl } from "../lib/apiConfig";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -34,7 +35,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(buildApiUrl("auth/register"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -202,11 +203,7 @@ export default function Register() {
           </form>
 
           <button
-            onClick={() =>
-              (window.location.href = `${
-                import.meta.env.VITE_API_URL
-              }/auth/google`)
-            }
+            onClick={() => (window.location.href = buildApiUrl("auth/google"))}
             className="w-full py-2.5 rounded-full bg-[#1F1F23] text-white font-medium text-sm hover:bg-[#2E2E32] transition flex items-center justify-center gap-2 shadow-md"
           >
             <img

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { buildApiUrl } from "../lib/apiConfig";
 import { trackLink } from "../lib/linkApi";
 import { X } from "lucide-react";
 import BouncingLoader from "../components/ui/BouncingLoader";
@@ -72,17 +73,14 @@ const PreviewPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(
-          import.meta.env.VITE_API_URL + `/public/links/${linkId}`,
-          {
-            // Explicitly no credentials for public endpoint
-            credentials: "omit",
-            headers: {
-              "Content-Type": "application/json",
-              // NO Authorization header for public endpoint
-            },
-          }
-        );
+        const res = await fetch(buildApiUrl(`public/links/${linkId}`), {
+          // Explicitly no credentials for public endpoint
+          credentials: "omit",
+          headers: {
+            "Content-Type": "application/json",
+            // NO Authorization header for public endpoint
+          },
+        });
 
         if (!res.ok) {
           if (res.status === 404) {
@@ -174,13 +172,15 @@ const PreviewPage = () => {
                   This link has been automatically destroyed by LinkNuke
                 </p>
                 <p className="text-gray-500 text-sm">
-                  The link reached its view limit and has been permanently removed
+                  The link reached its view limit and has been permanently
+                  removed
                 </p>
-                
+
                 {/* CTA Section */}
                 <div className="pt-6 space-y-4">
                   <p className="text-gray-200">
-                    Create your own secure links that self-destruct after viewing
+                    Create your own secure links that self-destruct after
+                    viewing
                   </p>
                   <div className="relative inline-flex items-center justify-center gap-4 group">
                     <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
@@ -347,7 +347,7 @@ const PreviewPage = () => {
                     setImageLoading(true);
                     // Force reload the image
                     const img = document.querySelector(
-                      'img[src="' + link.imageUrl + '"]'
+                      'img[src="' + link.imageUrl + '"]',
                     );
                     if (img) {
                       img.src = link.imageUrl + "?t=" + Date.now();
@@ -406,7 +406,7 @@ const PreviewPage = () => {
           {!link.extraSecure && (
             <a
               href={`data:text/plain;charset=utf-8,${encodeURIComponent(
-                link.text
+                link.text,
               )}`}
               download="text.txt"
               className="absolute top-3 left-3 z-30 p-2 bg-gray-800/60 hover:bg-gray-700/80 rounded-lg transition-all duration-200 opacity-70 hover:opacity-90"

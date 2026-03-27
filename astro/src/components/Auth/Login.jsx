@@ -4,6 +4,7 @@ import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { trackEvent } from "../lib/analytics";
+import { buildApiUrl } from "../lib/apiConfig";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -19,7 +20,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(buildApiUrl("auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -78,7 +79,7 @@ export default function Login() {
 
   // Google
   const handleGoogleLogin = () => {
-    window.location.href = "/api/auth/google";
+    window.location.href = buildApiUrl("auth/google");
   };
 
   return (

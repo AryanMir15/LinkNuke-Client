@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
+import { buildApiUrl } from "../lib/apiConfig";
 import posthog from "../lib/posthog.js";
 // import toast from "react-hot-toast";
 
@@ -93,7 +94,7 @@ export default function PricingSection() {
       }
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/paddle/create-checkout`,
+        buildApiUrl("paddle/create-checkout"),
         {
           productType: tier.name.toLowerCase(),
         },
