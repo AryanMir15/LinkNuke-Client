@@ -1,9 +1,10 @@
 // linkApi.js - Centralized API service for Link CRUD
 
-// Use relative paths for production compatibility with Vercel rewrites
-const API_BASE = "";
-const LINKS_URL = API_BASE + "/api/links";
-const PUBLIC_LINKS_URL = API_BASE + "/api/public/links";
+import { buildApiUrl } from "./apiConfig";
+
+// Use buildApiUrl for consistent API calls
+const LINKS_URL = buildApiUrl("links");
+const PUBLIC_LINKS_URL = buildApiUrl("public/links");
 
 // Retry configuration
 const MAX_RETRIES = 3;

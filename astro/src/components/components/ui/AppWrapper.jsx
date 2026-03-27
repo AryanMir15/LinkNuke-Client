@@ -8,6 +8,7 @@ import ForgotPassword from "../../Auth/ForgotPassword";
 import ResetPassword from "../../Auth/ResetPassword";
 import Dashboard from "../../Dashboard/Dashboard";
 import { LinksProvider } from "../../context/LinksContext";
+import { SessionProvider } from "../../context/useSession";
 import PreviewPage from "../../Preview/PreviewPage";
 import FeedbackForm from "../../Dashboard/FeedbackForm";
 import OAuthSuccess from "../OAuthSuccess";
@@ -69,33 +70,35 @@ function AppWrapper() {
           showContent ? "opacity-100" : "opacity-0"
         }`}
       >
-        <Routes>
-          {/* Public routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify-pin" element={<VerifyPin />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/oauth-success" element={<OAuthSuccess />} />
-          <Route path="/pricing" element={<PricingPage />} />
+        <SessionProvider>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verify-pin" element={<VerifyPin />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+            <Route path="/oauth-success" element={<OAuthSuccess />} />
+            <Route path="/pricing" element={<PricingPage />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <LinksProvider>
-                  <Dashboard />
-                </LinksProvider>
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/preview/:linkId" element={<PreviewPage />} />
-          <Route path="/feedback" element={<FeedbackForm />} />
+            {/* Protected routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <LinksProvider>
+                    <Dashboard />
+                  </LinksProvider>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/preview/:linkId" element={<PreviewPage />} />
+            <Route path="/feedback" element={<FeedbackForm />} />
 
-          {/* Catch-all route must be last */}
-          <Route path="/*" element={<App />} />
-        </Routes>
+            {/* Catch-all route must be last */}
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </SessionProvider>
       </div>
     </>
   );
