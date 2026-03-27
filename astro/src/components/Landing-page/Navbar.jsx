@@ -139,7 +139,7 @@ export default function Navbar() {
                     <button
                       onClick={() => {
                         if (typeof window !== "undefined") {
-                          window.location.href = "/dashboard/login";
+                          window.location.href = "/login";
                         }
                       }}
                       className="text-base text-white hover:text-[#1de4bf] transition font-thin"
@@ -151,7 +151,7 @@ export default function Navbar() {
                       <button
                         onClick={() => {
                           if (typeof window !== "undefined") {
-                            window.location.href = "/dashboard/register";
+                            window.location.href = "/register";
                           }
                         }}
                         className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
@@ -256,7 +256,7 @@ export default function Navbar() {
             <button
               onClick={() => {
                 if (typeof window !== "undefined") {
-                  window.location.href = "/dashboard/login";
+                  window.location.href = "/login";
                 }
               }}
               className="text-gray-300 hover:text-[#1de4bf] transition text-base cursor-pointer font-thin"

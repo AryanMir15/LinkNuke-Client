@@ -118,7 +118,7 @@ export default function Footer() {
                   href="mailto:support@whynotship.me"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  📧 support@whynotship.me
+                  support@whynotship.me
                 </a>
               </li>
               <li>
@@ -128,7 +128,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  🐦 @Tanzeelmirr (Twitter)
+                  @Tanzeelmirr (Twitter)
                 </a>
               </li>
               <li>
@@ -138,7 +138,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  💻 @AryanMir15 (GitHub)
+                  @AryanMir15 (GitHub)
                 </a>
               </li>
               <li>
@@ -148,7 +148,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
                 >
-                  🚀 WhyNotShip.me
+                  WhyNotShip.me
                 </a>
               </li>
             </ul>
