@@ -5,10 +5,10 @@ const PRODUCTION_BACKEND_URL = "https://linknuke-backend.fly.dev/api/v1";
 // Determine environment and set base URL
 export const API_BASE_URL =
   // If we have a development API URL, use it
-  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_PUBLIC_API_URL ||
   // If we're in development mode, use empty string (will be handled by dev server)
   import.meta.env.DEV
-    ? ""
+    ? "http://localhost:3001" // use explicit localhost in dev if no env var
     : // Otherwise, use production backend URL directly
       PRODUCTION_BACKEND_URL;
 

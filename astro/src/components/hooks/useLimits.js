@@ -5,12 +5,26 @@ export default function useLimits() {
   const { user } = useContext(SessionContext);
   const [cachedUsage, setCachedUsage] = useState(null);
 
-  // Basic cache with 60-second freshness
-  const getPlanLimits = () => ({
-    links: user?.subscription?.plan === "pro" ? 100 : 10,
-    files: user?.subscription?.plan === "pro" ? 50 : 5,
-    storage: user?.subscription?.plan === "pro" ? 1073741824 : 52428800,
-  });
+  // Dynamic plan limits from backend or defaults
+  const getPlanLimits = () => {
+    const plan = user?.subscription?.plan || "free";
+    
+    // Default fallback limits if not provided by backend
+    const defaultLimits = {
+      free: { links: 5, files: 1, storage: 52428800 }, // 50MB
+      starter: { links: 10, files: 5, storage: 1073741824 }, // 1GB
+      pro: { links: 500, files: 10, storage: 10737418240 }, // 10GB
+      lifetime: { links: 9999, files: 9999, storage: 107374182400 }, // 100GB
+    };
+    
+    const baseLimits = defaultLimits[plan] || defaultLimits.free;
+    
+    return {
+      links: user?.subscription?.usageLimits?.links || baseLimits.links,
+      files: baseLimits.files,
+      storage: baseLimits.storage,
+    };
+  };
 
   const canCreateLink = () =>
     (cachedUsage?.links || user?.dailyUsage?.links || 0) <
