@@ -15,7 +15,7 @@ export function SessionProvider({ children }) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setUser(null);
-      window.location.href = "/login";
+      window.location.href = "/dashboard/login";
     } catch (error) {}
   };
 
@@ -75,7 +75,7 @@ export function SessionProvider({ children }) {
 
         // Redirect to login only when on protected routes
         if (isProtectedRoute) {
-          window.location.href = "/login";
+          window.location.href = "/dashboard/login";
           return;
         }
       } finally {

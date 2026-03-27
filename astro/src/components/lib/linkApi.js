@@ -56,7 +56,7 @@ async function handleResponse(res) {
     if (res.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      window.location.href = "/dashboard/login";
       throw new Error("Authentication expired. Please login again.");
     }
 
@@ -83,7 +83,7 @@ export async function getLinks() {
   if (res.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    window.location.href = "/dashboard/login";
     return [];
   }
 
