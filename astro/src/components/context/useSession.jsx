@@ -23,19 +23,29 @@ export function SessionProvider({ children }) {
     const verifySession = async () => {
       const currentPath = window.location.pathname;
 
-      // Only verify session on protected route prefixes. All other pages are public.
+      // Define auth pages - skip ALL verification on these pages
+      const authPages = [
+        "/login",
+        "/register",
+        "/verify-pin",
+        "/forgot-password",
+        "/dashboard/login",
+        "/dashboard/register",
+        "/dashboard/verify-pin",
+        "/dashboard/forgot-password",
+      ];
+
+      if (authPages.includes(currentPath)) {
+        setLoading(false);
+        return;
+      }
+
+      // Only verify session on protected route prefixes
       const isProtectedRoute =
         currentPath.startsWith("/dashboard") ||
         currentPath.startsWith("/feedback");
 
-      // Always skip verification on explicit auth pages to avoid loops
-      const isAuthPage =
-        currentPath === "/login" ||
-        currentPath === "/register" ||
-        currentPath === "/verify-pin" ||
-        currentPath === "/forgot-password";
-
-      if (!isProtectedRoute || isAuthPage) {
+      if (!isProtectedRoute) {
         setLoading(false);
         return;
       }

@@ -18,8 +18,11 @@ import PricingPage from "../../Pricing/PricingPage";
 // Auth protection component
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
+
   if (!token) {
-    return <Navigate to="/login" replace />;
+    // Redirect to login using window.location for full page reload
+    window.location.href = "/dashboard/login";
+    return null;
   }
   return children;
 };
