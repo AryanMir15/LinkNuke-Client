@@ -167,7 +167,6 @@ const Configurator = () => {
     trackEvent("core_feature_clicked", {
       feature: "file_format_selection",
       format: formatLabel,
-      timestamp: new Date().toISOString(),
     });
   };
 

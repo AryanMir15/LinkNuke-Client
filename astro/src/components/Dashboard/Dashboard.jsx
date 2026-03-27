@@ -142,12 +142,6 @@ export default function Dashboard() {
 
         initialDataFetched.current = true;
 
-        // Track dashboard visit
-        trackPageView("dashboard", {
-          isMobile: window.innerWidth < 768,
-          timestamp: new Date().toISOString(),
-        });
-
         // Fetch links in background (don't wait for it)
         if (!links || links.length === 0) {
           fetchLinks().catch((err) => {});
@@ -181,6 +175,13 @@ export default function Dashboard() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array - run only once on mount
+
+  // Track dashboard visit after mount to avoid hydration issues
+  useEffect(() => {
+    trackPageView("dashboard", {
+      isMobile: window.innerWidth < 768,
+    });
+  }, []);
 
   // Handle payment success/cancel messages (run only once)
   useEffect(() => {
@@ -216,7 +217,6 @@ export default function Dashboard() {
     trackEvent("upgrade_clicked", {
       source: "dashboard_banner",
       plan: subscription?.plan || "free",
-      timestamp: new Date().toISOString(),
     });
   };
 
