@@ -29,8 +29,11 @@ export default function Dashboard() {
   const initialDataFetched = useRef(false);
 
   const fetchSubscriptionStatus = useCallback(async () => {
+    console.log("🔍 [DASHBOARD] Starting fetchSubscriptionStatus...");
     try {
       const token = localStorage.getItem("token");
+      console.log("🔍 [DASHBOARD] Token exists:", !!token);
+
       const response = await axios.get(
         `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
         {
@@ -40,14 +43,38 @@ export default function Dashboard() {
         },
       );
 
+      console.log(
+        "🔍 [DASHBOARD] Raw subscription response:",
+        JSON.stringify(response.data, null, 2),
+      );
+      console.log(
+        "🔍 [DASHBOARD] Subscription plan:",
+        response.data.subscription?.plan,
+      );
+      console.log(
+        "🔍 [DASHBOARD] Subscription status:",
+        response.data.subscription?.status,
+      );
+      console.log(
+        "🔍 [DASHBOARD] Usage limits:",
+        response.data.subscription?.usageLimits,
+      );
+
       setSubscription(response.data.subscription);
 
       // Check if user is on free plan or refunded and has reached limit
-      if (
+      const isFreeOrRefunded =
         !response.data.subscription?.plan ||
         response.data.subscription?.plan === "free" ||
-        response.data.subscription?.status === "refunded"
-      ) {
+        response.data.subscription?.status === "refunded";
+
+      console.log("🔍 [DASHBOARD] Is free or refunded:", isFreeOrRefunded);
+      console.log(
+        "🔍 [DASHBOARD] Current links count:",
+        Array.isArray(links) ? links.length : 0,
+      );
+
+      if (isFreeOrRefunded) {
         const startOfMonth = new Date();
         startOfMonth.setDate(1);
         startOfMonth.setHours(0, 0, 0, 0);
@@ -59,32 +86,56 @@ export default function Dashboard() {
 
         const limit = response.data.subscription?.usageLimits?.links || 5;
 
+        console.log("🔍 [DASHBOARD] Links this month:", linksThisMonth);
+        console.log("🔍 [DASHBOARD] Monthly limit:", limit);
+        console.log("🔍 [DASHBOARD] Limit reached:", linksThisMonth >= limit);
+
         if (linksThisMonth >= limit) {
+          console.log("🔍 [DASHBOARD] Setting showFreePlanLimit to TRUE");
           setShowFreePlanLimit(true);
         } else {
+          console.log("🔍 [DASHBOARD] Setting showFreePlanLimit to FALSE");
           setShowFreePlanLimit(false);
         }
       } else {
+        console.log(
+          "🔍 [DASHBOARD] User has premium plan, setting showFreePlanLimit to FALSE",
+        );
         setShowFreePlanLimit(false);
       }
     } catch (error) {
-      console.error("Failed to fetch subscription status:", error);
+      console.error(
+        "❌ [DASHBOARD] Failed to fetch subscription status:",
+        error,
+      );
+      console.log("🔍 [DASHBOARD] Attempting fallback to localStorage...");
       // Try to get subscription data from localStorage user as fallback
       try {
         const userStr = localStorage.getItem("user");
+        console.log("🔍 [DASHBOARD] Found user in localStorage:", !!userStr);
         if (userStr) {
           const user = JSON.parse(userStr);
+          console.log(
+            "🔍 [DASHBOARD] Parsed user subscription:",
+            user.subscription,
+          );
           if (user.subscription) {
+            console.log(
+              "🔍 [DASHBOARD] Using fallback subscription from localStorage",
+            );
             setSubscription(user.subscription);
           }
         }
       } catch (fallbackError) {
         console.error(
-          "Failed to get subscription from localStorage:",
+          "❌ [DASHBOARD] Failed to get subscription from localStorage:",
           fallbackError,
         );
       }
     } finally {
+      console.log(
+        "🔍 [DASHBOARD] fetchSubscriptionStatus completed, setting loading to false",
+      );
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,14 +145,11 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem("token");
       // Fetch fresh user data from the server
-      const response = await axios.get(
-        buildApiUrl("auth/verify"),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get(buildApiUrl("auth/verify"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       if (response.data.user) {
         // Update localStorage with fresh user data
@@ -157,6 +205,9 @@ export default function Dashboard() {
 
         // Always fetch subscription status to get accurate data
         if (isMounted) {
+          console.log(
+            "🔍 [DASHBOARD] useEffect: Starting subscription fetch...",
+          );
           await fetchSubscriptionStatus();
         }
       } catch (err) {
@@ -172,6 +223,9 @@ export default function Dashboard() {
     // Fallback timeout to ensure loading never gets stuck
     const timeoutId = setTimeout(() => {
       if (isMounted) {
+        console.log(
+          "🔍 [DASHBOARD] useEffect: Timeout reached, forcing loading to false",
+        );
         setLoading(false);
       }
     }, 10000); // 10 second timeout
@@ -290,8 +344,9 @@ export default function Dashboard() {
             <div>
               <h3 className="font-semibold">Free Plan Limit Reached</h3>
               <p className="text-sm opacity-90">
-                You've used all {subscription?.usageLimits?.links || 5} free links this month. Upgrade to create more
-                links and unlock premium features.
+                You've used all {subscription?.usageLimits?.links || 5} free
+                links this month. Upgrade to create more links and unlock
+                premium features.
               </p>
             </div>
             <button
@@ -317,8 +372,8 @@ export default function Dashboard() {
                   <div>
                     <h3 className="font-semibold">Free Plan Usage</h3>
                     <p className="text-sm opacity-90">
-                      You've used {usageStats.monthlyTotal}/{limit} free links this
-                      month. Upgrade to create unlimited links.
+                      You've used {usageStats.monthlyTotal}/{limit} free links
+                      this month. Upgrade to create unlimited links.
                     </p>
                   </div>
                   <button
@@ -426,7 +481,8 @@ export default function Dashboard() {
                 <div className="flex justify-between">
                   <span className="text-gray-400">Monthly Limit</span>
                   <span className="font-semibold text-white">
-                    {usageStats.monthlyTotal}/{subscription?.usageLimits?.links || 5}
+                    {usageStats.monthlyTotal}/
+                    {subscription?.usageLimits?.links || 5}
                   </span>
                 </div>
               </div>

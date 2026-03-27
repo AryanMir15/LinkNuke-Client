@@ -106,41 +106,99 @@ const Configurator = () => {
   };
 
   const fetchSubscriptionStatus = async () => {
+    console.log("🔍 [CONFIGURATOR] Starting fetchSubscriptionStatus...");
     try {
       const token = localStorage.getItem("token");
+      console.log("🔍 [CONFIGURATOR] Token exists:", !!token);
+
       const response = await axios.get(
         `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
+
+      console.log(
+        "🔍 [CONFIGURATOR] Raw subscription response:",
+        JSON.stringify(response.data, null, 2),
+      );
+      console.log(
+        "🔍 [CONFIGURATOR] Subscription plan:",
+        response.data.subscription?.plan,
+      );
+      console.log(
+        "🔍 [CONFIGURATOR] Subscription status:",
+        response.data.subscription?.status,
+      );
+      console.log(
+        "🔍 [CONFIGURATOR] Usage limits:",
+        response.data.subscription?.usageLimits,
+      );
+
       // Subscription fetched successfully
       setSubscription(response.data.subscription);
-    } catch (error) {}
+      console.log("🔍 [CONFIGURATOR] Subscription state updated");
+    } catch (error) {
+      console.error(
+        "❌ [CONFIGURATOR] Failed to fetch subscription status:",
+        error,
+      );
+    }
   };
 
   const closeModal = () => setActiveType(null);
 
   const handleFormatSelect = (formatLabel) => {
+    console.log(
+      "🔍 [CONFIGURATOR] handleFormatSelect called with:",
+      formatLabel,
+    );
     const format = formats.find((f) => f.label === formatLabel);
 
+    console.log("🔍 [CONFIGURATOR] Format found:", format);
+    console.log(
+      "🔍 [CONFIGURATOR] Current subscription plan:",
+      subscription?.plan,
+    );
+    console.log("🔍 [CONFIGURATOR] Usage stats:", usageStats);
+    console.log("🔍 [CONFIGURATOR] Format requires premium:", format.premium);
+    console.log("🔍 [CONFIGURATOR] Is premium user:", isPremiumUser);
+    console.log("🔍 [CONFIGURATOR] Is limit reached:", isLimitReached);
+
     // Check if format requires premium and user doesn't have it (but not if limit reached)
-    if (
+    const shouldBlockFormat =
       format.premium &&
       (!subscription?.plan || subscription?.plan === "free") &&
       !(
         (!subscription?.plan || subscription?.plan === "free") &&
         usageStats.monthlyTotal >= 5
-      )
-    ) {
+      );
+
+    console.log("🔍 [CONFIGURATOR] Should block format:", shouldBlockFormat);
+    console.log("🔍 [CONFIGURATOR] Blocking condition details:", {
+      formatPremium: format.premium,
+      noPlanOrFree: !subscription?.plan || subscription?.plan === "free",
+      usageStats: usageStats.monthlyTotal,
+      limitCheck: usageStats.monthlyTotal >= 5,
+      notLimitReached: !(
+        (!subscription?.plan || subscription?.plan === "free") &&
+        usageStats.monthlyTotal >= 5
+      ),
+    });
+
+    if (shouldBlockFormat) {
+      console.log(
+        "🔍 [CONFIGURATOR] BLOCKING format selection - requires premium plan",
+      );
       toast.error(
-        "This format requires a Pro or Lifetime plan. Upgrade to unlock all file types."
+        "This format requires a Pro or Lifetime plan. Upgrade to unlock all file types.",
       );
       return;
     }
 
+    console.log("🔍 [CONFIGURATOR] ALLOWING format selection");
     setActiveType(formatLabel);
 
     // Track core feature usage
@@ -158,7 +216,16 @@ const Configurator = () => {
     (!subscription?.plan || subscription?.plan === "free") &&
     usageStats.monthlyTotal >= 5;
 
-  // Debug logs removed to reduce console spam
+  // Heavy logging for debugging
+  console.log("🔍 [CONFIGURATOR] State Debug:");
+  console.log(
+    "🔍 [CONFIGURATOR] - subscription:",
+    JSON.stringify(subscription, null, 2),
+  );
+  console.log("🔍 [CONFIGURATOR] - usageStats:", usageStats);
+  console.log("🔍 [CONFIGURATOR] - isPremiumUser:", isPremiumUser);
+  console.log("🔍 [CONFIGURATOR] - isLimitReached:", isLimitReached);
+  console.log("🔍 [CONFIGURATOR] - activeType:", activeType);
 
   return (
     <section className="w-full px-4 sm:px-6 py-8 sm:py-16 bg-[#1F1F23]">
@@ -190,8 +257,8 @@ const Configurator = () => {
                         isActive
                           ? "bg-[#1de4bf]/10 text-white shadow-lg"
                           : isDisabled
-                          ? "text-gray-500 cursor-not-allowed opacity-50"
-                          : "text-gray-300 hover:text-white hover:bg-[#2E2E32]/80"
+                            ? "text-gray-500 cursor-not-allowed opacity-50"
+                            : "text-gray-300 hover:text-white hover:bg-[#2E2E32]/80"
                       }
                     `}
                   >
@@ -201,8 +268,8 @@ const Configurator = () => {
                           isActive
                             ? "text-[#1de4bf]"
                             : isDisabled
-                            ? "text-gray-500"
-                            : "text-gray-300"
+                              ? "text-gray-500"
+                              : "text-gray-300"
                         }`}
                       >
                         {React.cloneElement(format.icon, {
@@ -211,8 +278,8 @@ const Configurator = () => {
                             isActive
                               ? "text-[#00ffff]"
                               : isDisabled
-                              ? "text-gray-500"
-                              : "text-gray-400"
+                                ? "text-gray-500"
+                                : "text-gray-400"
                           } transition-colors duration-300 group-hover:text-gray-300`,
                         })}
                       </div>

@@ -36,6 +36,10 @@ const MAX_AUDIO_SIZE_MB = 100;
 const MAX_AUDIO_SIZE_BYTES = MAX_AUDIO_SIZE_MB * 1024 * 1024;
 
 const AudioModal = ({ closeModal }) => {
+  console.log(
+    "🔍 [AUDIO_MODAL] AudioModal component mounted - this is a PREMIUM feature",
+  );
+
   const [files, setFiles] = useState([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef(null);
