@@ -36,10 +36,6 @@ const MAX_VIDEO_SIZE_MB = 500;
 const MAX_VIDEO_SIZE_BYTES = MAX_VIDEO_SIZE_MB * 1024 * 1024;
 
 const VideoModal = ({ closeModal }) => {
-  console.log(
-    "🔍 [VIDEO_MODAL] VideoModal component mounted - this is a PREMIUM feature",
-  );
-
   const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [form, setForm] = useState(initialState);

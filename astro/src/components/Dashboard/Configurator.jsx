@@ -107,10 +107,8 @@ const Configurator = () => {
   };
 
   const fetchSubscriptionStatus = async () => {
-    console.log("🔍 [CONFIGURATOR] Starting fetchSubscriptionStatus...");
     try {
       const token = localStorage.getItem("token");
-      console.log("🔍 [CONFIGURATOR] Token exists:", !!token);
 
       const response = await axios.get(
         buildApiUrl("paddle/subscription-status"),
@@ -121,52 +119,21 @@ const Configurator = () => {
         },
       );
 
-      console.log(
-        "🔍 [CONFIGURATOR] Raw subscription response:",
-        JSON.stringify(response.data, null, 2),
-      );
-      console.log(
-        "🔍 [CONFIGURATOR] Subscription plan:",
-        response.data.subscription?.plan,
-      );
-      console.log(
-        "🔍 [CONFIGURATOR] Subscription status:",
-        response.data.subscription?.status,
-      );
-      console.log(
-        "🔍 [CONFIGURATOR] Usage limits:",
-        response.data.subscription?.usageLimits,
-      );
-
       // Subscription fetched successfully
       setSubscription(response.data.subscription);
-      console.log("🔍 [CONFIGURATOR] Subscription state updated");
     } catch (error) {
-      console.error(
-        "❌ [CONFIGURATOR] Failed to fetch subscription status:",
-        error,
-      );
-      // Add fallback to localStorage like Dashboard does
-      console.log("🔍 [CONFIGURATOR] Attempting fallback to localStorage...");
+      // Fallback to localStorage if API fails
       try {
         const userStr = localStorage.getItem("user");
-        console.log("🔍 [CONFIGURATOR] Found user in localStorage:", !!userStr);
         if (userStr) {
           const user = JSON.parse(userStr);
-          console.log(
-            "🔍 [CONFIGURATOR] Parsed user subscription:",
-            user.subscription,
-          );
           if (user.subscription) {
-            console.log(
-              "🔍 [CONFIGURATOR] Using fallback subscription from localStorage",
-            );
             setSubscription(user.subscription);
           }
         }
       } catch (fallbackError) {
         console.error(
-          "❌ [CONFIGURATOR] Failed to get subscription from localStorage:",
+          "Failed to get subscription from localStorage:",
           fallbackError,
         );
       }
@@ -176,21 +143,7 @@ const Configurator = () => {
   const closeModal = () => setActiveType(null);
 
   const handleFormatSelect = (formatLabel) => {
-    console.log(
-      "🔍 [CONFIGURATOR] handleFormatSelect called with:",
-      formatLabel,
-    );
     const format = formats.find((f) => f.label === formatLabel);
-
-    console.log("🔍 [CONFIGURATOR] Format found:", format);
-    console.log(
-      "🔍 [CONFIGURATOR] Current subscription plan:",
-      subscription?.plan,
-    );
-    console.log("🔍 [CONFIGURATOR] Usage stats:", usageStats);
-    console.log("🔍 [CONFIGURATOR] Format requires premium:", format.premium);
-    console.log("🔍 [CONFIGURATOR] Is premium user:", isPremiumUser);
-    console.log("🔍 [CONFIGURATOR] Is limit reached:", isLimitReached);
 
     // Check if format requires premium and user doesn't have it (but not if limit reached)
     const shouldBlockFormat =
@@ -201,29 +154,13 @@ const Configurator = () => {
         usageStats.monthlyTotal >= 5
       );
 
-    console.log("🔍 [CONFIGURATOR] Should block format:", shouldBlockFormat);
-    console.log("🔍 [CONFIGURATOR] Blocking condition details:", {
-      formatPremium: format.premium,
-      noPlanOrFree: !subscription?.plan || subscription?.plan === "free",
-      usageStats: usageStats.monthlyTotal,
-      limitCheck: usageStats.monthlyTotal >= 5,
-      notLimitReached: !(
-        (!subscription?.plan || subscription?.plan === "free") &&
-        usageStats.monthlyTotal >= 5
-      ),
-    });
-
     if (shouldBlockFormat) {
-      console.log(
-        "🔍 [CONFIGURATOR] BLOCKING format selection - requires premium plan",
-      );
       toast.error(
         "This format requires a Pro or Lifetime plan. Upgrade to unlock all file types.",
       );
       return;
     }
 
-    console.log("🔍 [CONFIGURATOR] ALLOWING format selection");
     setActiveType(formatLabel);
 
     // Track core feature usage
@@ -240,17 +177,6 @@ const Configurator = () => {
   const isLimitReached =
     (!subscription?.plan || subscription?.plan === "free") &&
     usageStats.monthlyTotal >= 5;
-
-  // Heavy logging for debugging
-  console.log("🔍 [CONFIGURATOR] State Debug:");
-  console.log(
-    "🔍 [CONFIGURATOR] - subscription:",
-    JSON.stringify(subscription, null, 2),
-  );
-  console.log("🔍 [CONFIGURATOR] - usageStats:", usageStats);
-  console.log("🔍 [CONFIGURATOR] - isPremiumUser:", isPremiumUser);
-  console.log("🔍 [CONFIGURATOR] - isLimitReached:", isLimitReached);
-  console.log("🔍 [CONFIGURATOR] - activeType:", activeType);
 
   return (
     <section className="w-full px-4 sm:px-6 py-8 sm:py-16 bg-[#1F1F23]">
@@ -348,14 +274,10 @@ const Configurator = () => {
             {isLimitReached && activeType ? (
               <motion.div
                 key="LimitReached"
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 24 }}
-                transition={{
-                  duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                  ease:
-                    window.innerWidth < 768 ? "easeOut" : [0.22, 1, 0.36, 1],
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
                 <div className="bg-[#1F1F23] border border-[#2E2E32] rounded-2xl p-8 max-w-2xl mx-auto text-center shadow-2xl">
                   {/* Lock Icon */}
@@ -398,16 +320,10 @@ const Configurator = () => {
                 {activeType === "Image" && (
                   <motion.div
                     key="Image"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
-                    transition={{
-                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                      ease:
-                        window.innerWidth < 768
-                          ? "easeOut"
-                          : [0.22, 1, 0.36, 1],
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <ImageModal closeModal={closeModal} />
                   </motion.div>
@@ -415,16 +331,10 @@ const Configurator = () => {
                 {activeType === "Video" && (
                   <motion.div
                     key="Video"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
-                    transition={{
-                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                      ease:
-                        window.innerWidth < 768
-                          ? "easeOut"
-                          : [0.22, 1, 0.36, 1],
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <VideoModal closeModal={closeModal} />
                   </motion.div>
@@ -432,16 +342,10 @@ const Configurator = () => {
                 {activeType === "Text" && (
                   <motion.div
                     key="Text"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
-                    transition={{
-                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                      ease:
-                        window.innerWidth < 768
-                          ? "easeOut"
-                          : [0.22, 1, 0.36, 1],
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <TextModal closeModal={closeModal} />
                   </motion.div>
@@ -449,16 +353,10 @@ const Configurator = () => {
                 {activeType === "Audio" && (
                   <motion.div
                     key="Audio"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
-                    transition={{
-                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                      ease:
-                        window.innerWidth < 768
-                          ? "easeOut"
-                          : [0.22, 1, 0.36, 1],
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <AudioModal closeModal={closeModal} />
                   </motion.div>
@@ -466,16 +364,10 @@ const Configurator = () => {
                 {activeType === "Doc" && (
                   <motion.div
                     key="Doc"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 24 }}
-                    transition={{
-                      duration: window.innerWidth < 768 ? 0.1 : 0.25,
-                      ease:
-                        window.innerWidth < 768
-                          ? "easeOut"
-                          : [0.22, 1, 0.36, 1],
-                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <DocumentsModal closeModal={closeModal} />
                   </motion.div>

@@ -47,10 +47,6 @@ const validTypes = [
 ];
 
 const DocumentsModal = ({ closeModal }) => {
-  console.log(
-    "🔍 [DOCUMENTS_MODAL] DocumentsModal component mounted - this is a PREMIUM feature",
-  );
-
   const [files, setFiles] = useState([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef(null);
