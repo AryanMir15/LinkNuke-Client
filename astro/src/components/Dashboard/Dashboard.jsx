@@ -35,7 +35,7 @@ export default function Dashboard() {
       console.log("🔍 [DASHBOARD] Token exists:", !!token);
 
       const response = await axios.get(
-        `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
+        buildApiUrl("paddle/subscription-status"),
         {
           headers: {
             Authorization: `Bearer ${token}`,

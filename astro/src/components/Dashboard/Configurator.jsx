@@ -20,6 +20,7 @@ import { trackEvent } from "../lib/analytics";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { getUsageStats } from "../lib/linkApi";
+import { buildApiUrl } from "../lib/apiConfig";
 
 const formats = [
   {
@@ -112,7 +113,7 @@ const Configurator = () => {
       console.log("🔍 [CONFIGURATOR] Token exists:", !!token);
 
       const response = await axios.get(
-        `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
+        buildApiUrl("paddle/subscription-status"),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -145,6 +146,30 @@ const Configurator = () => {
         "❌ [CONFIGURATOR] Failed to fetch subscription status:",
         error,
       );
+      // Add fallback to localStorage like Dashboard does
+      console.log("🔍 [CONFIGURATOR] Attempting fallback to localStorage...");
+      try {
+        const userStr = localStorage.getItem("user");
+        console.log("🔍 [CONFIGURATOR] Found user in localStorage:", !!userStr);
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          console.log(
+            "🔍 [CONFIGURATOR] Parsed user subscription:",
+            user.subscription,
+          );
+          if (user.subscription) {
+            console.log(
+              "🔍 [CONFIGURATOR] Using fallback subscription from localStorage",
+            );
+            setSubscription(user.subscription);
+          }
+        }
+      } catch (fallbackError) {
+        console.error(
+          "❌ [CONFIGURATOR] Failed to get subscription from localStorage:",
+          fallbackError,
+        );
+      }
     }
   };
 
