@@ -1,21 +1,34 @@
 // Central API configuration
-// In production, always use relative paths so Vercel rewrites work: /api/* -> https://linknuke-backend.fly.dev/api/*
-// In development, you can set VITE_PUBLIC_API_URL in .env file to override
+// Production backend URL from Vercel environment variables
+const PRODUCTION_BACKEND_URL = "https://linknuke-backend.fly.dev/api/v1";
+
+// Determine environment and set base URL
 export const API_BASE_URL =
-  import.meta.env.MODE === "production"
+  // If we have a development API URL, use it
+  import.meta.env.VITE_API_URL ||
+  // If we're in development mode, use empty string (will be handled by dev server)
+  import.meta.env.DEV
     ? ""
-    : import.meta.env.VITE_PUBLIC_API_URL || "";
+    : // Otherwise, use production backend URL directly
+      PRODUCTION_BACKEND_URL;
 
 // Helper function to build API URLs
 export function buildApiUrl(path) {
   // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith("/") ? path.slice(1) : path;
-  const url = `${API_BASE_URL}/api/${cleanPath}`;
+  const url = `${API_BASE_URL}/${cleanPath}`;
 
   // Debug: Log the URL being built
-  if (import.meta.env.DEV) {
-    console.log("buildApiUrl:", url, "(API_BASE_URL:", API_BASE_URL, ")");
-  }
+  console.log(
+    "buildApiUrl:",
+    url,
+    "(API_BASE_URL:",
+    API_BASE_URL,
+    ")",
+    "MODE:",
+    import.meta.env.MODE,
+    ")",
+  );
 
   return url;
 }
