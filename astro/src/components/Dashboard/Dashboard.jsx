@@ -36,7 +36,7 @@ export default function Dashboard() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setSubscription(response.data.subscription);
@@ -54,7 +54,7 @@ export default function Dashboard() {
         // Get links from context directly instead of dependency
         const currentLinks = Array.isArray(links) ? links : [];
         const linksThisMonth = currentLinks.filter(
-          (link) => new Date(link.createdAt) >= startOfMonth
+          (link) => new Date(link.createdAt) >= startOfMonth,
         ).length;
 
         if (linksThisMonth >= 5) {
@@ -67,6 +67,22 @@ export default function Dashboard() {
         setShowFreePlanLimit(false);
       }
     } catch (error) {
+      console.error("Failed to fetch subscription status:", error);
+      // Try to get subscription data from localStorage user as fallback
+      try {
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+          const user = JSON.parse(userStr);
+          if (user.subscription) {
+            setSubscription(user.subscription);
+          }
+        }
+      } catch (fallbackError) {
+        console.error(
+          "Failed to get subscription from localStorage:",
+          fallbackError,
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -83,7 +99,7 @@ export default function Dashboard() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.user) {
@@ -100,7 +116,7 @@ export default function Dashboard() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (subResponse.data.subscription) {
