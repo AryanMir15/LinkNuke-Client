@@ -5,7 +5,7 @@ import "./index.css";
 
 export default function ReactApp() {
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter basename="/dashboard">
       <AppWrapper />
     </BrowserRouter>
   );
