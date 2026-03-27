@@ -226,6 +226,7 @@ function App() {
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/#login" element={<Login />} />
         <Route path="/#register" element={<Register />} />
         <Route path="/dashboard/feedback-admin" element={<FeedbackAdmin />} />

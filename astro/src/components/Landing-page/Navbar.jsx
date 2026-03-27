@@ -151,7 +151,7 @@ export default function Navbar() {
                       <button
                         onClick={() => {
                           if (typeof window !== "undefined") {
-                            window.location.href = "/register";
+                            window.location.href = "/dashboard/register";
                           }
                         }}
                         className="group relative inline-flex items-center justify-center text-base rounded-full bg-gray-900 px-8 py-4 font-thin text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
