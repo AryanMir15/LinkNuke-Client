@@ -1,0 +1,11 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import ReactApp from '../../react-app/ReactApp.jsx';
+
+export default function Register() {
+  return (
+    <MainLayout title="Register - LinkNuke" description="Create a new LinkNuke account">
+      <ReactApp client:only="react" />
+    </MainLayout>
+  );
+}
