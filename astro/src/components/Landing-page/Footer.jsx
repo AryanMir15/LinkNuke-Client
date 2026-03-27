@@ -143,7 +143,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://whynotship.me"
+                  href="https://linknuke.whynotship.me"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-[#1de4bf] transition-colors text-sm"
@@ -171,7 +171,7 @@ export default function Footer() {
             <div className="text-gray-500 text-sm">
               Part of{" "}
               <a
-                href="https://whynotship.me"
+                href="https://linknuke.whynotship.me"
                 className="text-[#1de4bf] hover:underline"
               >
                 WhyNotShip.me
