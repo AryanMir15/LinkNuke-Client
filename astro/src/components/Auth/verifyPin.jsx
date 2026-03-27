@@ -81,7 +81,7 @@ export default function VerifyPin() {
     setLoading(true);
     try {
       const res = await fetch(
-        import.meta.env.VITE_API_URL + "/auth/verify-pin",
+        import.meta.env.VITE_PUBLIC_API_URL + "/auth/verify-pin",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -114,7 +114,7 @@ export default function VerifyPin() {
 
     try {
       const res = await fetch(
-        import.meta.env.VITE_API_URL + "/auth/resend-pin",
+        import.meta.env.VITE_PUBLIC_API_URL + "/auth/resend-pin",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

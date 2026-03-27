@@ -95,7 +95,7 @@ export default function Register() {
       // If trial plan was selected, start trial after registration
       if (trialPlan) {
         try {
-          await fetch(`${import.meta.env.VITE_API_URL}/paddle/start-trial`, {
+          await fetch(buildApiUrl("paddle/start-trial"), {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
