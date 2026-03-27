@@ -11,7 +11,7 @@ export default function RefundFailedModal({
 
   const handleEmailClick = () => {
     window.open(
-      `mailto:${supportEmail}?subject=Refund Request&body=Hi, I'd like to request a refund for my recent purchase. Please let me know how to proceed.`
+      `mailto:${supportEmail}?subject=Refund Request&body=Hi, I'd like to request a refund for my recent purchase. Please let me know how to proceed.`,
     );
   };
 
