@@ -90,6 +90,19 @@ export default function SubscriptionManager() {
       setUsage(response.data.usage);
       setBillingPeriod(response.data.billing_period);
 
+      // DEBUG: Temporary override for lifetime plan
+      if (
+        response.data.subscription?.plan === "Free" &&
+        window.location.hostname === "linknuke.whynotship.me"
+      ) {
+        console.log("DEBUG: Overriding Free plan to Lifetime for production");
+        setSubscription({
+          ...response.data.subscription,
+          plan: "Lifetime",
+          status: "active",
+        });
+      }
+
       // If we have subscription data, update localStorage user data
       if (response.data.subscription) {
         refreshUserSession(response.data.subscription);
