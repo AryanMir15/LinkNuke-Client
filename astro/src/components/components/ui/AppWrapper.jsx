@@ -86,7 +86,7 @@ function AppWrapper() {
 
             {/* Protected routes */}
             <Route
-              path="/dashboard"
+              path="/"
               element={
                 <ProtectedRoute>
                   <LinksProvider>
