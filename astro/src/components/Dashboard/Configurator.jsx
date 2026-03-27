@@ -109,7 +109,7 @@ const Configurator = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

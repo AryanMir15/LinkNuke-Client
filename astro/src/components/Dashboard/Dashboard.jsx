@@ -11,6 +11,7 @@ import { BarChart3, CreditCard } from "lucide-react";
 import PaymentSuccessModal from "../components/ui/PaymentSuccessModal";
 import WelcomeModal from "../components/ui/WelcomeModal";
 import { trackEvent, trackPageView } from "../lib/analytics";
+import { buildApiUrl } from "../lib/apiConfig";
 
 export default function Dashboard() {
   const [subscription, setSubscription] = useState(null);
@@ -31,7 +32,7 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+        `${import.meta.env.VITE_PUBLIC_API_URL}/paddle/subscription-status`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,19 +52,19 @@ export default function Dashboard() {
         startOfMonth.setDate(1);
         startOfMonth.setHours(0, 0, 0, 0);
 
-        // Get links from context directly instead of dependency
         const currentLinks = Array.isArray(links) ? links : [];
         const linksThisMonth = currentLinks.filter(
           (link) => new Date(link.createdAt) >= startOfMonth,
         ).length;
 
-        if (linksThisMonth >= 5) {
+        const limit = response.data.subscription?.usageLimits?.links || 5;
+
+        if (linksThisMonth >= limit) {
           setShowFreePlanLimit(true);
         } else {
           setShowFreePlanLimit(false);
         }
       } else {
-        // User is on a paid plan - hide the free plan limit banner
         setShowFreePlanLimit(false);
       }
     } catch (error) {
@@ -94,7 +95,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       // Fetch fresh user data from the server
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/auth/verify`,
+        buildApiUrl("auth/verify"),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,7 +112,7 @@ export default function Dashboard() {
       try {
         const token = localStorage.getItem("token");
         const subResponse = await axios.get(
-          `${import.meta.env.VITE_API_URL}/paddle/subscription-status`,
+          buildApiUrl("paddle/subscription-status"),
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -289,7 +290,7 @@ export default function Dashboard() {
             <div>
               <h3 className="font-semibold">Free Plan Limit Reached</h3>
               <p className="text-sm opacity-90">
-                You've used all 5 free links this month. Upgrade to create more
+                You've used all {subscription?.usageLimits?.links || 5} free links this month. Upgrade to create more
                 links and unlock premium features.
               </p>
             </div>
@@ -307,14 +308,16 @@ export default function Dashboard() {
       {(!subscription?.plan || subscription?.plan === "free") &&
         !showFreePlanLimit &&
         (() => {
-          if (usageStats.monthlyTotal >= 3) {
+          const limit = subscription?.usageLimits?.links || 5;
+          const threshold = Math.ceil(limit * 0.6); // Show when 60% of limit is reached
+          if (usageStats.monthlyTotal >= threshold) {
             return (
               <div className="bg-gradient-to-r from-[#1de4bf]/20 to-[#0bf3a2]/20 border border-[#1de4bf]/30 text-white px-4 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold">Free Plan Usage</h3>
                     <p className="text-sm opacity-90">
-                      You've used {usageStats.monthlyTotal}/5 free links this
+                      You've used {usageStats.monthlyTotal}/{limit} free links this
                       month. Upgrade to create unlimited links.
                     </p>
                   </div>
@@ -420,16 +423,12 @@ export default function Dashboard() {
                     {subscription?.plan || "Free"}
                   </span>
                 </div>
-                {(!subscription?.plan ||
-                  subscription?.plan === "free" ||
-                  subscription?.status === "refunded") && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Monthly Limit</span>
-                    <span className="font-semibold text-white">
-                      {usageStats.monthlyTotal}/5
-                    </span>
-                  </div>
-                )}
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Monthly Limit</span>
+                  <span className="font-semibold text-white">
+                    {usageStats.monthlyTotal}/{subscription?.usageLimits?.links || 5}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

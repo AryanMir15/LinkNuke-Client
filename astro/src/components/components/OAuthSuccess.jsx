@@ -27,7 +27,7 @@ export default function OAuthSuccess() {
     const fetchUserData = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/verify`,
+          `${import.meta.env.VITE_PUBLIC_API_URL}/auth/verify`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

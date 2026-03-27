@@ -18,7 +18,7 @@ const EmailVerificationBanner = () => {
       if (!token) return;
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/email/subscription`
+        `${import.meta.env.VITE_PUBLIC_API_URL}/email/subscription`
       );
 
       if (response.ok) {
@@ -38,7 +38,7 @@ const EmailVerificationBanner = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/resend-pin`,
+        `${import.meta.env.VITE_PUBLIC_API_URL}/auth/resend-pin`,
         {
           method: "POST",
           headers: {
