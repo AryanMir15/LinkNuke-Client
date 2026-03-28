@@ -7,17 +7,24 @@ export default function OAuthSuccess() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("🔍 [OAUTH_SUCCESS] Component mounted");
+
     // Parse URL parameters using plain JavaScript
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const userId = urlParams.get("userId");
 
+    console.log("🔍 [OAUTH_SUCCESS] Token found:", !!token);
+    console.log("🔍 [OAUTH_SUCCESS] User ID:", userId);
+
     if (!token) {
+      console.log("❌ [OAUTH_SUCCESS] No token found, setting error state");
       setStatus("error");
       setError("No authentication token found");
       return;
     }
 
+    console.log("✅ [OAUTH_SUCCESS] Storing token in localStorage");
     // Store the token and session indicator in localStorage
     localStorage.setItem("token", token);
     localStorage.setItem("session", "active");
@@ -25,8 +32,9 @@ export default function OAuthSuccess() {
     // Fetch user data using the token
     const fetchUserData = async () => {
       try {
+        console.log("🔍 [OAUTH_SUCCESS] Fetching user data...");
         const response = await fetch(
-          `${import.meta.env.VITE_PUBLIC_API_URL}/auth/verify`,
+          `${import.meta.env.VITE_PUBLIC_API_URL}/auth/verify-token`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -34,18 +42,30 @@ export default function OAuthSuccess() {
           },
         );
 
+        console.log("🔍 [OAUTH_SUCCESS] API response status:", response.status);
+
         if (response.ok) {
           const data = await response.json();
+          console.log("✅ [OAUTH_SUCCESS] User data received:", data);
           if (data.user) {
             // Store user data in localStorage
             localStorage.setItem("user", JSON.stringify(data.user));
+            console.log("✅ [OAUTH_SUCCESS] User data stored in localStorage");
           }
+        } else {
+          console.log(
+            "❌ [OAUTH_SUCCESS] API response not ok:",
+            response.status,
+          );
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log("❌ [OAUTH_SUCCESS] Error fetching user data:", error);
+      }
     };
 
     // Fetch user data and then redirect
     fetchUserData().then(() => {
+      console.log("✅ [OAUTH_SUCCESS] Setting status to success");
       // Update status to success
       setStatus("success");
 
@@ -53,7 +73,11 @@ export default function OAuthSuccess() {
       trackEvent("oauth_login_success", { provider: "Google" });
 
       // Redirect to dashboard after a short delay
+      console.log(
+        "🔄 [OAUTH_SUCCESS] Will redirect to /dashboard in 2 seconds...",
+      );
       setTimeout(() => {
+        console.log("🔄 [OAUTH_SUCCESS] Redirecting to /dashboard now");
         window.location.href = "/dashboard";
       }, 2000);
     });

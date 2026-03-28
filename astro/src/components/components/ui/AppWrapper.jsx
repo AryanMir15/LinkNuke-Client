@@ -19,11 +19,19 @@ import PricingPage from "../../Pricing/PricingPage";
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
+  console.log("🔍 [PROTECTED_ROUTE] Checking authentication...");
+  console.log("🔍 [PROTECTED_ROUTE] Token exists:", !!token);
+
   if (!token) {
+    console.log(
+      "❌ [PROTECTED_ROUTE] No token found, redirecting to /dashboard/login",
+    );
     // Redirect to login using window.location for full page reload
     window.location.href = "/dashboard/login";
     return null;
   }
+
+  console.log("✅ [PROTECTED_ROUTE] Token found, allowing access");
   return children;
 };
 
