@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, CheckCircle } from "lucide-react";
 import { trackEvent } from "../lib/analytics";
 
 export default function OAuthSuccess() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [status, setStatus] = useState("processing"); // processing, success, error
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = searchParams.get("token");
-    const userId = searchParams.get("userId");
+    // Parse URL parameters using plain JavaScript
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const userId = urlParams.get("userId");
 
     if (!token) {
       setStatus("error");
@@ -32,7 +31,7 @@ export default function OAuthSuccess() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (response.ok) {
@@ -55,10 +54,10 @@ export default function OAuthSuccess() {
 
       // Redirect to dashboard after a short delay
       setTimeout(() => {
-        navigate("/dashboard");
+        window.location.href = "/dashboard";
       }, 2000);
     });
-  }, [searchParams, navigate]);
+  }, []);
 
   if (status === "processing") {
     return (
@@ -86,7 +85,7 @@ export default function OAuthSuccess() {
           </h2>
           <p className="text-gray-400 mb-4">{error}</p>
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => (window.location.href = "/login")}
             className="px-6 py-2 bg-[#1de4bf] text-black rounded-lg hover:opacity-90 transition"
           >
             Try Again
