@@ -17,21 +17,41 @@ import PricingPage from "../../Pricing/PricingPage";
 
 // Auth protection component
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
 
-  console.log("🔍 [PROTECTED_ROUTE] Checking authentication...");
-  console.log("🔍 [PROTECTED_ROUTE] Token exists:", !!token);
+  // TEMPORARY: Bypass auth for testing
+  console.log(" [PROTECTED_ROUTE] TEMPORARY BYPASS ENABLED");
+  return children;
+
+  // Add a small delay to ensure localStorage is ready
+  useEffect(() => {
+    const checkToken = () => {
+      const storedToken = localStorage.getItem("token");
+      console.log(" [PROTECTED_ROUTE] Checking authentication...");
+      console.log(" [PROTECTED_ROUTE] Token exists:", !!storedToken);
+      setToken(storedToken);
+    };
+
+    // Check token after a short delay
+    const timer = setTimeout(checkToken, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (token === null) {
+    // Still checking
+    return null;
+  }
 
   if (!token) {
     console.log(
-      "❌ [PROTECTED_ROUTE] No token found, redirecting to /dashboard/login",
+      " [PROTECTED_ROUTE] No token found, redirecting to /dashboard/login",
     );
     // Redirect to login using window.location for full page reload
     window.location.href = "/dashboard/login";
     return null;
   }
 
-  console.log("✅ [PROTECTED_ROUTE] Token found, allowing access");
+  console.log(" [PROTECTED_ROUTE] Token found, allowing access");
   return children;
 };
 

@@ -76,6 +76,14 @@ export default function OAuthSuccess() {
       console.log(
         "🔄 [OAUTH_SUCCESS] Will redirect to /dashboard in 2 seconds...",
       );
+
+      // Debug localStorage right before redirect
+      console.log("🔍 [OAUTH_SUCCESS] localStorage before redirect:", {
+        token: localStorage.getItem("token"),
+        session: localStorage.getItem("session"),
+        user: localStorage.getItem("user"),
+      });
+
       setTimeout(() => {
         console.log("🔄 [OAUTH_SUCCESS] Redirecting to /dashboard now");
         window.location.href = "/dashboard";
