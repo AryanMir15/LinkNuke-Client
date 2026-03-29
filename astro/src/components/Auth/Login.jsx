@@ -66,7 +66,7 @@ export default function Login() {
 
       // Check for returnUrl in URL params
       const urlParams = new URLSearchParams(window.location.search);
-      const returnUrl = urlParams.get("returnUrl") || "/dashboard";
+      const returnUrl = urlParams.get("returnUrl") || "/";
 
       setShowSuccess(true);
       setTimeout(() => navigate(returnUrl), 2000);

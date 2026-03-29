@@ -19,10 +19,6 @@ import PricingPage from "../../Pricing/PricingPage";
 const ProtectedRoute = ({ children }) => {
   const [token, setToken] = useState(null);
 
-  // TEMPORARY: Bypass auth for testing
-  console.log(" [PROTECTED_ROUTE] TEMPORARY BYPASS ENABLED");
-  return children;
-
   // Add a small delay to ensure localStorage is ready
   useEffect(() => {
     const checkToken = () => {
