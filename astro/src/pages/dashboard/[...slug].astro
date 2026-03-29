@@ -11,5 +11,8 @@ export async function getStaticPaths() {
 ---
 
 <MainLayout title="Dashboard - LinkNuke" description="Manage your self-destructing links and files">
+	<head>
+		<meta name="robots" content="noindex, nofollow" />
+	</head>
 	<ReactApp client:only="react" />
 </MainLayout>
