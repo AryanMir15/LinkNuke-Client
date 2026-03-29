@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Loader2, CheckCircle } from "lucide-react";
 import { trackEvent } from "../lib/analytics";
+import { buildApiUrl } from "../lib/apiConfig";
 
 export default function OAuthSuccess() {
   const [status, setStatus] = useState("processing"); // processing, success, error
@@ -53,14 +54,11 @@ export default function OAuthSuccess() {
     const fetchUserData = async () => {
       try {
         console.log("🔍 [OAUTH_SUCCESS] Fetching user data...");
-        const response = await fetch(
-          `${import.meta.env.VITE_PUBLIC_API_URL}/auth/verify-token`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(buildApiUrl("auth/verify-token"), {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         console.log("🔍 [OAUTH_SUCCESS] API response status:", response.status);
 
