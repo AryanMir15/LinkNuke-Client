@@ -8,82 +8,57 @@ export default function OAuthSuccess() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Component mounted");
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Current URL:", window.location.href);
-    console.log(
-      "🔍🔍🔍 [OAUTH_SUCCESS] Search params:",
-      window.location.search,
-    );
-
     // Parse URL parameters using plain JavaScript
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const userId = urlParams.get("userId");
     const redirectTo = urlParams.get("redirectTo");
 
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Parsed params:", {
-      token: !!token,
-      userId: userId,
-      redirectTo: redirectTo,
-      tokenLength: token?.length,
-    });
-
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Token found:", !!token);
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] User ID:", userId);
+    console.log("OAuth Success - Token found:", !!token);
+    console.log("OAuth Success - User ID:", userId);
 
     if (!token) {
-      console.log(
-        "❌🔍🔍🔍 [OAUTH_SUCCESS] No token found, setting error state",
-      );
+      console.log("OAuth Success - No token found, setting error state");
       setStatus("error");
       setError("No authentication token found");
       return;
     }
 
-    console.log("✅🔍🔍🔍 [OAUTH_SUCCESS] Storing token in localStorage");
     // Store the token and session indicator in localStorage
     localStorage.setItem("token", token);
     localStorage.setItem("session", "active");
 
-    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Token stored, localStorage now:", {
-      token: !!localStorage.getItem("token"),
-      session: localStorage.getItem("session"),
-    });
+    console.log("OAuth Success - Token stored in localStorage");
 
     // Fetch user data using the token
     const fetchUserData = async () => {
       try {
-        console.log("🔍 [OAUTH_SUCCESS] Fetching user data...");
+        console.log("OAuth Success - Fetching user data...");
         const response = await fetch(buildApiUrl("auth/verify-token"), {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        console.log("🔍 [OAUTH_SUCCESS] API response status:", response.status);
-
         if (response.ok) {
           const data = await response.json();
-          console.log("✅ [OAUTH_SUCCESS] User data received:", data);
+          console.log("OAuth Success - User data received");
           if (data.user) {
             // Store user data in localStorage
             localStorage.setItem("user", JSON.stringify(data.user));
-            console.log("✅ [OAUTH_SUCCESS] User data stored in localStorage");
+            console.log("OAuth Success - User data stored");
           }
         } else {
-          console.log(
-            "❌ [OAUTH_SUCCESS] API response not ok:",
-            response.status,
-          );
+          console.log("OAuth Success - API response not ok:", response.status);
         }
       } catch (error) {
-        console.log("❌ [OAUTH_SUCCESS] Error fetching user data:", error);
+        console.log("OAuth Success - Error fetching user data:", error);
       }
     };
 
     // Fetch user data and then redirect
     fetchUserData().then(() => {
-      console.log("✅ [OAUTH_SUCCESS] Setting status to success");
+      console.log("OAuth Success - Setting status to success");
       // Update status to success
       setStatus("success");
 
@@ -91,19 +66,10 @@ export default function OAuthSuccess() {
       trackEvent("oauth_login_success", { provider: "Google" });
 
       // Redirect to dashboard after a short delay
-      console.log(
-        "🔄 [OAUTH_SUCCESS] Will redirect to /dashboard in 2 seconds...",
-      );
-
-      // Debug localStorage right before redirect
-      console.log("🔍 [OAUTH_SUCCESS] localStorage before redirect:", {
-        token: localStorage.getItem("token"),
-        session: localStorage.getItem("session"),
-        user: localStorage.getItem("user"),
-      });
+      console.log("OAuth Success - Will redirect to dashboard in 2 seconds...");
 
       setTimeout(() => {
-        console.log("🔄 [OAUTH_SUCCESS] Redirecting to /dashboard now");
+        console.log("OAuth Success - Redirecting to dashboard");
         window.location.href = "/dashboard";
       }, 2000);
     });
@@ -150,7 +116,7 @@ export default function OAuthSuccess() {
       <div className="text-center">
         <CheckCircle className="w-16 h-16 text-[#1de4bf] mx-auto mb-4" />
         <h2 className="text-2xl font-semibold text-white mb-2">
-          Welcome back! 🎉
+          Welcome back!
         </h2>
         <p className="text-gray-400 mb-4">
           You've successfully signed in with Google

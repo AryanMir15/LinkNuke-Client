@@ -70,7 +70,8 @@ export default function Login() {
 
       setShowSuccess(true);
       setTimeout(() => navigate(returnUrl), 2000);
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error);
       toast.error("Network error. Check your connection.");
     } finally {
       setLoading(false);
