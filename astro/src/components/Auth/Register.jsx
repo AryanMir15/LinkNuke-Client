@@ -128,14 +128,14 @@ export default function Register() {
   return (
     <div className="min-h-screen w-full bg-black text-gray-100 flex flex-col sm:flex-row relative">
       {/* Back Button */}
-      <Link
-        to="/"
+      <button
+        onClick={() => (window.location.href = "/")}
         className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors duration-200 z-10"
         title="Back to home"
       >
         <ArrowLeft className="w-5 h-5" />
         <span className="sr-only">Back to home</span>
-      </Link>
+      </button>
 
       {/* Left: Form */}
       <div className="w-full sm:w-1/2 flex items-center justify-center px-6 py-10">
