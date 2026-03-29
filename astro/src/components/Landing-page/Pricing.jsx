@@ -143,10 +143,8 @@ export default function PricingSection() {
         cached: response.data.cached || false,
       });
 
-      // Small delay to show toast before redirect
-      setTimeout(() => {
-        window.location.href = response.data.checkoutUrl;
-      }, 500);
+      // Redirect immediately to checkout (no delay!)
+      window.location.href = response.data.checkoutUrl;
     } catch (err) {
       console.error("Checkout error:", err);
 
