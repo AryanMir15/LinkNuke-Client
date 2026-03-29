@@ -1,9 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { buildApiUrl } from "../lib/apiConfig";
 import posthog from "../lib/posthog.js";
 // import toast from "react-hot-toast";
+
+// Generate idempotency key once per session
+const generateIdempotencyKey = () => {
+  return `checkout_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+};
 
 const tiers = [
   {
@@ -68,6 +73,9 @@ export default function PricingSection() {
     Lifetime: false,
   });
 
+  // Generate idempotency key once per component mount
+  const [idempotencyKey] = useState(() => generateIdempotencyKey());
+
   // Check if mobile for performance optimization
   // useEffect(() => {
   //   const checkMobile = () => {
@@ -101,9 +109,15 @@ export default function PricingSection() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Idempotency-Key": idempotencyKey, // Add idempotency key to prevent duplicate checkouts
           },
         },
       );
+
+      console.log(
+        `🔑 Checkout request with idempotency key: ${idempotencyKey}`,
+      );
+      console.log(`📦 Response cached: ${response.data.cached || false}`);
 
       posthog.capture("upgrade_clicked", {
         tier: tier.name,
