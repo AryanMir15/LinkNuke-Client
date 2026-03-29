@@ -7,27 +7,47 @@ export default function OAuthSuccess() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log("🔍 [OAUTH_SUCCESS] Component mounted");
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Component mounted");
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Current URL:", window.location.href);
+    console.log(
+      "🔍🔍🔍 [OAUTH_SUCCESS] Search params:",
+      window.location.search,
+    );
 
     // Parse URL parameters using plain JavaScript
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const userId = urlParams.get("userId");
+    const redirectTo = urlParams.get("redirectTo");
 
-    console.log("🔍 [OAUTH_SUCCESS] Token found:", !!token);
-    console.log("🔍 [OAUTH_SUCCESS] User ID:", userId);
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Parsed params:", {
+      token: !!token,
+      userId: userId,
+      redirectTo: redirectTo,
+      tokenLength: token?.length,
+    });
+
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Token found:", !!token);
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] User ID:", userId);
 
     if (!token) {
-      console.log("❌ [OAUTH_SUCCESS] No token found, setting error state");
+      console.log(
+        "❌🔍🔍🔍 [OAUTH_SUCCESS] No token found, setting error state",
+      );
       setStatus("error");
       setError("No authentication token found");
       return;
     }
 
-    console.log("✅ [OAUTH_SUCCESS] Storing token in localStorage");
+    console.log("✅🔍🔍🔍 [OAUTH_SUCCESS] Storing token in localStorage");
     // Store the token and session indicator in localStorage
     localStorage.setItem("token", token);
     localStorage.setItem("session", "active");
+
+    console.log("🔍🔍🔍 [OAUTH_SUCCESS] Token stored, localStorage now:", {
+      token: !!localStorage.getItem("token"),
+      session: localStorage.getItem("session"),
+    });
 
     // Fetch user data using the token
     const fetchUserData = async () => {
