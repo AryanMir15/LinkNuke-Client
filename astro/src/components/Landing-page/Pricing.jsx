@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { buildApiUrl } from "../lib/apiConfig";
 import posthog from "../lib/posthog.js";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 // Generate idempotency key once per session
 const generateIdempotencyKey = () => {
@@ -90,14 +90,19 @@ export default function PricingSection() {
     try {
       setLoadingStates((prev) => ({ ...prev, [tier.name]: true }));
 
+      // Show loading toast
+      const loadingToast = toast.loading(`Creating ${tier.name} checkout...`);
+
       // Check if user is logged in by checking localStorage
       const storedUser =
         typeof localStorage !== "undefined" && localStorage.getItem("user");
       const token =
         typeof localStorage !== "undefined" && localStorage.getItem("token");
       if (!storedUser || !token) {
-        // Show simple alert for unauthenticated users
-        alert("Please login or create an account to purchase");
+        // Show error toast for unauthenticated users
+        toast.dismiss(loadingToast);
+        toast.error("Please login or create an account to purchase");
+        setLoadingStates((prev) => ({ ...prev, [tier.name]: false }));
         return;
       }
 
@@ -119,6 +124,15 @@ export default function PricingSection() {
       );
       console.log(`📦 Response cached: ${response.data.cached || false}`);
 
+      // Show success toast
+      if (response.data.cached) {
+        toast.success("Redirecting to checkout...", { id: loadingToast });
+        console.log("⚡ Using cached checkout URL");
+      } else {
+        toast.success("Checkout created! Redirecting...", { id: loadingToast });
+        console.log("🆕 Created new checkout URL");
+      }
+
       posthog.capture("upgrade_clicked", {
         tier: tier.name,
         price: tier.price,
@@ -126,15 +140,24 @@ export default function PricingSection() {
         fromPage: "landing",
         timestamp:
           typeof window !== "undefined" ? new Date().toISOString() : "",
+        cached: response.data.cached || false,
       });
 
-      // Redirect immediately to checkout
-      window.location.href = response.data.checkoutUrl;
+      // Small delay to show toast before redirect
+      setTimeout(() => {
+        window.location.href = response.data.checkoutUrl;
+      }, 500);
     } catch (err) {
-      const errorMessage = "Failed to initiate payment. Please try again.";
+      console.error("Checkout error:", err);
 
-      // Show simple error alert
-      alert(errorMessage);
+      // Show professional error toast
+      if (err.response?.status === 409) {
+        toast.error("You already have an active subscription for this plan");
+      } else if (err.response?.status === 403) {
+        toast.error("Please verify your email before purchasing");
+      } else {
+        toast.error("Failed to create checkout. Please try again.");
+      }
 
       posthog.capture("payment_error", {
         error: err.message,
