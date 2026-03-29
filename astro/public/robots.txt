@@ -8,6 +8,12 @@ Disallow: /dashboard/
 Disallow: /api/
 Disallow: /admin/
 Disallow: /oauth-success
+Disallow: /app/
+Disallow: /basic-test
+Disallow: /simple-test
+Disallow: /index-clean
+Disallow: /index-original
+Disallow: /index-react-test
 
 # Allow important pages
 Allow: /

@@ -8,5 +8,8 @@ export async function getStaticPaths() {
 ---
 
 <MainLayout title="App - LinkNuke" description="The core app of LinkNuke">
+	<head>
+		<meta name="robots" content="noindex, nofollow" />
+	</head>
 	<ReactApp client:only="react" />
 </MainLayout>
