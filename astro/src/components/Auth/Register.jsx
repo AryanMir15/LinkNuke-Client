@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { trackEvent } from "../lib/analytics";
@@ -126,7 +126,17 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-gray-100 flex flex-col sm:flex-row">
+    <div className="min-h-screen w-full bg-black text-gray-100 flex flex-col sm:flex-row relative">
+      {/* Back Button */}
+      <Link
+        to="/"
+        className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors duration-200 z-10"
+        title="Back to home"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="sr-only">Back to home</span>
+      </Link>
+
       {/* Left: Form */}
       <div className="w-full sm:w-1/2 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-md space-y-6">
