@@ -46,12 +46,16 @@ const Topbar = () => {
 
       {/* Right: Feedback + Logout */}
       <div className="flex items-center gap-2 sm:gap-3">
-        <Link
-          to="/feedback"
-          className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide bg-gradient-to-r from-[#1de4bf] to-[#0bf3a2] text-black hover:opacity-90 transition shadow-md"
-        >
-          Feedback
-        </Link>
+        <div className="relative inline-flex items-center justify-center group">
+          <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200" />
+          <Link
+            to="/feedback"
+            className="group relative inline-flex items-center justify-center text-xs sm:text-sm rounded-xl bg-gray-900 px-3 sm:px-4 py-1.5 sm:py-2 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+            title="Share Your Feedback"
+          >
+            Feedback
+          </Link>
+        </div>
         <button
           onClick={handleLogout}
           className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#2c2c31] text-gray-300 hover:text-white hover:bg-[#33353a] transition shadow"
