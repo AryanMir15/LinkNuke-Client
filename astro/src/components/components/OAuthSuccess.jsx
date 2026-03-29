@@ -14,11 +14,7 @@ export default function OAuthSuccess() {
     const userId = urlParams.get("userId");
     const redirectTo = urlParams.get("redirectTo");
 
-    console.log("OAuth Success - Token found:", !!token);
-    console.log("OAuth Success - User ID:", userId);
-
     if (!token) {
-      console.log("OAuth Success - No token found, setting error state");
       setStatus("error");
       setError("No authentication token found");
       return;
@@ -28,12 +24,9 @@ export default function OAuthSuccess() {
     localStorage.setItem("token", token);
     localStorage.setItem("session", "active");
 
-    console.log("OAuth Success - Token stored in localStorage");
-
     // Fetch user data using the token
     const fetchUserData = async () => {
       try {
-        console.log("OAuth Success - Fetching user data...");
         const response = await fetch(buildApiUrl("auth/verify-token"), {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,23 +35,18 @@ export default function OAuthSuccess() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("OAuth Success - User data received");
           if (data.user) {
             // Store user data in localStorage
             localStorage.setItem("user", JSON.stringify(data.user));
-            console.log("OAuth Success - User data stored");
           }
-        } else {
-          console.log("OAuth Success - API response not ok:", response.status);
         }
       } catch (error) {
-        console.log("OAuth Success - Error fetching user data:", error);
+        console.error("OAuth Success - Error fetching user data:", error);
       }
     };
 
     // Fetch user data and then redirect
     fetchUserData().then(() => {
-      console.log("OAuth Success - Setting status to success");
       // Update status to success
       setStatus("success");
 
@@ -66,10 +54,7 @@ export default function OAuthSuccess() {
       trackEvent("oauth_login_success", { provider: "Google" });
 
       // Redirect to dashboard after a short delay
-      console.log("OAuth Success - Will redirect to dashboard in 2 seconds...");
-
       setTimeout(() => {
-        console.log("OAuth Success - Redirecting to dashboard");
         window.location.href = "/dashboard";
       }, 2000);
     });
