@@ -1,9 +1,8 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Hero from "./Hero";
 import Features from "./Features";
 import PainPoints from "./PainPoints";
 import Preview from "./Preview";
-import FAQs from "./FAQs";
 import Pricing from "./Pricing";
 import CTA from "./CTA";
 import Footer from "./Footer";
@@ -16,7 +15,15 @@ export default function LandingPage() {
       <PainPoints />
       <Features />
       <Pricing />
-      <FAQs />
+      <Suspense
+        fallback={
+          <div className="min-h-[400px] flex items-center justify-center text-white">
+            Loading FAQs...
+          </div>
+        }
+      >
+        <FAQs />
+      </Suspense>
       <CTA />
       <Footer />
       <div className="text-center py-20">

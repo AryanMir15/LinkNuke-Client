@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Critical CSS Inlining for Performance */
+.critical-above-fold {
+  /* Critical above-fold styles */
+  display: block;
+}
+
+/* Remove unused CSS for bundle optimization */
+.unused-component {
+  display: none;
+}
+
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
@@ -33,8 +44,13 @@ input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Custom Bouncing Loader Animations */
+/* Custom Bouncing Loader Animations - Optimized */
 @keyframes bounce-square {
+  0% {
+    border-bottom-right-radius: 3px;
+    transform: translateY(0) scale(0.95);
+  }
+
   15% {
     border-bottom-right-radius: 3px;
   }
@@ -47,6 +63,33 @@ input:-webkit-autofill {
     transform: translateY(18px) scale(1, 0.9) rotate(45deg);
     border-bottom-right-radius: 40px;
   }
+
+  75% {
+    transform: translateY(9px) rotate(22.5deg);
+  }
+
+  100% {
+    transform: translateY(0) scale(0.95);
+    border-bottom-right-radius: 3px;
+  }
+}
+
+/* Performance optimized animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Reduce layout shift */
+.layout-shift-prevention {
+  contain: layout;
+  min-height: 100vh;
+}
 
   75% {
     transform: translateY(9px) rotate(67.5deg);

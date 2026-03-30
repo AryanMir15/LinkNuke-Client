@@ -1,9 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import axios from "axios";
 import { buildApiUrl } from "../lib/apiConfig";
 import posthog from "../lib/posthog.js";
 import toast from "react-hot-toast";
+
+// Lazy load heavy components for better performance
+const Testimonials = lazy(() => import("./Testimonials.jsx"));
+const FAQs = lazy(() => import("./FAQs.jsx"));
 
 // Generate idempotency key once per session
 const generateIdempotencyKey = () => {

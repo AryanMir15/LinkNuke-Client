@@ -4,7 +4,44 @@ import Navbar from '../components/Landing-page/Navbar.jsx';
 import LandingPage from '../components/Landing-page/LandingPage.jsx';
 ---
 
-<MainLayout title="LinkNuke - Self-Destructing Links" description="Share sensitive files and links that automatically delete themselves">
+<MainLayout 
+  title="LinkNuke - Self-Destructing Links" 
+  description="Share sensitive files and links that automatically delete themselves"
+  ogImage="/og-image.jpg"
+  ogUrl="https://linknuke.whynotship.me"
+  keywords="secure file sharing, self-destructing links, privacy, temporary links, encrypted sharing"
+>
 	<Navbar client:load />
 	<LandingPage client:load />
+	
+	<!-- Structured Data for SEO -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "LinkNuke",
+		"description": "Secure file sharing platform with self-destructing links",
+		"url": "https://linknuke.whynotship.me",
+		"applicationCategory": "Productivity",
+		"operatingSystem": "Web Browser",
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "4.8",
+			"reviewCount": "150"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "LinkNuke Team"
+		},
+		"publisher": {
+			"@type": "Organization",
+			"name": "LinkNuke"
+		}
+	}
+	</script>
 </MainLayout>

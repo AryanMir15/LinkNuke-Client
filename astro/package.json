@@ -6,7 +6,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "analyze": "npm run build && npx vite-bundle-analyzer dist",
+    "build:analyze": "vite build --mode analyze",
+    "lint": "eslint . --ext .js,.jsx,.astro",
+    "lint:fix": "eslint . --ext .js,.jsx,.astro --fix"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
