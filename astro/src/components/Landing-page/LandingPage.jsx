@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import Hero from "./Hero";
 import Features from "./Features";
 import PainPoints from "./PainPoints";
@@ -6,6 +6,9 @@ import Preview from "./Preview";
 import Pricing from "./Pricing";
 import CTA from "./CTA";
 import Footer from "./Footer";
+
+// Lazy load FAQs for better performance
+const FAQs = lazy(() => import("./FAQs.jsx"));
 
 export default function LandingPage() {
   return (
