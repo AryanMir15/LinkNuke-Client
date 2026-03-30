@@ -1,0 +1,62 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Navbar from '../components/Landing-page/Navbar.jsx';
+import Pricing from '../components/Landing-page/Pricing.jsx';
+import Footer from '../components/Landing-page/Footer.jsx';
+---
+
+<MainLayout 
+  title="LinkNuke Pricing - Secure File Sharing Plans" 
+  description="Choose your perfect plan. Free tier for casual users, Pro for power users, Lifetime for unlimited access."
+  ogImage="/og-pricing.jpg"
+  ogUrl="https://linknuke.whynotship.me/pricing"
+  keywords="pricing, plans, subscription, secure file sharing, self-destructing links"
+>
+	<Navbar client:load />
+	<Pricing client:load />
+	<Footer client:load />
+	
+	<!-- Structured Data for Pricing Page -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebPage",
+		"name": "LinkNuke Pricing",
+		"description": "Choose your perfect plan for secure file sharing with self-destructing links",
+		"url": "https://linknuke.whynotship.me/pricing",
+		"mainEntity": {
+			"@type": "OfferCatalog",
+			"name": "LinkNuke Plans",
+			"itemListElement": [
+				{
+					"@type": "Offer",
+					"name": "Free Plan",
+					"price": "0",
+					"priceCurrency": "USD",
+					"description": "5 links per month, basic features"
+				},
+				{
+					"@type": "Offer", 
+					"name": "Pro Plan",
+					"price": "19",
+					"priceCurrency": "USD",
+					"priceSpecification": {
+						"@type": "UnitPriceSpecification",
+						"price": "19",
+						"priceCurrency": "USD",
+						"billingDuration": "P1M"
+					},
+					"description": "500 links per month, advanced features"
+				},
+				{
+					"@type": "Offer",
+					"name": "Lifetime Plan", 
+					"price": "199",
+					"priceCurrency": "USD",
+					"description": "Unlimited links, all features forever"
+				}
+			]
+		}
+	}
+	</script>
+</MainLayout>

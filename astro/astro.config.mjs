@@ -25,7 +25,19 @@ export default defineConfig({
     react(),
     tailwind(),
     sitemap({
-      filter: (page) => !page.includes("/dashboard"),
+      filter: (page) => {
+        // Exclude dashboard and test pages
+        const excludePatterns = [
+          "/dashboard",
+          "/basic-test",
+          "/index-clean",
+          "/index-original",
+          "/index-react-test",
+          "/simple-test",
+          "/oauth-success",
+        ];
+        return !excludePatterns.some((pattern) => page.includes(pattern));
+      },
     }),
   ],
   vite: {
