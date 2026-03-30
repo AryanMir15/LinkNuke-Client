@@ -76,13 +76,25 @@ input:-webkit-autofill {
 
 /* Performance optimized animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Reduce layout shift */
@@ -91,17 +103,9 @@ input:-webkit-autofill {
   min-height: 100vh;
 }
 
-  75% {
-    transform: translateY(9px) rotate(67.5deg);
-  }
-
-  100% {
-    transform: translateY(0) rotate(90deg);
-  }
-}
-
 @keyframes shadow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1, 1);
   }
 
@@ -211,7 +215,9 @@ input:-webkit-autofill:focus {
     transition: transform 0.1s ease-out;
     will-change: transform;
     mix-blend-mode: screen;
-    box-shadow: 0 0 15px #1de4bf, 0 0 30px #1de4bf;
+    box-shadow:
+      0 0 15px #1de4bf,
+      0 0 30px #1de4bf;
   }
 }
 
@@ -228,4 +234,3 @@ input:-webkit-autofill:focus {
     font-weight: 200 !important; /* thin(100) -> extra-light(200) */
   }
 }
-

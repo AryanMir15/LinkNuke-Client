@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { cn } from '../../lib/utils';
+import React, { useEffect, useRef, useState } from "react";
+import { cn } from "../../lib/utils";
 
 export interface GlowingCardProps {
   children: React.ReactNode;
@@ -57,11 +57,13 @@ export const GlowingCard: React.FC<GlowingCardProps> = ({
         "relative flex-1 min-w-[14rem] p-6 rounded-2xl text-black dark:text-white",
         "bg-background border ",
         "transition-all duration-400 ease-out",
-        className
+        className,
       )}
-      style={{
-        '--glow-color': glowColor, // CSS variable definition
-      } as React.CSSProperties}
+      style={
+        {
+          "--glow-color": glowColor, // CSS variable definition
+        } as React.CSSProperties
+      }
       {...props}
     >
       {children}
@@ -95,11 +97,11 @@ export const GlowingCards: React.FC<GlowingCardsProps> = ({
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
@@ -117,54 +119,51 @@ export const GlowingCards: React.FC<GlowingCardsProps> = ({
       setShowOverlay(true);
 
       // Using string concatenation for style properties
-      overlay.style.setProperty('--x', x + 'px');
-      overlay.style.setProperty('--y', y + 'px');
-      overlay.style.setProperty('--opacity', glowOpacity.toString());
+      overlay.style.setProperty("--x", x + "px");
+      overlay.style.setProperty("--y", y + "px");
+      overlay.style.setProperty("--opacity", glowOpacity.toString());
     };
 
     const handleMouseLeave = () => {
       setShowOverlay(false);
-      overlay.style.setProperty('--opacity', '0');
+      overlay.style.setProperty("--opacity", "0");
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      container.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [enableGlow, glowOpacity, isMobile]);
 
   const containerStyle = {
-    '--gap': gap,
-    '--max-width': maxWidth,
-    '--padding': padding,
-    '--border-radius': borderRadius,
-    '--animation-duration': animationDuration + 'ms', // Concatenation
-    '--glow-radius': glowRadius + 'rem', // Concatenation
-    '--glow-opacity': glowOpacity,
+    "--gap": gap,
+    "--max-width": maxWidth,
+    "--padding": padding,
+    "--border-radius": borderRadius,
+    "--animation-duration": animationDuration + "ms", // Concatenation
+    "--glow-radius": glowRadius + "rem", // Concatenation
+    "--glow-opacity": glowOpacity,
     backgroundColor: backgroundColor || undefined,
     ...customTheme,
   } as React.CSSProperties;
 
   return (
-    <div
-      className={cn("relative w-full", className)}
-      style={containerStyle}
-    >
+    <div className={cn("relative w-full", className)} style={containerStyle}>
       <div
         ref={containerRef}
         className={cn(
           "relative max-w-[var(--max-width)] mx-auto ",
-          "px-6 py-2"
+          "px-6 py-2",
         )}
         style={{ padding: "var(--padding)" }} // String literal
       >
         <div
           className={cn(
             "flex items-center justify-center flex-wrap gap-[var(--gap)]",
-            responsive && "flex-col sm:flex-row "
+            responsive && "flex-col sm:flex-row ",
           )}
         >
           {children}
@@ -175,21 +174,20 @@ export const GlowingCards: React.FC<GlowingCardsProps> = ({
             ref={overlayRef}
             className={cn(
               "absolute inset-0 pointer-events-none select-none",
-              "opacity-0 transition-all duration-[var(--animation-duration)] ease-out"
+              "opacity-0 transition-all duration-&lsqb;var(--animation-duration)&rsqb; ease-out",
             )}
             style={{
               // String concatenation for WebkitMask and mask
               WebkitMask:
                 "radial-gradient(var(--glow-radius) var(--glow-radius) at var(--x, 0) var(--y, 0), #000 1%, transparent 50%)",
-              mask:
-                "radial-gradient(var(--glow-radius) var(--glow-radius) at var(--x, 0) var(--y, 0), #000 1%, transparent 50%)",
-              opacity: showOverlay ? 'var(--opacity)' : '0',
+              mask: "radial-gradient(var(--glow-radius) var(--glow-radius) at var(--x, 0) var(--y, 0), #000 1%, transparent 50%)",
+              opacity: showOverlay ? "var(--opacity)" : "0",
             }}
           >
             <div
               className={cn(
                 "flex items-center justify-center flex-wrap gap-[var(--gap)] max-w-[var(--max-width)] center mx-auto",
-                responsive && "flex-col sm:flex-row"
+                responsive && "flex-col sm:flex-row",
               )}
               style={{ padding: "var(--padding)" }} // String literal
             >
@@ -200,7 +198,7 @@ export const GlowingCards: React.FC<GlowingCardsProps> = ({
                     className: cn(
                       child.props.className,
                       "bg-opacity-15 dark:bg-opacity-15",
-                      "border-opacity-100 dark:border-opacity-100"
+                      "border-opacity-100 dark:border-opacity-100",
                     ),
                     style: {
                       ...child.props.style,
